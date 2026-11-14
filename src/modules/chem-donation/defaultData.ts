@@ -1,0 +1,242 @@
+import { ChemDonationModuleConfig } from './types';
+
+export const DEFAULT_CHEM_DONATION_CONFIG: ChemDonationModuleConfig = {
+  clubName: 'BWAN Chemistry',
+  clubShortName: 'BWAN Chemistry',
+  clubLogoUrl: '/assets/aistudio/bwanclub_logo_cbb80c32.jpg',
+  institutionName: 'Câu lạc bộ Hóa Học BWAN',
+  foundedYear: 2008,
+  primaryColorHex: '#6c63ff',
+  missionHeadline: 'Đam mê lớn hơn và Phản ứng Sáng tạo trong một Câu lạc bộ Hóa Học',
+  missionSubheadline:
+    'Không gian chính thức tiếp nhận quyên góp cho các dự án thực nghiệm, đêm hội Hóa phát quang, chuỗi sự kiện học thuật và hệ sinh thái 18 nguyên tố nhân cách của Câu lạc bộ Hóa Học BWAN.',
+  heroImageUrl: '/src/assets/images/hero_chemistry_lab_1794108422739.jpg',
+  heroImageCaption:
+    'Thành viên BWAN Chemistry thực hiện chưng cất phân đoạn và phân tích chuẩn độ tại Phòng Thí Nghiệm Mở.',
+  campaignCode: 'QUY2026',
+  campaignTitle: 'Quỹ Chung Phát Triển Học Thuật & Sự Kiện Thường Niên BWAN',
+  totalTargetVnd: 100_000_000,
+  initialRaisedVnd: 0,
+  initialSupportersCount: 0,
+  bankConfig: {
+    bankName: 'Ngân hàng TMCP Đầu tư và Phát triển Việt Nam (BIDV)',
+    bankShortCode: 'BIDV',
+    accountNumber: 'V3CAS8877195761',
+    accountHolder: 'MAI TRAN ANH KHOA',
+    branchName: 'Cổng thanh toán tự động PayOS — BWAN Chemistry',
+    transferPrefix: 'BWAN',
+  },
+  presetAmountsVnd: [20_000, 50_000, 100_000, 200_000, 500_000, 1_000_000],
+  fundAllocations: [
+    {
+      id: 'alloc-lab',
+      code: '46% NGÂN SÁCH',
+      title: 'Dụng Cụ Thực Nghiệm & Hóa Chất Phòng Lab Mở',
+      percentage: 46,
+      allocatedVnd: 46_000_000,
+      description:
+        'Trang bị bộ thủy tinh Borosilicate chuẩn Class A, hóa chất tinh khiết cho các buổi thực hành tổng hợp, chuẩn độ và đo quang phổ hàng tuần của thành viên CLB.',
+      deliverables: [
+        'Bổ sung hóa chất & dung môi tinh khiết cho 24 buổi Lab thực nghiệm',
+        'Trang bị thêm bộ Cuvette thạch anh & pipet bán tự động độ chính xác cao',
+        'Đảm bảo 100% trang bị bảo hộ (kính ANSI Z87.1, găng tay nitrile, áo blouse)',
+      ],
+      specificationNote: 'Giải ngân trực tiếp cho Ban Thực Nghiệm & Chuyên Môn.',
+    },
+    {
+      id: 'alloc-outreach',
+      code: '34% NGÂN SÁCH',
+      title: 'Đêm Hội Hóa Phát Quang & Sự Kiện Học Thuật Thường Niên',
+      percentage: 34,
+      allocatedVnd: 34_000_000,
+      description:
+        'Tổ chức đêm hội biểu diễn phản ứng Hóa phát quang (Chemiluminescence Night), triển lãm tinh thể và chuỗi trải nghiệm thực nghiệm mở cho học sinh – sinh viên.',
+      deliverables: [
+        'Tổ chức Đêm hội Hóa phát quang & Triển lãm 18 Nguyên tố Nhân cách',
+        'Sản xuất 300 bộ Micro-scale Chemistry Kit cho người tham dự trải nghiệm',
+        'Chuỗi Workshop thực nghiệm "Phản ứng Sáng tạo" mở cửa tự do',
+      ],
+      specificationNote: '100% quy trình biểu diễn tuân thủ tiêu chuẩn an toàn hóa chất.',
+    },
+    {
+      id: 'alloc-talent',
+      code: '20% NGÂN SÁCH',
+      title: 'Học Bổng Tài Năng Trẻ & Đội Tuyển Olympic Hóa Học',
+      percentage: 20,
+      allocatedVnd: 20_000_000,
+      description:
+        'Trao học bổng khuyến khích nghiên cứu khoa học và tài trợ tài liệu chuyên khảo, lệ phí thi đấu cho các thành viên trẻ xuất sắc của BWAN Chemistry.',
+      deliverables: [
+        '15 suất Học bổng "Phản ứng Sáng tạo" dành cho thành viên tiêu biểu',
+        'Tài trợ tài liệu quốc tế và hóa chất ôn luyện đội tuyển Olympic Hóa học',
+        'Hỗ trợ chi phí công bố đề tài nghiên cứu khoa học sinh viên',
+      ],
+      specificationNote: 'Xét duyệt công khai bởi Ban Chủ Nhiệm & Cố vấn Học thuật.',
+    },
+  ],
+  upcomingEvents: [
+    {
+      id: 'evt-luminescence',
+      code: 'SỰ KIỆN · THÁNG 11/2026',
+      title: 'Đêm Hội Hóa Phát Quang — Luminescence & 18 Nguyên Tố Nhân Cách',
+      dateRange: '22/11/2026 · 18:00 – 21:30',
+      location: 'Hội trường Lớn & Không gian Sáng tạo BWAN',
+      categoryLabel: 'Đêm hội Thực nghiệm & Nghệ thuật',
+      summary:
+        'Đêm trình diễn ánh sáng từ các phản ứng Luminol, Fluorescein và phức chất kim loại chuyển tiếp, kết hợp khám phá bản đồ 18 nguyên tố nhân cách đặc trưng của BWAN Chemistry.',
+      expectedParticipants: '500+ học sinh, sinh viên & khách mời',
+      imageUrl: '/src/assets/images/project_spectrophotometer_lab_1794108425234.jpg',
+      imageCaption: 'Không gian thực nghiệm quang hóa và phản ứng phát quang tại BWAN Chemistry.',
+      highlightDeliverable: 'Vào cửa tự do — Trải nghiệm trực tiếp tại 6 trạm phản ứng ánh sáng',
+    },
+    {
+      id: 'evt-chembus',
+      code: 'DỰ ÁN · THÁNG 12/2026',
+      title: 'Chuyến Xe Hóa Học Xanh — Mang Phòng Lab Tới Trường Phổ Thông',
+      dateRange: '12/12/2026 – 15/12/2026',
+      location: 'Chuỗi 06 trường THPT đối tác',
+      categoryLabel: 'Dự án Cộng đồng',
+      summary:
+        'Hành trình tình nguyện mang 300 bộ Kit Hóa học vi lượng an toàn đến với học sinh phổ thông, giúp các bạn tự tay thực hiện 10 thí nghiệm chuẩn độ và kết tinh muối màu.',
+      expectedParticipants: '1.200 học sinh & 45 thành viên BWAN',
+      imageUrl: '/src/assets/images/project_mobile_chem_bus_1794108424645.jpg',
+      imageCaption: 'Hướng dẫn học sinh thực hành chuẩn độ màu trực quan và an toàn.',
+      highlightDeliverable: 'Trao tặng bộ dụng cụ thí nghiệm vi lượng & sổ tay Hóa học Xanh',
+    },
+    {
+      id: 'evt-olympiad-camp',
+      code: 'HỌC THUẬT · THÁNG 01/2027',
+      title: 'Tuần Lễ Thực Nghiệm Tổng Hợp Hữu Cơ & Giải Đấu Hóa Học BWAN',
+      dateRange: '10/01/2027 – 17/01/2027',
+      location: 'Phòng Thí Nghiệm Mở C204',
+      categoryLabel: 'Học thuật chuyên sâu',
+      summary:
+        'Chương trình huấn luyện cường độ cao về kỹ năng thực hành chưng cất, kết tinh lại, sắc ký bản mỏng và tranh tài giải quyết tình huống thực nghiệm dành cho các phân ban chuyên môn.',
+      expectedParticipants: '80 thí sinh từ các phân ban CLB',
+      imageUrl: '/src/assets/images/hero_chemistry_lab_1794108422739.jpg',
+      imageCaption: 'Thực hành lắp ráp hệ chưng cất và kiểm tra độ tinh khiết tại phòng Lab.',
+      highlightDeliverable: 'Tài trợ 100% hóa chất, áo blouse và giải thưởng từ Quỹ Ủng Hộ CLB',
+    },
+  ],
+  initialDonors: [],
+  goldSponsors: [
+    {
+      id: 'sp-pt-01',
+      organizationName: 'Tập Đoàn Hóa Chất & Vật Liệu Tiên Tiến Á Châu (ACMC Corp)',
+      chemicalSymbol: 'Pt',
+      atomicNumber: 78,
+      atomicMass: '195.084 u',
+      tierLabel: 'Kim Cương (Pt-78)',
+      annualCommitmentVnd: 150_000_000,
+      sinceYear: 2021,
+      supportedInitiative:
+        'Bảo trợ toàn diện Phòng Thí Nghiệm Mở (Open Lab) & Quỹ Nghiên Cứu Xúc Tác Dị Thể Sinh Viên',
+      quote:
+        'Đầu tư vào năng lực thực nghiệm chuẩn xác của sinh viên Hóa học hôm nay chính là nền móng cho ngành công nghiệp vật liệu bán dẫn và hóa dược Việt Nam trong thập kỷ tới.',
+      representativeName: 'TS. Trần Quốc Bảo',
+      representativeRole: 'Giám đốc Nghiên cứu & Phát triển (R&D Director)',
+      websiteUrl: 'https://acmc-materials.example.vn',
+    },
+    {
+      id: 'sp-au-02',
+      organizationName: 'Công Ty Cổ Phần Thiết Bị Khoa Học & Quang Phổ Đông Dương (IndoLab Sci)',
+      chemicalSymbol: 'Au',
+      atomicNumber: 79,
+      atomicMass: '196.966 u',
+      tierLabel: 'Vàng (Au-79)',
+      annualCommitmentVnd: 85_000_000,
+      sinceYear: 2022,
+      supportedInitiative:
+        'Tài trợ hiệu chuẩn định kỳ thiết bị phân tích quang học, cân phân tích 4 số lẻ và thủy tinh borosilicate chuẩn Class A',
+      quote:
+        'Chúng tôi tự hào đồng hành cùng BWAN Chemistry Club để mọi phép chuẩn độ và phổ đồ của sinh viên đều đạt độ tin cậy ngang tầm phòng kiểm nghiệm quốc tế.',
+      representativeName: 'Bà Nguyễn Thị Minh Tâm',
+      representativeRole: 'Tổng Giám đốc Điều hành',
+      websiteUrl: 'https://indolab-scientific.example.vn',
+    },
+    {
+      id: 'sp-au-03',
+      organizationName: 'Viện Nghiên Cứu Hóa Dược Sinh Học & Tinh Dầu Thiên Nhiên (BioChem Vina)',
+      chemicalSymbol: 'Au',
+      atomicNumber: 79,
+      atomicMass: '196.966 u',
+      tierLabel: 'Vàng (Au-79)',
+      annualCommitmentVnd: 70_000_000,
+      sinceYear: 2023,
+      supportedInitiative:
+        'Bảo trợ Hóa chất Sắc ký, Dung môi tinh khiết HPLC và Học bổng Thực tập Nghiên cứu Hè cho 15 thành viên CLB mỗi năm',
+      quote:
+        'Các thành viên trưởng thành từ CLB Hóa học luôn thể hiện tư duy thực nghiệm sắc bén và kỷ luật an toàn phòng lab vượt trội khi bước vào các dự án R&D thực tế.',
+      representativeName: 'PGS.TS. Lê Văn Hưng',
+      representativeRole: 'Viện trưởng Hội đồng Khoa học',
+      websiteUrl: 'https://biochem-vina.example.vn',
+    },
+    {
+      id: 'sp-ag-04',
+      organizationName: 'Quỹ Cựu Sinh Viên Khoa Hóa — Thế Hệ Vàng (ChemAlumni Endowment)',
+      chemicalSymbol: 'Ag',
+      atomicNumber: 47,
+      atomicMass: '107.868 u',
+      tierLabel: 'Đồng Hành Học Thuật (Ag-47)',
+      annualCommitmentVnd: 60_000_000,
+      sinceYear: 2018,
+      supportedInitiative:
+        'Tài trợ thường niên Chuyến Xe Hóa Học Xanh & Quỹ Giải Thưởng Sinh Viên Nghiên Cứu Khoa Học Xuất Sắc',
+      quote:
+        'Sợi dây kết nối bền chặt nhất giữa hơn 1.200 cựu sinh viên qua 18 khóa chính là truyền thống sẻ chia tri thức và nâng đỡ đàn em ngay từ những ngày đầu khoác áo blouse trắng.',
+      representativeName: 'KS. Đặng Tuấn Anh',
+      representativeRole: 'Trưởng Ban Điều phối Quỹ Cựu Sinh Viên',
+      websiteUrl: 'https://chemalumni-endowment.example.vn',
+    },
+  ],
+  roadmap: [
+    {
+      id: 'rm-2026-q4',
+      phaseIndex: '01. GIAI ĐOẠN I',
+      period: 'Quý IV / 2026 — Quý I / 2027',
+      title: 'Chuẩn Hóa Phòng Lab Mở & Số Hóa Cơ Sở Dữ Liệu Phổ Đồ Thực Nghiệm',
+      subtitle: 'Nâng cấp hạ tầng phân tích công cụ tại chỗ',
+      description:
+        'Hoàn tất lắp đặt hệ thống Quang phổ kế UV-Vis hai chùm tia, bộ chuẩn độ điện thế tự động và xây dựng kho lưu trữ mở (Open Spectral Archive) gồm 500 phổ đồ UV-Vis / FT-IR chuẩn do chính sinh viên CLB đo đạc và chú giải.',
+      keyDeliverables: [
+        'Đưa vào vận hành 100% công suất Trạm đo UV-Vis phục vụ khóa luận & NCKH sinh viên',
+        'Số hóa 500 phổ đồ thực nghiệm và quy trình SOP an toàn hóa chất theo chuẩn GHS',
+        'Tổ chức 08 buổi Workshop kỹ thuật phân tích công cụ miễn phí cho sinh viên toàn trường',
+      ],
+      requiredBudgetVnd: 165_000_000,
+      status: 'in_progress',
+    },
+    {
+      id: 'rm-2027',
+      phaseIndex: '02. GIAI ĐOẠN II',
+      period: 'Năm Học 2027 — 2028',
+      title: 'Mạng Lưới Phòng Thí Nghiệm Lưu Động "Hóa Học Xanh" Liên Tỉnh',
+      subtitle: 'Lan tỏa thực nghiệm an toàn tới 50 trường THPT',
+      description:
+        'Mở rộng quy mô dự án Chuyến Xe Hóa Học Xanh từ 15 lên 50 trường THPT tại các tỉnh miền núi và ven biển. Chuyển giao 2.000 bộ Micro-scale Chemistry Kit kèm giáo án thực hành mở cho giáo viên địa phương.',
+      keyDeliverables: [
+        'Chuyển giao 2.000 bộ Kit Hóa học vi lượng tái sử dụng nhiều lần',
+        'Đào tạo 120 tình nguyện viên nòng cốt về sư phạm thực nghiệm và xử lý sự cố hóa chất',
+        'Xuất bản Sổ tay "100 Thí Nghiệm Hóa Học Xanh Không Độc Hại" bản in và PDF mã nguồn mở',
+      ],
+      requiredBudgetVnd: 240_000_000,
+      status: 'upcoming',
+    },
+    {
+      id: 'rm-2028-2030',
+      phaseIndex: '03. GIAI ĐOẠN III',
+      period: 'Tầm Nhìn Chiến Lược 2028 — 2030',
+      title: 'Vườn Ươm Khởi Nghiệp Vật Liệu Bền Vững & Quỹ Học Bổng Quốc Tế BWAN',
+      subtitle: 'Kết nối nghiên cứu học thuật với ứng dụng công nghiệp xanh',
+      description:
+        'Hình thành Quỹ Đầu Tư Học Thuật (Endowment Fund) tự chủ tài chính, tài trợ cho các nhóm sinh viên phát triển vật liệu phân hủy sinh học, pin lưu trữ năng lượng sạch và trao học bổng trao đổi nghiên cứu ngắn hạn tại các phòng lab đối tác châu Á & châu Âu.',
+      keyDeliverables: [
+        'Tài trợ ươm tạo 05 dự án Spin-off sinh viên về vật liệu xanh và tái chế phụ phẩm nông nghiệp',
+        'Trao 10 suất Học bổng Trao đổi Lab Quốc tế (BWAN Visiting Scholar) mỗi năm',
+        'Xây dựng mạng lưới 30 doanh nghiệp R&D bảo trợ việc làm và thực tập cho thành viên CLB',
+      ],
+      requiredBudgetVnd: 500_000_000,
+      status: 'upcoming',
+    },
+  ],
+};

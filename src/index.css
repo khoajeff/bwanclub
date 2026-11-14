@@ -1,0 +1,215 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-sans: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Be Vietnam Pro', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    color: #1F1F2E;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition:
+      background-color 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      color 360ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.dark {
+    color: #F8FAFC;
+    background-color: #0D0C1D;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.022em;
+    line-height: 1.22;
+  }
+
+  p {
+    line-height: 1.68;
+  }
+
+  /* Use clean human-crafted Vietnamese sans with tabular numbers instead of mechanical monospace for badges & labels */
+  .font-mono {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Top Hero Gradient Wash — Ultra-smooth organic fade into base background with zero seams */
+.google-one-chem-hero {
+  background:
+    radial-gradient(65% 55% at 50% 0%, rgba(108, 99, 255, 0.13) 0%, rgba(14, 165, 233, 0.05) 45%, rgba(255, 255, 255, 0) 80%),
+    linear-gradient(180deg, #F5F4FF 0%, #FAF9FE 45%, #FFFFFF 85%, #FFFFFF 100%);
+}
+
+html.dark .google-one-chem-hero,
+.dark .google-one-chem-hero {
+  background:
+    radial-gradient(65% 55% at 50% 0%, rgba(108, 99, 255, 0.24) 0%, rgba(56, 189, 248, 0.09) 45%, rgba(13, 12, 29, 0) 80%),
+    linear-gradient(180deg, #161336 0%, #110F26 48%, #0D0C1D 85%, #0D0C1D 100%);
+}
+
+/* Mid-page Section Wash — Strictly zero-opacity at top (0%-15%) and bottom (85%-100%) to prevent any visible band */
+.google-one-chem-section-wash {
+  background:
+    radial-gradient(50% 38% at 50% 50%, rgba(108, 99, 255, 0.04) 0%, rgba(14, 165, 233, 0.015) 55%, rgba(255, 255, 255, 0) 92%),
+    linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 12%, #FAF9FE 50%, #FFFFFF 88%, #FFFFFF 100%);
+}
+
+html.dark .google-one-chem-section-wash,
+.dark .google-one-chem-section-wash {
+  background:
+    radial-gradient(50% 38% at 50% 50%, rgba(108, 99, 255, 0.075) 0%, rgba(56, 189, 248, 0.025) 55%, rgba(13, 12, 29, 0) 92%),
+    linear-gradient(180deg, #0D0C1D 0%, #0D0C1D 12%, #100E22 50%, #0D0C1D 88%, #0D0C1D 100%);
+}
+
+/* Smooth Google One Ambient Glow at the bottom of the website — Centered at 50% 50% with zero edge clipping */
+.gemini-bottom-glow {
+  background:
+    radial-gradient(70% 44% at 50% 48%, rgba(108, 99, 255, 0.10) 0%, rgba(14, 165, 233, 0.04) 50%, rgba(255, 255, 255, 0) 92%),
+    linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 15%, #F7F6FF 48%, #FFFFFF 85%, #FFFFFF 100%);
+}
+
+html.dark .gemini-bottom-glow,
+.dark .gemini-bottom-glow {
+  background:
+    radial-gradient(70% 44% at 50% 48%, rgba(108, 99, 255, 0.16) 0%, rgba(56, 189, 248, 0.06) 50%, rgba(13, 12, 29, 0) 92%),
+    linear-gradient(180deg, #0D0C1D 0%, #0D0C1D 15%, #12102B 48%, #0D0C1D 85%, #0D0C1D 100%);
+}
+
+/* Gradient headline emphasis unified with #6C63FF Google One Chemistry primary */
+.google-one-chem-gradient-text {
+  background: linear-gradient(95deg, #6C63FF 0%, #564CE0 48%, #0284C7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html.dark .google-one-chem-gradient-text,
+.dark .google-one-chem-gradient-text {
+  background: linear-gradient(95deg, #8B84FF 0%, #6C63FF 45%, #38BDF8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Level 1 Tonal Card — Harmonious Lavender-Indigo Surface with Clear Contrast Against Base Background */
+.google-one-tonal-card {
+  background: linear-gradient(180deg, #F6F5FC 0%, #F1EFFA 100%);
+  border: 1px solid #DFDCF2;
+  box-shadow: 0 10px 28px -12px rgba(108, 99, 255, 0.08);
+  will-change: transform, box-shadow;
+  transition:
+    transform 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 340ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.google-one-tonal-card:hover {
+  background: linear-gradient(180deg, #F3F1FF 0%, #ECE9FA 100%);
+  border-color: rgba(108, 99, 255, 0.42);
+  box-shadow: 0 16px 36px -14px rgba(108, 99, 255, 0.16);
+}
+
+html.dark .google-one-tonal-card,
+.dark .google-one-tonal-card {
+  background: linear-gradient(180deg, #191636 0%, #14122B 100%);
+  border: 1px solid rgba(139, 132, 255, 0.28);
+  box-shadow:
+    0 14px 34px -14px rgba(5, 4, 15, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+html.dark .google-one-tonal-card:hover,
+.dark .google-one-tonal-card:hover {
+  background: linear-gradient(180deg, #1E1B40 0%, #181534 100%);
+  border-color: rgba(163, 157, 255, 0.48);
+  box-shadow:
+    0 18px 40px -14px rgba(108, 99, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Level 2 Inner Sub-Card — Softly Elevated Contrast Inside Tonal Cards (Never Sunken or Glaring) */
+.google-one-subcard {
+  background-color: #FFFFFF;
+  border: 1px solid #DCD9F2;
+  box-shadow: 0 4px 14px -4px rgba(108, 99, 255, 0.07);
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.google-one-subcard:hover {
+  border-color: rgba(108, 99, 255, 0.45);
+  box-shadow: 0 8px 20px -6px rgba(108, 99, 255, 0.14);
+}
+
+html.dark .google-one-subcard,
+.dark .google-one-subcard {
+  background: linear-gradient(145deg, #24204A 0%, #1E1A3E 100%);
+  border: 1px solid rgba(163, 157, 255, 0.32);
+  box-shadow:
+    0 6px 18px -6px rgba(7, 6, 20, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+html.dark .google-one-subcard:hover,
+.dark .google-one-subcard:hover {
+  background: linear-gradient(145deg, #2A2556 0%, #231F48 100%);
+  border-color: rgba(180, 174, 255, 0.52);
+  box-shadow:
+    0 10px 24px -6px rgba(108, 99, 255, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Level 3 Inner Tag / Chip Surface Inside Sub-Cards */
+.google-one-subcard-pill {
+  background-color: #F2F0FC;
+  border: 1px solid #D8D4F2;
+  color: #1F1F2E;
+}
+
+html.dark .google-one-subcard-pill,
+.dark .google-one-subcard-pill {
+  background-color: #2F2A5E;
+  border: 1px solid rgba(180, 174, 255, 0.34);
+  color: #F8FAFC;
+}
+
+/* Primary Capsule Button in #6c63ff */
+.google-one-chem-btn {
+  background: linear-gradient(135deg, #6C63FF 0%, #564CE0 100%);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px -4px rgba(108, 99, 255, 0.36);
+  will-change: transform, box-shadow;
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.google-one-chem-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 10px 26px -4px rgba(108, 99, 255, 0.48);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}

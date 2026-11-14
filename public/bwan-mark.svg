@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="bwanMarkOuter" x1="12" y1="8" x2="88" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B80FF" />
+      <stop offset="50%" stop-color="#6C63FF" />
+      <stop offset="100%" stop-color="#4338CA" />
+    </linearGradient>
+    <linearGradient id="bwanMarkLeft" x1="12" y1="26" x2="50" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7C73FF" />
+      <stop offset="100%" stop-color="#4F46E5" />
+    </linearGradient>
+    <linearGradient id="bwanMarkRight" x1="50" y1="6" x2="88" y2="74" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#A59DFF" />
+      <stop offset="100%" stop-color="#5B54E8" />
+    </linearGradient>
+  </defs>
+  <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="url(#bwanMarkOuter)" />
+  <polygon points="50,5 89,27.5 56,50 11,27.5" fill="url(#bwanMarkRight)" opacity="0.92" />
+  <polygon points="11,27.5 46,48 50,95 11,72.5" fill="url(#bwanMarkLeft)" opacity="0.95" />
+  <g stroke="#110E2E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="50,5 89,27.5 89,72.5 50,95 11,72.5 11,27.5" fill="none" />
+    <line x1="50" y1="5" x2="29" y2="54" />
+    <line x1="29" y1="54" x2="11" y2="27.5" />
+    <line x1="29" y1="54" x2="11" y2="72.5" />
+    <line x1="29" y1="54" x2="50" y2="95" />
+    <line x1="50" y1="5" x2="56" y2="50" />
+    <line x1="56" y1="50" x2="89" y2="27.5" />
+    <line x1="56" y1="50" x2="89" y2="72.5" />
+    <line x1="56" y1="50" x2="50" y2="95" />
+    <line x1="29" y1="54" x2="56" y2="50" />
+    <line x1="11" y1="27.5" x2="56" y2="50" />
+  </g>
+</svg>

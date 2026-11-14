@@ -1,0 +1,6 @@
+{
+  "name": "BWAN CLUB — Câu Lạc Bộ Hóa Học Hiện Đại",
+  "description": "Trang chủ chính thức của BWAN Club (BWANCLUB) — Câu lạc bộ Hóa học trường THPT chuyên Lê Quý Đôn Đà Nẵng. Khám phá dự án 18 Nguyên tố, Lab ảo và Quỹ học thuật.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
