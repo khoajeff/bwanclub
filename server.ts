@@ -286,8 +286,13 @@ app.post('/api/payos-status/:paymentLinkId', async (req, res) => {
 });
 
 async function startServer() {
+  const publicPath = path.join(process.cwd(), 'public');
   const distPath = path.join(process.cwd(), 'dist');
   const hasBuiltDist = fs.existsSync(path.join(distPath, 'index.html'));
+
+  if (fs.existsSync(publicPath)) {
+    app.use(express.static(publicPath));
+  }
 
   if (process.env.NODE_ENV !== 'production') {
     const vitePromise = import('vite').then(({ createServer }) =>
