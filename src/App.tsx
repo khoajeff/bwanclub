@@ -427,11 +427,11 @@ export default function App() {
           {/* Closing Club Invitation Banner — Google One Large Uniform Proportions */}
           <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-4xl mx-auto">
-              <div className="inline-flex items-center justify-center gap-4 mb-6">
-                <BwanHexLogo className="w-14 h-14 sm:w-16 sm:h-16" />
-                <span className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight leading-none inline-flex items-center">
+              <div className="inline-flex items-center justify-center gap-3.5 mb-6">
+                <BwanHexLogo className="w-12 h-12 sm:w-14 sm:h-14" />
+                <span className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight leading-none inline-flex items-center">
                   <span className="text-[#1F1F2E] dark:text-white">BWAN</span>
-                  <span className="ml-2 text-[#6C63FF] dark:text-[#8B84FF]">
+                  <span className="ml-1.5 text-[#6C63FF] dark:text-[#8B84FF]">
                     CLUB
                   </span>
                 </span>
@@ -485,12 +485,12 @@ export default function App() {
               {/* TIER 1: OFFICIAL BWAN CLUB IDENTITY & CLEAN TYPOGRAPHIC NAVIGATION */}
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 pb-10 border-b border-[#E5E2DC]/80 dark:border-white/10">
                 <div className="max-w-2xl space-y-3.5">
-                  {/* Top Row: Large, Evenly Proportioned Club Logo + BWAN CLUB Wordmark */}
-                  <div className="flex flex-wrap items-center gap-4">
-                    <BwanHexLogo className="w-14 h-14 sm:w-16 sm:h-16 shrink-0" />
-                    <span className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight leading-none text-[#1F1F2E] dark:text-white inline-flex items-center">
+                  {/* Top Row: Balanced Club Logo + BWAN CLUB Wordmark */}
+                  <div className="flex flex-wrap items-center gap-3.5">
+                    <BwanHexLogo className="w-12 h-12 sm:w-14 sm:h-14 shrink-0" />
+                    <span className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight leading-none text-[#1F1F2E] dark:text-white inline-flex items-center">
                       <span>BWAN</span>
-                      <span className="ml-2 text-[#6C63FF] dark:text-[#8B84FF]">
+                      <span className="ml-1.5 text-[#6C63FF] dark:text-[#8B84FF]">
                         CLUB
                       </span>
                     </span>
@@ -576,24 +576,24 @@ export default function App() {
                 </nav>
               </div>
 
-              {/* TIER 2: HUMAN-CRAFTED EDITORIAL CREDIT LINE FOR WEBSITE CO-FOUNDERS */}
+              {/* TIER 2: HUMAN-CRAFTED EDITORIAL CREDIT LINE FOR WEBSITE CREATORS */}
               <div
                 data-testid="cofounders-credit"
-                className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs sm:text-sm text-[#5F6368] dark:text-[#94A3B8]"
+                className="pt-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs sm:text-sm text-[#5F6368] dark:text-[#94A3B8]"
               >
-                <p>
+                <p className="sm:whitespace-nowrap">
                   © 2026 <strong className="font-semibold text-[#1F1F2E] dark:text-white">BWAN CLUB</strong> · Trường THPT chuyên Lê Quý Đôn Đà Nẵng.
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:whitespace-nowrap">
                   <span>Thiết kế & phát triển website:</span>
                   <span className="font-semibold text-[#1F1F2E] dark:text-white">
                     Mai Trần Anh Khoa
                   </span>
                   <span className="text-[#6C63FF] dark:text-[#A39DFF] font-medium">
-                    (Co-Founder)
+                    (Founder)
                   </span>
-                  <span aria-hidden="true" className="text-[#9CA3AF] dark:text-white/30 px-1">
+                  <span aria-hidden="true" className="text-[#9CA3AF] dark:text-white/30 px-0.5">
                     &
                   </span>
                   <span className="font-semibold text-[#1F1F2E] dark:text-white">
@@ -601,6 +601,15 @@ export default function App() {
                   </span>
                   <span className="text-[#6C63FF] dark:text-[#A39DFF] font-medium">
                     (Co-Founder)
+                  </span>
+                  <span aria-hidden="true" className="text-[#9CA3AF] dark:text-white/30 px-0.5">
+                    &
+                  </span>
+                  <span className="font-semibold text-[#1F1F2E] dark:text-white">
+                    Trần Minh Trí
+                  </span>
+                  <span className="text-[#6C63FF] dark:text-[#A39DFF] font-medium">
+                    (CMO)
                   </span>
                 </div>
               </div>

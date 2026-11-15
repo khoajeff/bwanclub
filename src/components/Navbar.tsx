@@ -101,11 +101,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-[#0D0C1D]/90 backdrop-blur-xl border-b border-[#E5E7EB]/60 dark:border-[#6C63FF]/20 transition-colors duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-6 px-4 sm:px-6 lg:px-8 h-20">
-        {/* Zone 1: Transparent Hexagonal Club Logo + Unified Google One Style BWAN CLUB Wordmark */}
+        {/* Zone 1: Transparent Hexagonal Club Logo + Balanced Google One Style BWAN CLUB Wordmark */}
         <a
           href="/"
           onClick={(e) => handleLinkClick(e, '/')}
-          className="group inline-flex items-center gap-3 sm:gap-3.5 font-bold tracking-tight text-[#1F1F2E] dark:text-white whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#6C63FF] rounded-lg"
+          className="group inline-flex items-center gap-2.5 sm:gap-3 font-bold tracking-tight text-[#1F1F2E] dark:text-white whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#6C63FF] rounded-lg"
         >
           <motion.div
             whileHover={{ rotate: 10, scale: 1.05 }}
@@ -113,9 +113,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             transition={{ type: 'spring', stiffness: 380, damping: 22 }}
             className="flex items-center justify-center"
           >
-            <BwanHexLogo className="w-12 h-12 sm:w-13 sm:h-13" />
+            <BwanHexLogo className="w-10 h-10 sm:w-11 sm:h-11" />
           </motion.div>
-          <span className="font-display text-2xl sm:text-[28px] font-extrabold tracking-tight leading-none text-[#1F1F2E] dark:text-white inline-flex items-center">
+          <span className="font-display text-xl sm:text-[22px] font-extrabold tracking-tight leading-none text-[#1F1F2E] dark:text-white inline-flex items-center">
             <span>BWAN</span>
             <span className="ml-1.5 text-[#6C63FF] dark:text-[#8B84FF]">
               CLUB
@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 2: Uniform Google One Navigation Links + Theme & Language items */}
         <nav
           aria-label="Điều hướng chính"
-          className="hidden lg:flex items-center gap-2 text-[15px] font-semibold text-[#4A4A68] dark:text-[#CBD5E1]"
+          className="hidden lg:flex items-center gap-3 xl:gap-4 text-base sm:text-[17px] font-bold text-[#4A4A68] dark:text-[#CBD5E1]"
         >
           {navItems.map((item) => {
             const isActive = item.isDonate
@@ -143,11 +143,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 aria-current={isActive ? 'page' : undefined}
                 className={`relative px-4 py-6 transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-2 ${
                   isActive
-                    ? 'text-[#6C63FF] dark:text-[#A39DFF] font-bold'
+                    ? 'text-[#6C63FF] dark:text-[#A39DFF] font-extrabold'
                     : 'text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#1F1F2E] dark:hover:text-white'
                 }`}
               >
-                {item.isDonate && <HeartHandshake className="w-4 h-4" />}
+                {item.isDonate && <HeartHandshake className="w-[18px] h-[18px]" />}
                 <span>{item.label}</span>
                 {isActive && (
                   <motion.span

@@ -260,27 +260,34 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                 </div>
               </div>
 
-              {/* NEW PROJECT SPOTLIGHT: BWAN 3D ORGANIC MOLECULAR STUDIO */}
+              {/* SPOTLIGHT 01: BWAN 3D ORGANIC MOLECULAR STUDIO (MATCHING UNIFIED FORM) */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                 data-testid="spotlight-3d-molecular-studio"
-                className="mt-10 google-one-tonal-card rounded-[32px] p-6 sm:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+                className="mt-10 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
               >
-                <div className="lg:col-span-7 space-y-4">
+                <div className="lg:col-span-6 space-y-4">
                   <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
-                    <span className="px-3 py-1 rounded-full bg-[#6C63FF]/15 dark:bg-[#6C63FF]/25 text-[#6C63FF] dark:text-[#A39DFF] border border-[#6C63FF]/30">
-                      ★ DỰ ÁN MỚI RA MẮT · 3D LAB WORKBENCH
+                    <span className="text-[#6C63FF] dark:text-[#A39DFF]">
+                      {lang === 'vi'
+                        ? 'DỰ ÁN MỚI RA MẮT (GEN 6 · 2026)'
+                        : 'NEW GEN 6 FLAGSHIP STUDIO'}
+                    </span>
+                    <span aria-hidden="true" className="text-[#9CA3AF]">
+                      ·
                     </span>
                     <span className="text-[#0284C7] dark:text-[#38BDF8]">
-                      Three.js r128 · 60 FPS
+                      {lang === 'vi'
+                        ? 'MÔ PHỎNG PHÂN TỬ 3D'
+                        : '3D MOLECULAR ENGINE'}
                     </span>
                     <span aria-hidden="true" className="text-[#9CA3AF]">
                       ·
                     </span>
                     <span className="text-[#0D9488] dark:text-[#34D399]">
-                      ● LINK RIÊNG TRỰC TUYẾN
+                      ● ĐANG MỞ CỔNG TRẢI NGHIỆM
                     </span>
                   </div>
 
@@ -294,72 +301,28 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                   </h3>
 
                   <p className="text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                    Khám phá không gian mô phỏng cấu trúc phân tử 3D tương tác
-                    thời gian thực của{' '}
+                    Không gian mô phỏng cấu trúc phân tử 3D tương tác thời gian
+                    thực của{' '}
                     <strong className="text-[#1F1F2E] dark:text-white">
-                      BWAN CLUB
-                    </strong>
-                    : xoay tự do 360° Quaternion không khóa trục, tích hợp 25+
-                    hợp chất hữu cơ &amp; đại phân tử sinh học (Chlorophyll a/b,
-                    Heme B, Benzene, Glycine...), tìm kiếm trực tuyến qua{' '}
+                      BWAN CLUB Gen 6
+                    </strong>{' '}
+                    dành cho người tham gia trải nghiệm trực tiếp: xoay tự do
+                    360° Quaternion, tra cứu hàng triệu hợp chất từ{' '}
                     <strong className="text-[#0284C7] dark:text-[#38BDF8]">
                       PubChem 3D, NIH Cactus, RCSB PDB &amp; ChEMBL
                     </strong>
                     , đo lai hóa sp/sp²/sp³, độ dài (Å) và góc liên kết (°).
                   </p>
 
-                  {/* Dedicated Project URL Bar */}
-                  <div className="google-one-subcard p-3.5 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-xl bg-[#6C63FF]/15 dark:bg-[#6C63FF]/25 flex items-center justify-center text-[#6C63FF] dark:text-[#A39DFF] shrink-0">
-                        <Link2 className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF] uppercase">
-                          Link Liên Kết Riêng Của Dự Án
-                        </span>
-                        <code className="block text-xs sm:text-sm font-mono font-bold text-[#1F1F2E] dark:text-white truncate">
-                          /du-an/3d-molecular-studio · /3d-molecular-studio.html
-                        </code>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      <button
-                        type="button"
-                        data-testid="copy-link-3d-studio-btn"
-                        onClick={() =>
-                          handleCopyProjectLink('3d-molecular-studio')
-                        }
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#191736] hover:bg-[#F1F0FF] dark:hover:bg-[#2A2656] border border-[#D5D0EA] dark:border-[#6C63FF]/35 text-xs font-semibold text-[#1F1F2E] dark:text-white transition-colors cursor-pointer"
-                      >
-                        {copiedSlug === '3d-molecular-studio' ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
-                            <span className="text-[#0D9488] dark:text-[#34D399]">
-                              Đã sao chép link!
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
-                            <span>Sao chép link</span>
-                          </>
-                        )}
-                      </button>
-
-                      <a
-                        href="/3d-molecular-studio.html"
-                        data-testid="standalone-link-3d-studio"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0284C7]/15 dark:bg-[#38BDF8]/20 hover:bg-[#0284C7]/25 border border-[#0284C7]/35 text-xs font-semibold text-[#0284C7] dark:text-[#38BDF8] transition-colors whitespace-nowrap"
-                      >
-                        <Maximize2 className="w-3.5 h-3.5" />
-                        <span>Mở Toàn Màn Hình</span>
-                      </a>
-                    </div>
+                  <div className="pt-1 flex flex-wrap items-center gap-3 text-xs font-mono font-semibold text-[#D97706] dark:text-[#FBBF24]">
+                    <span>Three.js 3D (Xoay 360° Quaternion)</span>
+                    <span>·</span>
+                    <span>PubChem &amp; PDB Cloud</span>
+                    <span>·</span>
+                    <span>Đo góc &amp; Lai hóa sp/sp²/sp³</span>
                   </div>
 
-                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <div className="pt-3 flex flex-wrap items-center gap-3">
                     <motion.button
                       type="button"
                       data-testid="open-3d-molecular-studio-btn"
@@ -370,40 +333,68 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                       }
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold text-white cursor-pointer whitespace-nowrap shrink-0"
                     >
-                      <Box className="w-4 h-4" />
                       <span>
                         {lang === 'vi'
-                          ? 'Mở Phòng Thí Nghiệm 3D Ngay'
-                          : 'Launch 3D Molecular Studio'}
+                          ? 'Trải Nghiệm Dự Án Ngay'
+                          : 'Experience Project Now'}
                       </span>
                       <ArrowUpRight className="w-4 h-4" />
                     </motion.button>
+
+                    <button
+                      type="button"
+                      data-testid="copy-link-3d-studio-btn"
+                      onClick={() =>
+                        handleCopyProjectLink('3d-molecular-studio')
+                      }
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-mono font-semibold text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#6C63FF] dark:hover:text-white transition-colors cursor-pointer"
+                    >
+                      {copiedSlug === '3d-molecular-studio' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                          <span className="text-[#0D9488] dark:text-[#34D399]">
+                            Đã sao chép link!
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                          <span>/du-an/3d-molecular-studio</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
 
-                {/* Right Interactive Preview Card for 3D Studio */}
-                <div className="lg:col-span-5">
+                <div className="lg:col-span-6">
                   <div
                     onClick={() =>
                       onOpenProjectExperience?.('3d-molecular-studio')
                     }
-                    className="google-one-subcard p-6 rounded-3xl cursor-pointer group space-y-5 relative overflow-hidden"
+                    title="Bấm để mở trang trải nghiệm BWAN 3D Organic Molecular Studio"
+                    className="rounded-2xl overflow-hidden border border-[#E5E2DC] dark:border-[#6C63FF]/40 shadow-md bg-[#0B0A16] cursor-pointer group relative"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF]">
-                        <Box className="w-4 h-4" />
-                        <span>3D MOLECULAR ENGINE · CPK &amp; ORBIT</span>
-                      </span>
-                      <span className="px-2.5 py-1 rounded-md bg-[#0D9488]/15 text-[#0D9488] dark:text-[#34D399] font-mono text-[11px] font-bold">
-                        WebGL 60FPS
+                    {/* Matching Dark Chemistry UI Window (same visual form as Spotlight 02) */}
+                    <div className="px-4 py-3 bg-[#121026] border-b border-[#6C63FF]/30 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#6C63FF]" />
+                        <span className="font-mono text-[11px] font-bold text-white tracking-wide">
+                          BWAN GEN 6 — 3D MOLECULAR STUDIO
+                        </span>
+                      </div>
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#1E1B3D] border border-[#6C63FF]/40 font-mono text-[10px] font-semibold text-[#A39DFF]">
+                        WebGL 60FPS · Three.js r128
                       </span>
                     </div>
 
-                    {/* Visual 3D Atom/Bond CPK Schematic */}
-                    <div className="rounded-2xl bg-[#0F1322] border border-[#6C63FF]/30 p-5 flex flex-col items-center justify-center relative min-h-[190px]">
+                    <div className="p-5 sm:p-6 flex flex-col items-center justify-between min-h-[250px] bg-gradient-to-b from-[#0B0A16] via-[#111026] to-[#0B0A16]">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#1E1B3D] border border-[#6C63FF]/35 text-[11px] font-mono text-[#A39DFF]">
+                        <span>✦ Mô phỏng Phân tử Hữu cơ &amp; Phức chất 3D</span>
+                      </div>
+
                       <svg
-                        viewBox="0 0 320 150"
-                        className="w-full max-w-[290px] h-auto transition-transform duration-500 group-hover:scale-105"
+                        viewBox="0 0 340 140"
+                        className="w-full max-w-[310px] h-auto my-2 transition-transform duration-300 group-hover:scale-[1.03]"
                       >
                         <defs>
                           <radialGradient id="cpk-c" cx="35%" cy="30%" r="65%">
@@ -427,120 +418,110 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                             <stop offset="100%" stopColor="#94A3B8" />
                           </radialGradient>
                         </defs>
-                        {/* Angle arc */}
                         <path
-                          d="M 132 68 A 32 32 0 0 1 188 68"
+                          d="M 142 62 A 30 30 0 0 1 198 62"
                           fill="none"
                           stroke="#F59E0B"
                           strokeWidth="2"
                           strokeDasharray="4 3"
                         />
                         <text
-                          x="160"
-                          y="46"
+                          x="170"
+                          y="40"
                           textAnchor="middle"
                           fill="#FBBF24"
                           fontSize="11"
                           fontFamily="monospace"
                           fontWeight="bold"
                         >
-                          109.5° · sp³
+                          ∠C-C-C = 109.5° · sp³
                         </text>
-                        {/* Bonds */}
                         <line
-                          x1="105"
-                          y1="95"
-                          x2="160"
+                          x1="115"
+                          y1="88"
+                          x2="170"
+                          y2="62"
+                          stroke="#94A3B8"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="170"
+                          y1="62"
+                          x2="225"
+                          y2="88"
+                          stroke="#94A3B8"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="225"
+                          y1="84"
+                          x2="272"
+                          y2="60"
+                          stroke="#CBD5E1"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="225"
+                          y1="92"
+                          x2="272"
                           y2="68"
-                          stroke="#94A3B8"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                        />
-                        <line
-                          x1="160"
-                          y1="68"
-                          x2="215"
-                          y2="95"
-                          stroke="#94A3B8"
-                          strokeWidth="7"
-                          strokeLinecap="round"
-                        />
-                        <line
-                          x1="215"
-                          y1="91"
-                          x2="262"
-                          y2="66"
                           stroke="#CBD5E1"
                           strokeWidth="4"
                           strokeLinecap="round"
                         />
                         <line
-                          x1="215"
-                          y1="99"
-                          x2="262"
-                          y2="74"
-                          stroke="#CBD5E1"
-                          strokeWidth="4"
-                          strokeLinecap="round"
-                        />
-                        <line
-                          x1="105"
-                          y1="95"
-                          x2="60"
-                          y2="70"
+                          x1="115"
+                          y1="88"
+                          x2="70"
+                          y2="64"
                           stroke="#94A3B8"
                           strokeWidth="5"
                           strokeLinecap="round"
                         />
                         <line
-                          x1="105"
-                          y1="95"
-                          x2="82"
-                          y2="130"
+                          x1="115"
+                          y1="88"
+                          x2="92"
+                          y2="122"
                           stroke="#CBD5E1"
                           strokeWidth="3.5"
                           strokeLinecap="round"
                         />
-                        {/* Atoms */}
-                        <circle cx="60" cy="70" r="14" fill="url(#cpk-n)" />
-                        <circle cx="105" cy="95" r="17" fill="url(#cpk-c)" />
-                        <circle cx="160" cy="68" r="17" fill="url(#cpk-c)" />
-                        <circle cx="215" cy="95" r="17" fill="url(#cpk-c)" />
-                        <circle cx="262" cy="70" r="15" fill="url(#cpk-o)" />
-                        <circle cx="82" cy="130" r="10" fill="url(#cpk-h)" />
+                        <circle cx="70" cy="64" r="14" fill="url(#cpk-n)" />
+                        <circle cx="115" cy="88" r="17" fill="url(#cpk-c)" />
+                        <circle cx="170" cy="62" r="17" fill="url(#cpk-c)" />
+                        <circle cx="225" cy="88" r="17" fill="url(#cpk-c)" />
+                        <circle cx="272" cy="64" r="15" fill="url(#cpk-o)" />
+                        <circle cx="92" cy="122" r="10" fill="url(#cpk-h)" />
                       </svg>
-                      <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-[#CBD5E1]">
-                        <span className="px-2 py-0.5 rounded bg-white/10">
-                          C₆H₆ Benzene
-                        </span>
-                        <span className="px-2 py-0.5 rounded bg-white/10">
-                          C₅₅H₇₂MgN₄O₅ Chlorophyll a
-                        </span>
-                        <span className="px-2 py-0.5 rounded bg-white/10">
-                          C₃₄H₃₂FeN₄O₄ Heme B
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
-                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
-                        ✦ Xoay 360° Quaternion
-                      </div>
-                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
-                        ✦ PubChem &amp; PDB Cloud
-                      </div>
-                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
-                        ✦ Đo góc &amp; Lai hóa
-                      </div>
-                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
-                        ✦ Nhập/Xuất .SDF .MOL
+                      <div className="flex flex-wrap items-center justify-center gap-2">
+                        {[
+                          '01 Xoay 360°',
+                          '02 PubChem & PDB',
+                          '03 Đo góc & Lai hóa',
+                          '04 .SDF / .MOL / .XYZ',
+                        ].map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-1 rounded-full bg-[#1E1B3D] border border-[#6C63FF]/30 text-[11px] font-mono text-[#E2E8F0]"
+                          >
+                            <strong className="text-[#A39DFF]">
+                              {tag.slice(0, 2)}
+                            </strong>
+                            {tag.slice(2)}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Featured Flagship Project Spotlight */}
+              {/* SPOTLIGHT 02: PROJECT 18 PERSONALITY ELEMENTS (MATCHING UNIFIED FORM) */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -610,7 +591,7 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                           'giai-ma-18-nguyen-to-nhan-cach'
                         )
                       }
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold cursor-pointer whitespace-nowrap shrink-0"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold text-white cursor-pointer whitespace-nowrap shrink-0"
                     >
                       <span>
                         {lang === 'vi'
@@ -619,6 +600,28 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                       </span>
                       <ArrowUpRight className="w-4 h-4" />
                     </motion.button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopyProjectLink('giai-ma-18-nguyen-to-nhan-cach')
+                      }
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-mono font-semibold text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#6C63FF] dark:hover:text-white transition-colors cursor-pointer"
+                    >
+                      {copiedSlug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                          <span className="text-[#0D9488] dark:text-[#34D399]">
+                            Đã sao chép link!
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                          <span>/du-an/giai-ma-18-nguyen-to-nhan-cach</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
 

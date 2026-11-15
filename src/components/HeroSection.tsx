@@ -50,17 +50,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </span>
         </motion.div>
 
-        {/* Clean Transparent Hexagonal Logo + BWAN CLUB Title (Uniformly Large & Balanced) */}
+        {/* Clean Transparent Hexagonal Logo + BWAN CLUB Title (Balanced) */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center justify-center gap-4 mb-6"
+          className="inline-flex items-center justify-center gap-3.5 mb-6"
         >
-          <BwanHexLogo className="w-14 h-14 sm:w-16 sm:h-16" />
-          <span className="font-display text-3xl sm:text-4xl lg:text-[42px] font-extrabold tracking-tight leading-none inline-flex items-center">
+          <BwanHexLogo className="w-12 h-12 sm:w-14 sm:h-14" />
+          <span className="font-display text-2xl sm:text-3xl lg:text-[34px] font-extrabold tracking-tight leading-none inline-flex items-center">
             <span className="text-[#1F1F2E] dark:text-white">BWAN</span>
-            <span className="ml-2 text-[#6C63FF] dark:text-[#8B84FF]">
+            <span className="ml-1.5 text-[#6C63FF] dark:text-[#8B84FF]">
               CLUB
             </span>
           </span>
@@ -325,17 +325,17 @@ export const PageBannerHeader: React.FC<PageBannerHeaderProps> = ({
           </span>
         </motion.div>
 
-        {/* Centered Large & Evenly Proportioned Club Logo + BWAN CLUB Wordmark */}
+        {/* Centered Balanced Club Logo + BWAN CLUB Wordmark */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: 0.03 }}
-          className="inline-flex items-center justify-center gap-4 mb-5"
+          className="inline-flex items-center justify-center gap-3.5 mb-5"
         >
-          <BwanHexLogo className="w-14 h-14 sm:w-16 sm:h-16" />
-          <span className="font-display text-3xl sm:text-4xl lg:text-[40px] font-extrabold tracking-tight leading-none inline-flex items-center">
+          <BwanHexLogo className="w-12 h-12 sm:w-14 sm:h-14" />
+          <span className="font-display text-2xl sm:text-3xl lg:text-[32px] font-extrabold tracking-tight leading-none inline-flex items-center">
             <span className="text-[#1F1F2E] dark:text-white">BWAN</span>
-            <span className="ml-2 text-[#6C63FF] dark:text-[#8B84FF]">
+            <span className="ml-1.5 text-[#6C63FF] dark:text-[#8B84FF]">
               CLUB
             </span>
           </span>

@@ -853,7 +853,7 @@ export function generateBwanClubAdvisorReply(message: string): string {
     lower.includes('sáng lập') ||
     lower.includes('founder')
   ) {
-    return `[Dữ liệu Lịch sử Các Thế hệ BWAN CLUB (2021 – 2027)]:\n**BWAN CLUB** được thành lập năm **2021** trực thuộc Đoàn Trường THPT chuyên Lê Quý Đôn Đà Nẵng với khẩu hiệu **“LEARN NOT STUDY”**.\n• **Gen 1 (2021–2022)**: Co-Founder CLB **Đỗ Vĩnh Phúc**\n• **Gen 2 (2022–2023)**: Ban Chủ Nhiệm **Yến Nhi & Thục Trinh**\n• **Gen 3 (2023–2024)**: Ban Chủ Nhiệm **Hoàng Quyên & Như Khuê**\n• **Gen 4 (2024–2025)**: Ban Chủ Nhiệm **Công Vinh**\n• **Gen 5 (2025–2026)**: Ban Chủ Nhiệm **Văn Thoại & Minh Khuê**\n• **Gen 6 (2026–2027)**: Đồng Chủ Nhiệm **Trần Minh Trí & Nguyễn Minh Anh**.\n\n*(Ghi chú hệ thống: Nền tảng Website được xây dựng độc lập bởi **Mai Trần Anh Khoa — Co-Founder** & **Phan Nhật Nam — Co-Founder**)*.`;
+    return `[Dữ liệu Lịch sử Các Thế hệ BWAN CLUB (2021 – 2027)]:\n**BWAN CLUB** được thành lập năm **2021** trực thuộc Đoàn Trường THPT chuyên Lê Quý Đôn Đà Nẵng với khẩu hiệu **“LEARN NOT STUDY”**.\n• **Gen 1 (2021–2022)**: Co-Founder CLB **Đỗ Vĩnh Phúc**\n• **Gen 2 (2022–2023)**: Ban Chủ Nhiệm **Yến Nhi & Thục Trinh**\n• **Gen 3 (2023–2024)**: Ban Chủ Nhiệm **Hoàng Quyên & Như Khuê**\n• **Gen 4 (2024–2025)**: Ban Chủ Nhiệm **Công Vinh**\n• **Gen 5 (2025–2026)**: Ban Chủ Nhiệm **Văn Thoại & Minh Khuê**\n• **Gen 6 (2026–2027)**: Đồng Chủ Nhiệm **Trần Minh Trí & Nguyễn Minh Anh**.\n\n*(Ghi chú hệ thống: Nền tảng Website được xây dựng bởi **Mai Trần Anh Khoa — Founder**, **Phan Nhật Nam — Co-Founder** & **Trần Minh Trí — CMO**)*.`;
   }
 
   if (
