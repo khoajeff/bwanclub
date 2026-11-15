@@ -50,7 +50,14 @@ const INITIAL_MEMBERS: MemberRegistration[] = [
 function resolveRouteFromPathname(pathname: string): AppRoute {
   const clean = pathname.replace(/\/+$/, '') || '/';
   if (clean === '/phan-ban') return '/phan-ban';
-  if (clean === '/du-an' || clean.startsWith('/du-an/')) return '/du-an';
+  if (
+    clean === '/du-an' ||
+    clean.startsWith('/du-an/') ||
+    clean === '/3d-molecular-studio' ||
+    clean === '/molecular-studio'
+  ) {
+    return '/du-an';
+  }
   if (clean === '/su-kien') return '/su-kien';
   if (clean === '/donate' || clean === '/quyen-gop') {
     return '/donate';
@@ -67,6 +74,9 @@ function resolveRouteFromPathname(pathname: string): AppRoute {
 
 function extractProjectSlugFromPathname(pathname: string): string | null {
   const clean = pathname.replace(/\/+$/, '') || '/';
+  if (clean === '/3d-molecular-studio' || clean === '/molecular-studio') {
+    return '3d-molecular-studio';
+  }
   const match = clean.match(/^\/du-an\/([^/]+)$/);
   return match ? decodeURIComponent(match[1]) : null;
 }

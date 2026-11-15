@@ -16,10 +16,12 @@ import {
 } from './chemistryEngine';
 
 test('INITIAL_CLUB_PROJECTS contains BWAN Gen 6 showcase projects and events', () => {
-  assert.ok(INITIAL_CLUB_PROJECTS.length >= 4);
-  assert.equal(INITIAL_CLUB_PROJECTS[0].code, 'BWAN-GEN6-01');
+  assert.ok(INITIAL_CLUB_PROJECTS.length >= 5);
+  assert.equal(INITIAL_CLUB_PROJECTS[0].code, 'BWAN-3D-STUDIO');
+  assert.equal(INITIAL_CLUB_PROJECTS[0].slug, '3d-molecular-studio');
+  assert.equal(INITIAL_CLUB_PROJECTS[1].code, 'BWAN-GEN6-01');
   assert.equal(
-    INITIAL_CLUB_PROJECTS[0].previewImage,
+    INITIAL_CLUB_PROJECTS[1].previewImage,
     '/assets/aistudio/image_f5fb4f1c.png'
   );
 });

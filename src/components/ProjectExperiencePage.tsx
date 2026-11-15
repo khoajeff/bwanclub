@@ -11,6 +11,11 @@ import {
   Gift,
   Compass,
   Grid,
+  Box,
+  Link2,
+  Check,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ClubProjectItem } from '../utils/chemistryEngine';
@@ -319,6 +324,19 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
   // Interactive state for Project 03: Valentine Chemistry Collection
   const [selectedProductIdx, setSelectedProductIdx] = useState(0);
 
+  // Interactive state for Project 00: 3D Organic Molecular Studio
+  const [copiedProjectLink, setCopiedProjectLink] = useState(false);
+  const [isStudioExpanded, setIsStudioExpanded] = useState(false);
+
+  const handleCopyCurrentProjectLink = () => {
+    const url = `${window.location.origin}/du-an/${project.slug}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).catch(() => {});
+    }
+    setCopiedProjectLink(true);
+    window.setTimeout(() => setCopiedProjectLink(false), 2200);
+  };
+
   const handleStartQuiz = (e: React.FormEvent) => {
     e.preventDefault();
     setSelectedAnswers([]);
@@ -367,7 +385,15 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
       data-testid="project-experience-page"
       className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 transition-colors duration-300"
     >
-      <div className="max-w-6xl mx-auto space-y-8">
+      <div
+        className={`${
+          project.slug === '3d-molecular-studio' && isStudioExpanded
+            ? 'max-w-[96vw]'
+            : project.slug === '3d-molecular-studio'
+            ? 'max-w-7xl'
+            : 'max-w-6xl'
+        } mx-auto space-y-6 transition-all duration-300`}
+      >
         {/* Top Navigation Bar back to Projects list */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <motion.button
@@ -386,6 +412,25 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
           </motion.button>
 
           <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
+            <button
+              type="button"
+              onClick={handleCopyCurrentProjectLink}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full google-one-subcard-pill text-[#1F1F2E] dark:text-white hover:border-[#6C63FF] transition-colors cursor-pointer"
+            >
+              {copiedProjectLink ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                  <span className="text-[#0D9488] dark:text-[#34D399]">
+                    Đã sao chép: /du-an/{project.slug}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                  <span>Link riêng: /du-an/{project.slug}</span>
+                </>
+              )}
+            </button>
             <span className="px-3 py-1 rounded-full bg-[#F1F0FF] dark:bg-[#6C63FF]/25 text-[#6C63FF] dark:text-[#A39DFF]">
               {project.code}
             </span>
@@ -395,8 +440,133 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
           </div>
         </div>
 
-        {/* CASE 1: FLAGSHIP 18 PERSONALITY ELEMENTS INTERACTIVE EXPERIENCE */}
-        {project.slug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
+        {/* CASE 0: BWAN 3D ORGANIC MOLECULAR STUDIO */}
+        {project.slug === '3d-molecular-studio' ? (
+          <div
+            data-testid="experience-3d-molecular-studio"
+            className="google-one-tonal-card rounded-[32px] p-4 sm:p-6 lg:p-8 space-y-5"
+          >
+            {/* Studio Top Control Bar */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#DFDBD2] dark:border-[#6C63FF]/25">
+              <div className="space-y-1.5">
+                <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF]">
+                  <Box className="w-4 h-4" />
+                  <span>
+                    BWAN CLUB · 3D ORGANIC MOLECULAR STUDIO · WEBGL THREE.JS R128
+                  </span>
+                </div>
+                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white">
+                  {project.title}
+                </h1>
+                <p className="text-xs sm:text-sm text-[#4A4A68] dark:text-[#CBD5E1]">
+                  Xoay tự do 360° Quaternion · 25+ phân tử hữu cơ &amp; phức chất
+                  sinh học · Tra cứu trực tuyến PubChem 3D, NIH Cactus, RCSB PDB
+                  &amp; ChEMBL · Đo độ dài (Å), góc liên kết (°) và lai hóa
+                  sp/sp²/sp³.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyCurrentProjectLink}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-semibold text-[#1F1F2E] dark:text-white hover:border-[#6C63FF] transition-colors cursor-pointer"
+                >
+                  {copiedProjectLink ? (
+                    <>
+                      <Check className="w-4 h-4 text-[#0D9488] dark:text-[#34D399]" />
+                      <span className="text-[#0D9488] dark:text-[#34D399]">
+                        Đã sao chép link dự án!
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Link2 className="w-4 h-4 text-[#6C63FF] dark:text-[#A39DFF]" />
+                      <span>Sao chép link (/du-an/3d-molecular-studio)</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsStudioExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#F1F0FF] dark:bg-[#1E1B3D] hover:bg-[#6C63FF] hover:text-white text-xs font-semibold text-[#6C63FF] dark:text-[#A39DFF] border border-[#6C63FF]/35 transition-colors cursor-pointer"
+                >
+                  {isStudioExpanded ? (
+                    <>
+                      <Minimize2 className="w-4 h-4" />
+                      <span>Thu gọn khung 3D</span>
+                    </>
+                  ) : (
+                    <>
+                      <Maximize2 className="w-4 h-4" />
+                      <span>Mở rộng khung 3D</span>
+                    </>
+                  )}
+                </button>
+
+                <a
+                  href="/3d-molecular-studio.html"
+                  data-testid="open-standalone-3d-studio-link"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full google-one-chem-btn text-xs font-semibold text-white whitespace-nowrap"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>Mở Link Độc Lập Toàn Màn Hình</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Interactive Embedded 3D Molecular Studio Workbench */}
+            <div className="rounded-2xl overflow-hidden border border-[#D5D0EA] dark:border-[#6C63FF]/40 bg-[#0F1322] shadow-lg">
+              <iframe
+                src="/3d-molecular-studio.html"
+                title="BWAN CLUB - 3D Organic Molecular Studio"
+                className={`w-full border-0 transition-all duration-300 ${
+                  isStudioExpanded ? 'h-[86vh] min-h-[760px]' : 'h-[740px]'
+                }`}
+              />
+            </div>
+
+            {/* Quick Guide Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div className="google-one-subcard p-3.5 text-xs">
+                <span className="font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF] block">
+                  01 · ĐIỀU KHIỂN CAMERA 3D TỰ DO 360°
+                </span>
+                <p className="mt-1 text-[#4A4A68] dark:text-[#CBD5E1]">
+                  Giữ chuột trái để xoay tự do 360° mọi hướng (Quaternion), cuộn
+                  con lăn để thu phóng, giữ chuột phải để di chuyển tâm phân tử.
+                </p>
+              </div>
+              <div className="google-one-subcard p-3.5 text-xs">
+                <span className="font-mono font-bold text-[#0284C7] dark:text-[#38BDF8] block">
+                  02 · ĐO LAI HÓA, ĐỘ DÀI &amp; GÓC LIÊN KẾT
+                </span>
+                <p className="mt-1 text-[#4A4A68] dark:text-[#CBD5E1]">
+                  Click 1 nguyên tử để xem lai hóa (sp/sp²/sp³), click 2 nguyên
+                  tử để đo khoảng cách (Å), click 3 nguyên tử để vẽ cung góc
+                  liên kết (°).
+                </p>
+              </div>
+              <div className="google-one-subcard p-3.5 text-xs">
+                <span className="font-mono font-bold text-[#0D9488] dark:text-[#34D399] block">
+                  03 · ĐƯỜNG LINK RIÊNG CHIA SẺ TRỰC TIẾP
+                </span>
+                <p className="mt-1 text-[#4A4A68] dark:text-[#CBD5E1]">
+                  Truy cập trực tiếp qua{' '}
+                  <code className="font-mono font-semibold text-[#6C63FF] dark:text-[#A39DFF]">
+                    /du-an/3d-molecular-studio
+                  </code>{' '}
+                  hoặc bản toàn màn hình{' '}
+                  <code className="font-mono font-semibold text-[#0284C7] dark:text-[#38BDF8]">
+                    /3d-molecular-studio.html
+                  </code>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : project.slug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
           <div className="rounded-[32px] bg-[#0B0A18] text-white border border-[#6C63FF]/40 shadow-xl overflow-hidden relative">
             {/* Subtle Chemistry Grid Background */}
             <div className="px-6 py-4 bg-[#121026] border-b border-[#6C63FF]/30 flex flex-wrap items-center justify-between gap-4">

@@ -19,6 +19,10 @@ import {
   Users,
   Globe,
   Wallet,
+  Box,
+  Link2,
+  Check,
+  Maximize2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AppLanguage } from './Navbar';
@@ -71,6 +75,19 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
   const [payloadText, setPayloadText] = useState('');
   const [syncError, setSyncError] = useState<string | null>(null);
   const [syncSuccess, setSyncSuccess] = useState<string | null>(null);
+  const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  const handleCopyProjectLink = (slug: string, customPath?: string) => {
+    const relativePath = customPath || `/du-an/${slug}`;
+    const fullUrl = `${window.location.origin}${relativePath}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullUrl).catch(() => {});
+    }
+    setCopiedSlug(slug);
+    window.setTimeout(() => {
+      setCopiedSlug((prev) => (prev === slug ? null : prev));
+    }, 2200);
+  };
 
   const filteredProjects =
     activeFilter === 'all'
@@ -181,8 +198,8 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                   </h2>
                   <p className="mt-3 text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
                     {lang === 'vi'
-                      ? 'Mỗi dự án là một không gian tương tác dành riêng cho người tham gia trải nghiệm. Hãy bấm vào nút trên từng dự án để được chuyển trực tiếp đến trang trải nghiệm của dự án đó!'
-                      : 'Each project is an interactive experience built for participants. Click any project button below to open its dedicated experience page.'}
+                      ? 'Mỗi dự án là một không gian tương tác dành riêng cho người tham gia trải nghiệm. Hãy bấm vào nút trên từng dự án hoặc truy cập đường link riêng để khám phá ngay!'
+                      : 'Each project is an interactive experience built for participants. Click any project button below or open its dedicated link.'}
                   </p>
                 </div>
 
@@ -243,12 +260,292 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                 </div>
               </div>
 
+              {/* NEW PROJECT SPOTLIGHT: BWAN 3D ORGANIC MOLECULAR STUDIO */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                data-testid="spotlight-3d-molecular-studio"
+                className="mt-10 google-one-tonal-card rounded-[32px] p-6 sm:p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+              >
+                <div className="lg:col-span-7 space-y-4">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
+                    <span className="px-3 py-1 rounded-full bg-[#6C63FF]/15 dark:bg-[#6C63FF]/25 text-[#6C63FF] dark:text-[#A39DFF] border border-[#6C63FF]/30">
+                      ★ DỰ ÁN MỚI RA MẮT · 3D LAB WORKBENCH
+                    </span>
+                    <span className="text-[#0284C7] dark:text-[#38BDF8]">
+                      Three.js r128 · 60 FPS
+                    </span>
+                    <span aria-hidden="true" className="text-[#9CA3AF]">
+                      ·
+                    </span>
+                    <span className="text-[#0D9488] dark:text-[#34D399]">
+                      ● LINK RIÊNG TRỰC TUYẾN
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white leading-tight text-balance">
+                    BWAN 3D Organic Molecular Studio —{' '}
+                    <span className="google-one-chem-gradient-text">
+                      {lang === 'vi'
+                        ? 'Phòng Thí Nghiệm Phân Tử Hữu Cơ 3D'
+                        : 'Interactive 3D Organic Molecular Lab'}
+                    </span>
+                  </h3>
+
+                  <p className="text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
+                    Khám phá không gian mô phỏng cấu trúc phân tử 3D tương tác
+                    thời gian thực của{' '}
+                    <strong className="text-[#1F1F2E] dark:text-white">
+                      BWAN CLUB
+                    </strong>
+                    : xoay tự do 360° Quaternion không khóa trục, tích hợp 25+
+                    hợp chất hữu cơ &amp; đại phân tử sinh học (Chlorophyll a/b,
+                    Heme B, Benzene, Glycine...), tìm kiếm trực tuyến qua{' '}
+                    <strong className="text-[#0284C7] dark:text-[#38BDF8]">
+                      PubChem 3D, NIH Cactus, RCSB PDB &amp; ChEMBL
+                    </strong>
+                    , đo lai hóa sp/sp²/sp³, độ dài (Å) và góc liên kết (°).
+                  </p>
+
+                  {/* Dedicated Project URL Bar */}
+                  <div className="google-one-subcard p-3.5 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-8 h-8 rounded-xl bg-[#6C63FF]/15 dark:bg-[#6C63FF]/25 flex items-center justify-center text-[#6C63FF] dark:text-[#A39DFF] shrink-0">
+                        <Link2 className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="block text-[11px] font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF] uppercase">
+                          Link Liên Kết Riêng Của Dự Án
+                        </span>
+                        <code className="block text-xs sm:text-sm font-mono font-bold text-[#1F1F2E] dark:text-white truncate">
+                          /du-an/3d-molecular-studio · /3d-molecular-studio.html
+                        </code>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        type="button"
+                        data-testid="copy-link-3d-studio-btn"
+                        onClick={() =>
+                          handleCopyProjectLink('3d-molecular-studio')
+                        }
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-[#191736] hover:bg-[#F1F0FF] dark:hover:bg-[#2A2656] border border-[#D5D0EA] dark:border-[#6C63FF]/35 text-xs font-semibold text-[#1F1F2E] dark:text-white transition-colors cursor-pointer"
+                      >
+                        {copiedSlug === '3d-molecular-studio' ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                            <span className="text-[#0D9488] dark:text-[#34D399]">
+                              Đã sao chép link!
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                            <span>Sao chép link</span>
+                          </>
+                        )}
+                      </button>
+
+                      <a
+                        href="/3d-molecular-studio.html"
+                        data-testid="standalone-link-3d-studio"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#0284C7]/15 dark:bg-[#38BDF8]/20 hover:bg-[#0284C7]/25 border border-[#0284C7]/35 text-xs font-semibold text-[#0284C7] dark:text-[#38BDF8] transition-colors whitespace-nowrap"
+                      >
+                        <Maximize2 className="w-3.5 h-3.5" />
+                        <span>Mở Toàn Màn Hình</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-3">
+                    <motion.button
+                      type="button"
+                      data-testid="open-3d-molecular-studio-btn"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() =>
+                        onOpenProjectExperience?.('3d-molecular-studio')
+                      }
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold text-white cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      <Box className="w-4 h-4" />
+                      <span>
+                        {lang === 'vi'
+                          ? 'Mở Phòng Thí Nghiệm 3D Ngay'
+                          : 'Launch 3D Molecular Studio'}
+                      </span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* Right Interactive Preview Card for 3D Studio */}
+                <div className="lg:col-span-5">
+                  <div
+                    onClick={() =>
+                      onOpenProjectExperience?.('3d-molecular-studio')
+                    }
+                    className="google-one-subcard p-6 rounded-3xl cursor-pointer group space-y-5 relative overflow-hidden"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF]">
+                        <Box className="w-4 h-4" />
+                        <span>3D MOLECULAR ENGINE · CPK &amp; ORBIT</span>
+                      </span>
+                      <span className="px-2.5 py-1 rounded-md bg-[#0D9488]/15 text-[#0D9488] dark:text-[#34D399] font-mono text-[11px] font-bold">
+                        WebGL 60FPS
+                      </span>
+                    </div>
+
+                    {/* Visual 3D Atom/Bond CPK Schematic */}
+                    <div className="rounded-2xl bg-[#0F1322] border border-[#6C63FF]/30 p-5 flex flex-col items-center justify-center relative min-h-[190px]">
+                      <svg
+                        viewBox="0 0 320 150"
+                        className="w-full max-w-[290px] h-auto transition-transform duration-500 group-hover:scale-105"
+                      >
+                        <defs>
+                          <radialGradient id="cpk-c" cx="35%" cy="30%" r="65%">
+                            <stop offset="0%" stopColor="#94A3B8" />
+                            <stop offset="55%" stopColor="#475569" />
+                            <stop offset="100%" stopColor="#1E293B" />
+                          </radialGradient>
+                          <radialGradient id="cpk-o" cx="35%" cy="30%" r="65%">
+                            <stop offset="0%" stopColor="#FCA5A5" />
+                            <stop offset="55%" stopColor="#EF4444" />
+                            <stop offset="100%" stopColor="#991B1B" />
+                          </radialGradient>
+                          <radialGradient id="cpk-n" cx="35%" cy="30%" r="65%">
+                            <stop offset="0%" stopColor="#93C5FD" />
+                            <stop offset="55%" stopColor="#3B82F6" />
+                            <stop offset="100%" stopColor="#1D4ED8" />
+                          </radialGradient>
+                          <radialGradient id="cpk-h" cx="35%" cy="30%" r="65%">
+                            <stop offset="0%" stopColor="#FFFFFF" />
+                            <stop offset="70%" stopColor="#E2E8F0" />
+                            <stop offset="100%" stopColor="#94A3B8" />
+                          </radialGradient>
+                        </defs>
+                        {/* Angle arc */}
+                        <path
+                          d="M 132 68 A 32 32 0 0 1 188 68"
+                          fill="none"
+                          stroke="#F59E0B"
+                          strokeWidth="2"
+                          strokeDasharray="4 3"
+                        />
+                        <text
+                          x="160"
+                          y="46"
+                          textAnchor="middle"
+                          fill="#FBBF24"
+                          fontSize="11"
+                          fontFamily="monospace"
+                          fontWeight="bold"
+                        >
+                          109.5° · sp³
+                        </text>
+                        {/* Bonds */}
+                        <line
+                          x1="105"
+                          y1="95"
+                          x2="160"
+                          y2="68"
+                          stroke="#94A3B8"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="160"
+                          y1="68"
+                          x2="215"
+                          y2="95"
+                          stroke="#94A3B8"
+                          strokeWidth="7"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="215"
+                          y1="91"
+                          x2="262"
+                          y2="66"
+                          stroke="#CBD5E1"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="215"
+                          y1="99"
+                          x2="262"
+                          y2="74"
+                          stroke="#CBD5E1"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="105"
+                          y1="95"
+                          x2="60"
+                          y2="70"
+                          stroke="#94A3B8"
+                          strokeWidth="5"
+                          strokeLinecap="round"
+                        />
+                        <line
+                          x1="105"
+                          y1="95"
+                          x2="82"
+                          y2="130"
+                          stroke="#CBD5E1"
+                          strokeWidth="3.5"
+                          strokeLinecap="round"
+                        />
+                        {/* Atoms */}
+                        <circle cx="60" cy="70" r="14" fill="url(#cpk-n)" />
+                        <circle cx="105" cy="95" r="17" fill="url(#cpk-c)" />
+                        <circle cx="160" cy="68" r="17" fill="url(#cpk-c)" />
+                        <circle cx="215" cy="95" r="17" fill="url(#cpk-c)" />
+                        <circle cx="262" cy="70" r="15" fill="url(#cpk-o)" />
+                        <circle cx="82" cy="130" r="10" fill="url(#cpk-h)" />
+                      </svg>
+                      <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono text-[#CBD5E1]">
+                        <span className="px-2 py-0.5 rounded bg-white/10">
+                          C₆H₆ Benzene
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-white/10">
+                          C₅₅H₇₂MgN₄O₅ Chlorophyll a
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-white/10">
+                          C₃₄H₃₂FeN₄O₄ Heme B
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
+                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
+                        ✦ Xoay 360° Quaternion
+                      </div>
+                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
+                        ✦ PubChem &amp; PDB Cloud
+                      </div>
+                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
+                        ✦ Đo góc &amp; Lai hóa
+                      </div>
+                      <div className="google-one-subcard-pill px-3 py-2 font-semibold text-[#1F1F2E] dark:text-white">
+                        ✦ Nhập/Xuất .SDF .MOL
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
               {/* Featured Flagship Project Spotlight */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-10 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+                className="mt-8 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
               >
                 <div className="lg:col-span-6 space-y-4">
                   <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
@@ -413,7 +710,41 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                           </span>
                         </div>
 
-                        <div className="flex items-center justify-end">
+                        <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleCopyProjectLink(proj.slug)}
+                              title={`Sao chép link riêng: /du-an/${proj.slug}`}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full google-one-subcard-pill text-[11px] font-mono font-semibold text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#6C63FF] dark:hover:text-white transition-colors cursor-pointer"
+                            >
+                              {copiedSlug === proj.slug ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                                  <span className="text-[#0D9488] dark:text-[#34D399]">
+                                    Đã chép link
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                                  <span>/du-an/{proj.slug}</span>
+                                </>
+                              )}
+                            </button>
+
+                            {proj.slug === '3d-molecular-studio' && (
+                              <a
+                                href="/3d-molecular-studio.html"
+                                title="Mở link độc lập toàn màn hình"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-[#0284C7]/15 dark:bg-[#38BDF8]/20 text-[11px] font-mono font-semibold text-[#0284C7] dark:text-[#38BDF8] hover:bg-[#0284C7]/25 transition-colors"
+                              >
+                                <Maximize2 className="w-3 h-3" />
+                                <span>Full 3D</span>
+                              </a>
+                            )}
+                          </div>
+
                           <motion.button
                             type="button"
                             data-testid={`open-project-btn-${proj.slug}`}
