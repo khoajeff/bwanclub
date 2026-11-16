@@ -77,8 +77,21 @@ function extractProjectSlugFromPathname(pathname: string): string | null {
   if (clean === '/3d-molecular-studio' || clean === '/molecular-studio') {
     return '3d-molecular-studio';
   }
+  if (clean === '/18-nguyen-to-nhan-cach' || clean === '/giai-ma-18-nguyen-to-nhan-cach') {
+    return 'giai-ma-18-nguyen-to-nhan-cach';
+  }
   const match = clean.match(/^\/du-an\/([^/]+)$/);
   return match ? decodeURIComponent(match[1]) : null;
+}
+
+function isStandaloneFullscreenUrl(): boolean {
+  const searchParams = new URLSearchParams(window.location.search);
+  const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  return (
+    searchParams.get('fullscreen') === '1' ||
+    cleanPath === '/18-nguyen-to-nhan-cach' ||
+    cleanPath === '/giai-ma-18-nguyen-to-nhan-cach'
+  );
 }
 
 const TAB_TRANSITION = {
@@ -92,6 +105,9 @@ export default function App() {
   );
   const [activeProjectSlug, setActiveProjectSlug] = useState<string | null>(
     () => extractProjectSlugFromPathname(window.location.pathname)
+  );
+  const [standaloneFullscreen, setStandaloneFullscreen] = useState<boolean>(
+    () => isStandaloneFullscreenUrl()
   );
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<AppLanguage>('vi');
@@ -119,6 +135,7 @@ export default function App() {
       setActiveProjectSlug(
         extractProjectSlugFromPathname(window.location.pathname)
       );
+      setStandaloneFullscreen(isStandaloneFullscreenUrl());
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -152,10 +169,11 @@ export default function App() {
   }, []);
 
   const handleNavigate = useCallback((route: AppRoute) => {
-    if (window.location.pathname !== route) {
+    if (window.location.pathname !== route || window.location.search) {
       window.history.pushState({}, '', route);
     }
     setActiveProjectSlug(null);
+    setStandaloneFullscreen(false);
     setCurrentRoute(route);
 
     if (route === '/leaderboard' || route === '/bxh') {
@@ -172,11 +190,12 @@ export default function App() {
 
   const handleOpenProjectExperience = useCallback((slug: string) => {
     const targetPath = `/du-an/${slug}`;
-    if (window.location.pathname !== targetPath) {
+    if (window.location.pathname !== targetPath || window.location.search) {
       window.history.pushState({}, '', targetPath);
     }
     setCurrentRoute('/du-an');
     setActiveProjectSlug(slug);
+    setStandaloneFullscreen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -196,6 +215,17 @@ export default function App() {
   const matchedProject = activeProjectSlug
     ? projects.find((p) => p.slug === activeProjectSlug) || projects[0]
     : null;
+
+  if (standaloneFullscreen && matchedProject) {
+    return (
+      <ProjectExperiencePage
+        project={matchedProject}
+        onBackToProjects={() => handleNavigate('/du-an')}
+        lang={lang}
+        standaloneFullscreen={true}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-[#0D0C1D] text-[#1F1F2E] dark:text-[#F8FAFC] transition-colors duration-300">

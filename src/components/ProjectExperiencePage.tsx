@@ -26,6 +26,7 @@ interface ProjectExperiencePageProps {
   project: ClubProjectItem;
   onBackToProjects: () => void;
   lang: AppLanguage;
+  standaloneFullscreen?: boolean;
 }
 
 interface PersonalityElementProfile {
@@ -309,6 +310,7 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
   project,
   onBackToProjects,
   lang,
+  standaloneFullscreen = false,
 }) => {
   // Interactive state for Project 01: 18 Personality Elements Test
   const [participantName, setParticipantName] = useState('');
@@ -380,6 +382,290 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
     quizStarted && selectedAnswers.length >= PERSONALITY_QUIZ_STEPS.length;
   const matchedElement = getMatchedElement();
 
+  const isExpandableProject =
+    project.slug === '3d-molecular-studio' ||
+    project.slug === 'giai-ma-18-nguyen-to-nhan-cach';
+
+  if (
+    standaloneFullscreen &&
+    project.slug === 'giai-ma-18-nguyen-to-nhan-cach'
+  ) {
+    return (
+      <div className="min-h-screen bg-[#0B0A18] text-white flex flex-col">
+        <div className="px-6 py-4 bg-[#121026] border-b border-[#6C63FF]/30 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <BwanHexLogo className="w-9 h-9" />
+            <div>
+              <span className="font-display text-sm sm:text-base font-extrabold tracking-tight text-white block">
+                BWAN GEN 6 — CHEMISTRY LAB
+              </span>
+              <span className="font-mono text-[11px] text-[#A39DFF] block">
+                Which Element Are You? · Interactive Personality Test
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setShowPeriodicModal((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#1E1B3D] hover:bg-[#6C63FF] text-xs font-mono font-bold text-[#CBD5E1] hover:text-white border border-[#6C63FF]/35 transition-colors cursor-pointer"
+            >
+              <Grid className="w-3.5 h-3.5 text-[#38BDF8]" />
+              <span>
+                {showPeriodicModal
+                  ? 'Đóng Bảng 18 Nguyên Tố'
+                  : 'Bảng 18 Nguyên Tố'}
+              </span>
+            </button>
+
+            <a
+              href="/du-an/giai-ma-18-nguyen-to-nhan-cach"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-[#1E1B3D] hover:bg-[#6C63FF] text-xs font-mono font-bold text-[#CBD5E1] hover:text-white border border-[#6C63FF]/35 transition-colors"
+            >
+              <Minimize2 className="w-3.5 h-3.5" />
+              <span>Thoát Toàn Màn Hình</span>
+            </a>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {showPeriodicModal && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="bg-[#15122E] border-b border-[#6C63FF]/30 px-6 py-6 overflow-hidden"
+            >
+              <div className="max-w-5xl mx-auto">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-display text-sm sm:text-base font-bold text-white">
+                    Danh Mục 18 Nguyên Tố Nhân Cách — BWAN CLUB Gen 6
+                  </h4>
+                  <span className="text-xs font-mono text-[#A39DFF]">
+                    6 nhóm tính cách chủ đạo & 12 nguyên tố mở rộng
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  {EIGHTEEN_ELEMENTS_CATALOG.map((el) => (
+                    <div
+                      key={el.symbol}
+                      className="p-3.5 rounded-2xl bg-[#0D0C1D] border border-[#6C63FF]/30 space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-xs font-bold text-[#38BDF8]">
+                          {el.symbol} · {el.atomicNumber}
+                        </span>
+                        <span className="text-[11px] font-mono text-[#A39DFF]">
+                          {el.divisionMatch.split('(')[0]}
+                        </span>
+                      </div>
+                      <p className="font-display text-sm font-bold text-white">
+                        {el.name}
+                      </p>
+                      <p className="text-xs text-[#CBD5E1] leading-relaxed">
+                        {el.archetype}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-14">
+          <div className="w-full max-w-3xl">
+            {!quizStarted && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-[28px] bg-[#131129]/95 border border-[#6C63FF]/35 p-6 sm:p-10 text-center space-y-6 shadow-lg"
+              >
+                <div className="flex justify-center">
+                  <BwanHexLogo className="w-14 h-14" />
+                </div>
+
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1E1B3D] border border-[#6C63FF]/40 text-xs font-mono font-bold text-[#A39DFF]">
+                  <Atom className="w-3.5 h-3.5" />
+                  <span>
+                    Hệ thống giải mã 18 Nguyên tố Nhân cách — BWAN GEN 6
+                  </span>
+                </div>
+
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  Nguyên Tố Hóa Học Nào{' '}
+                  <span className="block mt-1 google-one-chem-gradient-text">
+                    Đại Diện Cho Bạn?
+                  </span>
+                </h1>
+
+                <p className="text-sm sm:text-base text-[#CBD5E1] max-w-xl mx-auto leading-relaxed">
+                  Không có đáp án đúng hay sai — mỗi lựa chọn phản ánh thói
+                  quen, bản năng và nguồn năng lượng tự nhiên nhất của bạn qua
+                  5 chiều sâu: tính cách, tư duy, làm việc nhóm, xử lý áp lực
+                  và phong cách sáng tạo.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center gap-2">
+                  {[
+                    '01 Tính cách',
+                    '02 Tư duy',
+                    '03 Làm việc nhóm',
+                    '04 Xử lý áp lực',
+                    '05 Phong cách sáng tạo',
+                  ].map((dim) => (
+                    <span
+                      key={dim}
+                      className="px-3 py-1.5 rounded-full bg-[#1E1B3D] border border-[#6C63FF]/30 text-xs font-mono font-semibold text-[#E2E8F0]"
+                    >
+                      <strong className="text-[#A39DFF]">
+                        {dim.slice(0, 2)}
+                      </strong>
+                      {dim.slice(2)}
+                    </span>
+                  ))}
+                </div>
+
+                <form
+                  onSubmit={handleStartQuiz}
+                  className="max-w-md mx-auto space-y-4 pt-2"
+                >
+                  <div className="text-left">
+                    <label
+                      htmlFor="element-quiz-name-fs"
+                      className="block text-xs font-semibold text-[#CBD5E1] mb-1.5 text-center"
+                    >
+                      Nhập tên hoặc biệt danh của bạn (in lên thẻ kết quả):
+                    </label>
+                    <input
+                      id="element-quiz-name-fs"
+                      type="text"
+                      value={participantName}
+                      onChange={(e) => setParticipantName(e.target.value)}
+                      placeholder="VD: Minh Anh — BWAN Gen 6..."
+                      className="w-full px-4 py-3 rounded-xl bg-[#0B0A18] border border-[#6C63FF]/40 text-sm text-white placeholder-[#64748B] text-center focus:outline-none focus:border-[#A39DFF]"
+                    />
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.96 }}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full google-one-chem-btn text-sm font-bold text-white shadow-md cursor-pointer"
+                  >
+                    <span>Bắt Đầu Phản Ứng</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </motion.button>
+                </form>
+              </motion.div>
+            )}
+
+            {quizStarted && !isQuizCompleted && (
+              <motion.div
+                key={`q-fs-${currentQuestionIdx}`}
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="rounded-[28px] bg-[#131129]/95 border border-[#6C63FF]/35 p-6 sm:p-10 space-y-6"
+              >
+                <div className="flex items-center justify-between text-xs font-mono text-[#A39DFF]">
+                  <span>
+                    CHIỀU SÂU 0{currentQuestionIdx + 1} / 0
+                    {PERSONALITY_QUIZ_STEPS.length} ·{' '}
+                    {PERSONALITY_QUIZ_STEPS[currentQuestionIdx].stepCode}
+                  </span>
+                  <span>
+                    {Math.round(
+                      ((currentQuestionIdx + 1) /
+                        PERSONALITY_QUIZ_STEPS.length) *
+                        100
+                    )}
+                    %
+                  </span>
+                </div>
+
+                <h2 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug">
+                  {PERSONALITY_QUIZ_STEPS[currentQuestionIdx].question}
+                </h2>
+
+                <div className="space-y-3">
+                  {PERSONALITY_QUIZ_STEPS[currentQuestionIdx].options.map(
+                    (opt, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSelectOption(opt.elementIdx)}
+                        className="w-full text-left p-4 rounded-2xl bg-[#0B0A18] hover:bg-[#1E1B3D] border border-[#6C63FF]/30 hover:border-[#A39DFF] transition-all flex items-start gap-3 cursor-pointer"
+                      >
+                        <span className="w-7 h-7 rounded-lg bg-[#6C63FF]/25 border border-[#6C63FF]/40 flex items-center justify-center font-mono text-xs font-bold text-[#A39DFF] shrink-0">
+                          {String.fromCharCode(65 + idx)}
+                        </span>
+                        <span className="text-sm sm:text-base text-[#E2E8F0] leading-relaxed">
+                          {opt.label}
+                        </span>
+                      </button>
+                    )
+                  )}
+                </div>
+              </motion.div>
+            )}
+
+            {isQuizCompleted && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-[28px] bg-[#131129] border-2 border-[#6C63FF] p-6 sm:p-10 space-y-6"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#6C63FF]/30 pb-5">
+                  <div>
+                    <span className="text-xs font-mono font-bold text-[#34D399] block">
+                      ● ĐÃ GIẢI MÃ BẢN SẮC NGUYÊN TỐ HÓA HỌC
+                    </span>
+                    <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-white mt-1">
+                       Hồ Sơ Nguyên Tố Của{' '}
+                      <span className="text-[#A39DFF]">
+                        {participantName.trim() || 'Nhà Thực Nghiệm BWAN'}
+                      </span>
+                    </h2>
+                  </div>
+                  <div className="flex h-16 w-16 flex-col items-center justify-center rounded-2xl bg-gradient-to-br from-[#6C63FF] to-[#0284C7] text-white shadow-md">
+                    <span className="font-mono text-[10px] font-bold">
+                      {matchedElement.atomicNumber}
+                    </span>
+                    <span className="font-display text-2xl font-extrabold leading-none">
+                      {matchedElement.symbol}
+                    </span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">
+                    {matchedElement.archetype}
+                  </div>
+                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white">
+                    {matchedElement.name}
+                  </h3>
+                  <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
+                    {matchedElement.description}
+                  </p>
+                </div>
+                <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-[#6C63FF]/30">
+                  <button
+                    type="button"
+                    onClick={handleResetQuiz}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1E1B3D] hover:bg-[#6C63FF] text-xs sm:text-sm font-semibold text-white transition-colors cursor-pointer"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    <span>Thực hiện lại bài trắc nghiệm</span>
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <section
       data-testid="project-experience-page"
@@ -387,9 +673,9 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
     >
       <div
         className={`${
-          project.slug === '3d-molecular-studio' && isStudioExpanded
+          isExpandableProject && isStudioExpanded
             ? 'max-w-[96vw]'
-            : project.slug === '3d-molecular-studio'
+            : isExpandableProject
             ? 'max-w-7xl'
             : 'max-w-6xl'
         } mx-auto space-y-6 transition-all duration-300`}
@@ -567,9 +853,86 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
             </div>
           </div>
         ) : project.slug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
-          <div className="rounded-[32px] bg-[#0B0A18] text-white border border-[#6C63FF]/40 shadow-xl overflow-hidden relative">
-            {/* Subtle Chemistry Grid Background */}
-            <div className="px-6 py-4 bg-[#121026] border-b border-[#6C63FF]/30 flex flex-wrap items-center justify-between gap-4">
+          /* CASE 1: FLAGSHIP 18 PERSONALITY ELEMENTS INTERACTIVE EXPERIENCE (UNTOUCHED CORE UI + FULLSCREEN & EXPAND CONTROLS) */
+          <div
+            data-testid="experience-18-elements"
+            className="google-one-tonal-card rounded-[32px] p-4 sm:p-6 lg:p-8 space-y-5"
+          >
+            {/* Top Control Bar matching Project 2 (3D Studio) */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-[#DFDBD2] dark:border-[#6C63FF]/25">
+              <div className="space-y-1.5">
+                <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF]">
+                  <Atom className="w-4 h-4" />
+                  <span>
+                    BWAN CLUB · HỆ THỐNG GIẢI MÃ 18 NGUYÊN TỐ NHÂN CÁCH · GEN 6
+                  </span>
+                </div>
+                <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white">
+                  {project.title}
+                </h1>
+                <p className="text-xs sm:text-sm text-[#4A4A68] dark:text-[#CBD5E1]">
+                  Khám phá nguyên tố hóa học đại diện cho bản thân qua 5 chiều
+                  sâu: tính cách, tư duy, làm việc nhóm, xử lý áp lực và phong
+                  cách sáng tạo.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyCurrentProjectLink}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-semibold text-[#1F1F2E] dark:text-white hover:border-[#6C63FF] transition-colors cursor-pointer"
+                >
+                  {copiedProjectLink ? (
+                    <>
+                      <Check className="w-4 h-4 text-[#0D9488] dark:text-[#34D399]" />
+                      <span className="text-[#0D9488] dark:text-[#34D399]">
+                        Đã sao chép link dự án!
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Link2 className="w-4 h-4 text-[#6C63FF] dark:text-[#A39DFF]" />
+                      <span>
+                        Sao chép link (/du-an/giai-ma-18-nguyen-to-nhan-cach)
+                      </span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsStudioExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#F1F0FF] dark:bg-[#1E1B3D] hover:bg-[#6C63FF] hover:text-white text-xs font-semibold text-[#6C63FF] dark:text-[#A39DFF] border border-[#6C63FF]/35 transition-colors cursor-pointer"
+                >
+                  {isStudioExpanded ? (
+                    <>
+                      <Minimize2 className="w-4 h-4" />
+                      <span>Thu gọn khung</span>
+                    </>
+                  ) : (
+                    <>
+                      <Maximize2 className="w-4 h-4" />
+                      <span>Mở rộng khung</span>
+                    </>
+                  )}
+                </button>
+
+                <a
+                  href="/du-an/giai-ma-18-nguyen-to-nhan-cach?fullscreen=1"
+                  data-testid="open-standalone-18-elements-link"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full google-one-chem-btn text-xs font-semibold text-white whitespace-nowrap"
+                >
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>Mở Link Độc Lập Toàn Màn Hình</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Untouched Original 18 Elements Application */}
+            <div className="rounded-[32px] bg-[#0B0A18] text-white border border-[#6C63FF]/40 shadow-xl overflow-hidden relative">
+              {/* Subtle Chemistry Grid Background */}
+              <div className="px-6 py-4 bg-[#121026] border-b border-[#6C63FF]/30 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <BwanHexLogo className="w-9 h-9" />
                 <div>
@@ -889,6 +1252,7 @@ export const ProjectExperiencePage: React.FC<ProjectExperiencePageProps> = ({
                   </div>
                 </motion.div>
               )}
+            </div>
             </div>
           </div>
         ) : project.slug === 'chuoi-lab-tour-noi-bo-va-workshop-gen-6' ? (

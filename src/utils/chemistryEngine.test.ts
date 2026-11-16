@@ -17,13 +17,13 @@ import {
 
 test('INITIAL_CLUB_PROJECTS contains BWAN Gen 6 showcase projects and events', () => {
   assert.ok(INITIAL_CLUB_PROJECTS.length >= 5);
-  assert.equal(INITIAL_CLUB_PROJECTS[0].code, 'BWAN-3D-STUDIO');
-  assert.equal(INITIAL_CLUB_PROJECTS[0].slug, '3d-molecular-studio');
-  assert.equal(INITIAL_CLUB_PROJECTS[1].code, 'BWAN-GEN6-01');
+  assert.equal(INITIAL_CLUB_PROJECTS[0].code, 'BWAN-GEN6-01');
   assert.equal(
-    INITIAL_CLUB_PROJECTS[1].previewImage,
+    INITIAL_CLUB_PROJECTS[0].previewImage,
     '/assets/aistudio/image_f5fb4f1c.png'
   );
+  assert.equal(INITIAL_CLUB_PROJECTS[1].code, 'BWAN-3D-STUDIO');
+  assert.equal(INITIAL_CLUB_PROJECTS[1].slug, '3d-molecular-studio');
 });
 
 test('BWAN_CLUB_BACKGROUND, VISION, CORE VALUES, and GENERATIONS match official Gen 6 slides', () => {

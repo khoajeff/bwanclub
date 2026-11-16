@@ -260,20 +260,157 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                 </div>
               </div>
 
-              {/* SPOTLIGHT 01: BWAN 3D ORGANIC MOLECULAR STUDIO (MATCHING UNIFIED FORM) */}
+              {/* SPOTLIGHT 01 (DỰ ÁN SỐ 1): PROJECT 18 PERSONALITY ELEMENTS */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                data-testid="spotlight-3d-molecular-studio"
                 className="mt-10 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
               >
                 <div className="lg:col-span-6 space-y-4">
                   <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
                     <span className="text-[#6C63FF] dark:text-[#A39DFF]">
                       {lang === 'vi'
-                        ? 'DỰ ÁN MỚI RA MẮT (GEN 6 · 2026)'
-                        : 'NEW GEN 6 FLAGSHIP STUDIO'}
+                        ? 'DỰ ÁN SỐ 1 · PROJECT MỞ MÀN GEN 6 (10 – 11/2026)'
+                        : 'PROJECT #1 · GEN 6 OPENING PROJECT'}
+                    </span>
+                    <span aria-hidden="true" className="text-[#9CA3AF]">
+                      ·
+                    </span>
+                    <span className="text-[#0284C7] dark:text-[#38BDF8]">
+                      {lang === 'vi'
+                        ? '18 NGUYÊN TỐ NHÂN CÁCH'
+                        : '18 PERSONALITY ELEMENTS'}
+                    </span>
+                    <span aria-hidden="true" className="text-[#9CA3AF]">
+                      ·
+                    </span>
+                    <span className="text-[#0D9488] dark:text-[#34D399]">
+                      ● ĐANG MỞ CỔNG TRẢI NGHIỆM
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white leading-tight text-balance">
+                    {lang === 'vi'
+                      ? 'PROJECT “Bạn là nguyên tố nào?” — '
+                      : 'PROJECT “Which Element Are You?” — '}
+                    <span className="google-one-chem-gradient-text">
+                      {lang === 'vi'
+                        ? 'Giải Mã Bản Sắc Hóa Học'
+                        : 'Decode Your Chemical Identity'}
+                    </span>
+                  </h3>
+
+                  <p className="text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
+                    Chiến dịch trực tuyến mở đầu nhiệm kỳ{' '}
+                    <strong className="text-[#1F1F2E] dark:text-white">
+                      BWAN CLUB Gen 6
+                    </strong>{' '}
+                    dành cho người tham gia trải nghiệm trực tiếp: khám phá
+                    nguyên tố đại diện của chính bạn qua 5 chiều sâu tính cách,
+                    tư duy, làm việc nhóm, xử lý áp lực và phong cách sáng tạo.
+                  </p>
+
+                  <div className="pt-1 flex flex-wrap items-center gap-3 text-xs font-mono font-semibold text-[#D97706] dark:text-[#FBBF24]">
+                    <span>Ne · 10 (Khí hiếm Sáng tạo)</span>
+                    <span>·</span>
+                    <span>Fe · 26 (Bản lĩnh Thép)</span>
+                    <span>·</span>
+                    <span>Au · 79 (Kết nối Bền vững)</span>
+                  </div>
+
+                  <div className="pt-3 flex flex-wrap items-center gap-3">
+                    <motion.button
+                      type="button"
+                      data-testid="flagship-project-experience-btn"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() =>
+                        onOpenProjectExperience?.(
+                          'giai-ma-18-nguyen-to-nhan-cach'
+                        )
+                      }
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold text-white cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      <span>
+                        {lang === 'vi'
+                          ? 'Trải Nghiệm Dự Án Ngay'
+                          : 'Experience Project Now'}
+                      </span>
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.button>
+
+                    <a
+                      href="/du-an/giai-ma-18-nguyen-to-nhan-cach?fullscreen=1"
+                      data-testid="fullscreen-link-project-1-btn"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#6C63FF]/12 dark:bg-[#6C63FF]/25 border border-[#6C63FF]/30 text-xs font-semibold text-[#6C63FF] dark:text-[#A39DFF] hover:bg-[#6C63FF]/20 transition-colors cursor-pointer"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === 'vi'
+                          ? 'Mở Toàn Màn Hình'
+                          : 'Open Fullscreen'}
+                      </span>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopyProjectLink('giai-ma-18-nguyen-to-nhan-cach')
+                      }
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-mono font-semibold text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#6C63FF] dark:hover:text-white transition-colors cursor-pointer"
+                    >
+                      {copiedSlug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
+                          <span className="text-[#0D9488] dark:text-[#34D399]">
+                            Đã sao chép link!
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+                          <span>/du-an/giai-ma-18-nguyen-to-nhan-cach</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-6">
+                  <div
+                    onClick={() =>
+                      onOpenProjectExperience?.(
+                        'giai-ma-18-nguyen-to-nhan-cach'
+                      )
+                    }
+                    title="Bấm để mở trang trải nghiệm PROJECT Bạn là nguyên tố nào?"
+                    className="rounded-2xl overflow-hidden border border-[#E5E2DC] dark:border-[#6C63FF]/40 shadow-md bg-[#0B0A16] cursor-pointer group relative"
+                  >
+                    <img
+                      src="/assets/aistudio/image_f5fb4f1c.png"
+                      alt="Giao diện Hệ thống giải mã 18 Nguyên tố Nhân cách — BWAN CLUB Gen 6"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* SPOTLIGHT 02 (DỰ ÁN SỐ 2): BWAN 3D ORGANIC MOLECULAR STUDIO */}
+              <motion.div
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                data-testid="spotlight-3d-molecular-studio"
+                className="mt-8 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
+              >
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
+                    <span className="text-[#6C63FF] dark:text-[#A39DFF]">
+                      {lang === 'vi'
+                        ? 'DỰ ÁN SỐ 2 · MỚI RA MẮT (GEN 6 · 2026)'
+                        : 'PROJECT #2 · NEW GEN 6 FLAGSHIP STUDIO'}
                     </span>
                     <span aria-hidden="true" className="text-[#9CA3AF]">
                       ·
@@ -341,6 +478,19 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                       <ArrowUpRight className="w-4 h-4" />
                     </motion.button>
 
+                    <a
+                      href="/3d-molecular-studio.html"
+                      data-testid="fullscreen-link-project-2-btn"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#6C63FF]/12 dark:bg-[#6C63FF]/25 border border-[#6C63FF]/30 text-xs font-semibold text-[#6C63FF] dark:text-[#A39DFF] hover:bg-[#6C63FF]/20 transition-colors cursor-pointer"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>
+                        {lang === 'vi'
+                          ? 'Mở Toàn Màn Hình'
+                          : 'Open Fullscreen'}
+                      </span>
+                    </a>
+
                     <button
                       type="button"
                       data-testid="copy-link-3d-studio-btn"
@@ -374,7 +524,7 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                     title="Bấm để mở trang trải nghiệm BWAN 3D Organic Molecular Studio"
                     className="rounded-2xl overflow-hidden border border-[#E5E2DC] dark:border-[#6C63FF]/40 shadow-md bg-[#0B0A16] cursor-pointer group relative"
                   >
-                    {/* Matching Dark Chemistry UI Window (same visual form as Spotlight 02) */}
+                    {/* Matching Dark Chemistry UI Window */}
                     <div className="px-4 py-3 bg-[#121026] border-b border-[#6C63FF]/30 flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-[#6C63FF]" />
@@ -521,130 +671,6 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                 </div>
               </motion.div>
 
-              {/* SPOTLIGHT 02: PROJECT 18 PERSONALITY ELEMENTS (MATCHING UNIFIED FORM) */}
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-8 bg-white dark:bg-[#16142E] rounded-[32px] p-6 sm:p-8 lg:p-10 border border-[#E5E2DC] dark:border-[#6C63FF]/35 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
-              >
-                <div className="lg:col-span-6 space-y-4">
-                  <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-semibold">
-                    <span className="text-[#6C63FF] dark:text-[#A39DFF]">
-                      {lang === 'vi'
-                        ? 'PROJECT MỞ MÀN GEN 6 (10 – 11/2026)'
-                        : 'GEN 6 OPENING PROJECT'}
-                    </span>
-                    <span aria-hidden="true" className="text-[#9CA3AF]">
-                      ·
-                    </span>
-                    <span className="text-[#0284C7] dark:text-[#38BDF8]">
-                      {lang === 'vi'
-                        ? '18 NGUYÊN TỐ NHÂN CÁCH'
-                        : '18 PERSONALITY ELEMENTS'}
-                    </span>
-                    <span aria-hidden="true" className="text-[#9CA3AF]">
-                      ·
-                    </span>
-                    <span className="text-[#0D9488] dark:text-[#34D399]">
-                      ● ĐANG MỞ CỔNG TRẢI NGHIỆM
-                    </span>
-                  </div>
-
-                  <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white leading-tight text-balance">
-                    {lang === 'vi'
-                      ? 'PROJECT “Bạn là nguyên tố nào?” — '
-                      : 'PROJECT “Which Element Are You?” — '}
-                    <span className="google-one-chem-gradient-text">
-                      {lang === 'vi'
-                        ? 'Giải Mã Bản Sắc Hóa Học'
-                        : 'Decode Your Chemical Identity'}
-                    </span>
-                  </h3>
-
-                  <p className="text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                    Chiến dịch trực tuyến mở đầu nhiệm kỳ{' '}
-                    <strong className="text-[#1F1F2E] dark:text-white">
-                      BWAN CLUB Gen 6
-                    </strong>{' '}
-                    dành cho người tham gia trải nghiệm trực tiếp: khám phá
-                    nguyên tố đại diện của chính bạn qua 5 chiều sâu tính cách,
-                    tư duy, làm việc nhóm, xử lý áp lực và phong cách sáng tạo.
-                  </p>
-
-                  <div className="pt-1 flex flex-wrap items-center gap-3 text-xs font-mono font-semibold text-[#D97706] dark:text-[#FBBF24]">
-                    <span>Ne · 10 (Khí hiếm Sáng tạo)</span>
-                    <span>·</span>
-                    <span>Fe · 26 (Bản lĩnh Thép)</span>
-                    <span>·</span>
-                    <span>Au · 79 (Kết nối Bền vững)</span>
-                  </div>
-
-                  <div className="pt-3 flex flex-wrap items-center gap-3">
-                    <motion.button
-                      type="button"
-                      data-testid="flagship-project-experience-btn"
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.96 }}
-                      onClick={() =>
-                        onOpenProjectExperience?.(
-                          'giai-ma-18-nguyen-to-nhan-cach'
-                        )
-                      }
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full google-one-chem-btn text-sm font-semibold text-white cursor-pointer whitespace-nowrap shrink-0"
-                    >
-                      <span>
-                        {lang === 'vi'
-                          ? 'Trải Nghiệm Dự Án Ngay'
-                          : 'Experience Project Now'}
-                      </span>
-                      <ArrowUpRight className="w-4 h-4" />
-                    </motion.button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleCopyProjectLink('giai-ma-18-nguyen-to-nhan-cach')
-                      }
-                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full google-one-subcard-pill text-xs font-mono font-semibold text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#6C63FF] dark:hover:text-white transition-colors cursor-pointer"
-                    >
-                      {copiedSlug === 'giai-ma-18-nguyen-to-nhan-cach' ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#34D399]" />
-                          <span className="text-[#0D9488] dark:text-[#34D399]">
-                            Đã sao chép link!
-                          </span>
-                        </>
-                      ) : (
-                        <>
-                          <Link2 className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
-                          <span>/du-an/giai-ma-18-nguyen-to-nhan-cach</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="lg:col-span-6">
-                  <div
-                    onClick={() =>
-                      onOpenProjectExperience?.(
-                        'giai-ma-18-nguyen-to-nhan-cach'
-                      )
-                    }
-                    title="Bấm để mở trang trải nghiệm PROJECT Bạn là nguyên tố nào?"
-                    className="rounded-2xl overflow-hidden border border-[#E5E2DC] dark:border-[#6C63FF]/40 shadow-md bg-[#0B0A16] cursor-pointer group relative"
-                  >
-                    <img
-                      src="/assets/aistudio/image_f5fb4f1c.png"
-                      alt="Giao diện Hệ thống giải mã 18 Nguyên tố Nhân cách — BWAN CLUB Gen 6"
-                      referrerPolicy="no-referrer"
-                      className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                    />
-                  </div>
-                </div>
-              </motion.div>
-
               {/* All Registered Projects Grid */}
               <motion.div
                 layout
@@ -714,7 +740,7 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                         </div>
 
                         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex flex-wrap items-center gap-1.5">
                             <button
                               type="button"
                               onClick={() => handleCopyProjectLink(proj.slug)}
@@ -736,14 +762,19 @@ export const CategorySyncHubSection: React.FC<CategorySyncHubSectionProps> = ({
                               )}
                             </button>
 
-                            {proj.slug === '3d-molecular-studio' && (
+                            {(proj.slug === 'giai-ma-18-nguyen-to-nhan-cach' ||
+                              proj.slug === '3d-molecular-studio') && (
                               <a
-                                href="/3d-molecular-studio.html"
+                                href={
+                                  proj.slug === '3d-molecular-studio'
+                                    ? '/3d-molecular-studio.html'
+                                    : '/du-an/giai-ma-18-nguyen-to-nhan-cach?fullscreen=1'
+                                }
                                 title="Mở link độc lập toàn màn hình"
                                 className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-[#0284C7]/15 dark:bg-[#38BDF8]/20 text-[11px] font-mono font-semibold text-[#0284C7] dark:text-[#38BDF8] hover:bg-[#0284C7]/25 transition-colors"
                               >
                                 <Maximize2 className="w-3 h-3" />
-                                <span>Full 3D</span>
+                                <span>Toàn màn hình</span>
                               </a>
                             )}
                           </div>

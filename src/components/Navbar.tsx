@@ -100,12 +100,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 dark:bg-[#0D0C1D]/90 backdrop-blur-xl border-b border-[#E5E7EB]/60 dark:border-[#6C63FF]/20 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-6 px-4 sm:px-6 lg:px-8 h-20">
+      <div className="max-w-7xl mx-auto flex items-stretch justify-between gap-6 px-4 sm:px-6 lg:px-8 h-16">
         {/* Zone 1: Transparent Hexagonal Club Logo + Balanced Google One Style BWAN CLUB Wordmark */}
         <a
           href="/"
           onClick={(e) => handleLinkClick(e, '/')}
-          className="group inline-flex items-center gap-2.5 sm:gap-3 font-bold tracking-tight text-[#1F1F2E] dark:text-white whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#6C63FF] rounded-lg"
+          className="group inline-flex items-center gap-2.5 sm:gap-3 pt-2 pb-1 font-bold tracking-tight text-[#1F1F2E] dark:text-white whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#6C63FF] rounded-lg"
         >
           <motion.div
             whileHover={{ rotate: 10, scale: 1.05 }}
@@ -126,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 2: Uniform Google One Navigation Links + Theme & Language items */}
         <nav
           aria-label="Điều hướng chính"
-          className="hidden lg:flex items-center gap-3 xl:gap-4 text-base sm:text-[17px] font-bold text-[#4A4A68] dark:text-[#CBD5E1]"
+          className="hidden lg:flex items-stretch gap-3 xl:gap-4 text-base sm:text-[17px] font-bold text-[#4A4A68] dark:text-[#CBD5E1]"
         >
           {navItems.map((item) => {
             const isActive = item.isDonate
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   handleLinkClick(e, item.path, item.scrollTargetId)
                 }
                 aria-current={isActive ? 'page' : undefined}
-                className={`relative px-4 py-6 transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-2 ${
+                className={`relative px-3.5 pt-3.5 pb-1.5 transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-2 ${
                   isActive
                     ? 'text-[#6C63FF] dark:text-[#A39DFF] font-extrabold'
                     : 'text-[#4A4A68] dark:text-[#CBD5E1] hover:text-[#1F1F2E] dark:hover:text-white'
@@ -160,52 +160,54 @@ export const Navbar: React.FC<NavbarProps> = ({
             );
           })}
 
-          <div className="h-4 w-[1px] bg-[#E5E7EB] dark:bg-[#6C63FF]/25 mx-1.5" />
+          <div className="flex items-center pt-2 pb-1 gap-2">
+            <div className="h-4 w-[1px] bg-[#E5E7EB] dark:bg-[#6C63FF]/25 mx-1.5" />
 
-          {/* Light / Dark Mode Switch */}
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.94 }}
-            onClick={onToggleTheme}
-            aria-label={
-              isDark
-                ? 'Chuyển sang giao diện Sáng'
-                : 'Chuyển sang giao diện Tối'
-            }
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F2EE] dark:bg-[#191632] text-[#1F1F2E] dark:text-white hover:text-[#6C63FF] dark:hover:text-[#A39DFF] border border-transparent hover:border-[#6C63FF]/30 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-          >
-            <motion.span
-              key={isDark ? 'sun' : 'moon'}
-              initial={{ rotate: -45, opacity: 0, scale: 0.7 }}
-              animate={{ rotate: 0, opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2 }}
+            {/* Light / Dark Mode Switch */}
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={onToggleTheme}
+              aria-label={
+                isDark
+                  ? 'Chuyển sang giao diện Sáng'
+                  : 'Chuyển sang giao diện Tối'
+              }
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F2EE] dark:bg-[#191632] text-[#1F1F2E] dark:text-white hover:text-[#6C63FF] dark:hover:text-[#A39DFF] border border-transparent hover:border-[#6C63FF]/30 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              {isDark ? (
-                <Sun className="w-4 h-4 text-[#F59E0B]" />
-              ) : (
-                <Moon className="w-4 h-4 text-[#6C63FF]" />
-              )}
-            </motion.span>
-            <span className="text-xs font-semibold">{labels.themeLabel}</span>
-          </motion.button>
+              <motion.span
+                key={isDark ? 'sun' : 'moon'}
+                initial={{ rotate: -45, opacity: 0, scale: 0.7 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isDark ? (
+                  <Sun className="w-4 h-4 text-[#F59E0B]" />
+                ) : (
+                  <Moon className="w-4 h-4 text-[#6C63FF]" />
+                )}
+              </motion.span>
+              <span className="text-xs font-semibold">{labels.themeLabel}</span>
+            </motion.button>
 
-          {/* Language Selector (VI / EN) */}
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.94 }}
-            onClick={onToggleLang}
-            aria-label="Chuyển đổi ngôn ngữ Tiếng Việt hoặc Tiếng Anh"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F2EE] dark:bg-[#191632] text-[#1F1F2E] dark:text-white hover:text-[#6C63FF] dark:hover:text-[#A39DFF] border border-transparent hover:border-[#6C63FF]/30 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-          >
-            <Globe className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
-            <span className="text-xs font-semibold">{labels.langLabel}</span>
-          </motion.button>
+            {/* Language Selector (VI / EN) */}
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={onToggleLang}
+              aria-label="Chuyển đổi ngôn ngữ Tiếng Việt hoặc Tiếng Anh"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F2EE] dark:bg-[#191632] text-[#1F1F2E] dark:text-white hover:text-[#6C63FF] dark:hover:text-[#A39DFF] border border-transparent hover:border-[#6C63FF]/30 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+            >
+              <Globe className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />
+              <span className="text-xs font-semibold">{labels.langLabel}</span>
+            </motion.button>
+          </div>
         </nav>
 
         {/* Zone 3: Capsule actions */}
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center pt-2 pb-1 gap-2.5 shrink-0">
           <motion.button
             type="button"
             whileHover={{ scale: 1.03 }}

@@ -600,13 +600,29 @@ export const BWAN_GEN6_ROADMAP: Gen6RoadmapMonth[] = [
 
 export const INITIAL_CLUB_PROJECTS: ClubProjectItem[] = [
   {
+    id: 'proj-element-personality',
+    slug: 'giai-ma-18-nguyen-to-nhan-cach',
+    code: 'BWAN-GEN6-01',
+    title: 'PROJECT “Bạn là nguyên tố nào?” — Giải Mã 18 Nguyên Tố Nhân Cách',
+    category: 'ung-dung',
+    categoryLabel: 'Dự Án Số 1 · Trọng Điểm Gen 6',
+    semester: 'Tháng 10 – 11/2026',
+    highlightMetric: '1.850+ lượt giải mã',
+    chemicalTheme: 'Ne · 10 / Si · 14 / Fe · 26 / Au · 79',
+    summary:
+      'Chiến dịch trực tuyến mở màn Gen 6 & chuỗi tri ân 20/11: phản ánh thói quen, bản năng và nguồn năng lượng tự nhiên qua 5 chiều sâu tính cách hóa học.',
+    status: 'ACTIVE',
+    statusLabel: 'Đang mở trải nghiệm',
+    previewImage: '/assets/aistudio/image_f5fb4f1c.png',
+  },
+  {
     id: 'proj-3d-molecular-studio',
     slug: '3d-molecular-studio',
     code: 'BWAN-3D-STUDIO',
     title:
       'BWAN 3D Organic Molecular Studio — Phòng Thí Nghiệm Phân Tử Hữu Cơ 3D',
     category: 'ung-dung',
-    categoryLabel: 'Ứng Dụng Mô Phỏng 3D · Mới Ra Mắt',
+    categoryLabel: 'Dự Án Số 2 · Mô Phỏng 3D',
     semester: 'Gen 6 · 2026–2027',
     highlightMetric: '25+ phân tử & 4 Cloud APIs (PubChem, PDB)',
     chemicalTheme: 'Three.js 3D · Lai hóa sp/sp²/sp³ · Đo độ dài & góc liên kết',
@@ -614,22 +630,6 @@ export const INITIAL_CLUB_PROJECTS: ClubProjectItem[] = [
       'Không gian mô phỏng cấu trúc phân tử hữu cơ & phức chất 3D thời gian thực: xoay tự do 360° Quaternion, tra cứu hàng triệu chất từ PubChem/RCSB PDB/ChEMBL, đo góc liên kết trực tiếp và nhập/xuất .SDF/.MOL/.XYZ.',
     status: 'ACTIVE',
     statusLabel: 'Đang mở trải nghiệm',
-  },
-  {
-    id: 'proj-element-personality',
-    slug: 'giai-ma-18-nguyen-to-nhan-cach',
-    code: 'BWAN-GEN6-01',
-    title: 'PROJECT “Bạn là nguyên tố nào?” — Giải Mã 18 Nguyên Tố Nhân Cách',
-    category: 'ung-dung',
-    categoryLabel: 'Dự Án Trọng Điểm Gen 6',
-    semester: 'Tháng 10 – 11/2026',
-    highlightMetric: '1.850+ lượt giải mã',
-    chemicalTheme: 'Ne · 10 / Si · 14 / Fe · 26 / Au · 79',
-    summary:
-      'Chiến dịch trực tuyến mở màn Gen 6 & chuỗi tri ân 20/11: phản ánh thói quen, bản năng và nguồn năng lượng tự nhiên qua 5 chiều sâu tính cách hóa học.',
-    status: 'ACTIVE',
-    statusLabel: 'Đang triển khai',
-    previewImage: '/assets/aistudio/image_f5fb4f1c.png',
   },
   {
     id: 'proj-lab-tour-series',
