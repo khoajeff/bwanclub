@@ -44,8 +44,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <span className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-white/85 dark:bg-[#16142E]/90 border border-[#6C63FF]/30 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF] shadow-2xs">
             <Sparkles className="w-3.5 h-3.5" />
             <span>
-              ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN ĐÀ NẴNG · EST. 2021 · “LEARN
-              NOT STUDY”
+              {lang === 'vi'
+                ? 'ĐOÀN TRƯỜNG THPT CHUYÊN LÊ QUÝ ĐÔN ĐÀ NẴNG · EST. 2021 · “LEARN NOT STUDY”'
+                : 'LE QUY DON HIGH SCHOOL FOR THE GIFTED, DA NANG · EST. 2021 · “LEARN NOT STUDY”'}
             </span>
           </span>
         </motion.div>
@@ -208,7 +209,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <p className="mt-1.5 text-[13.5px] sm:text-sm font-normal text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
               {lang === 'vi'
                 ? 'PROJECT “Bạn là nguyên tố nào?”, Lab Tour I–III, Preorder Valentine'
-                : '“Which Element Are You?”, Lab Tours I–III & Valentine Preorder'}
+                : '“Which Element Are You?”, 3D Molecular Studio, Lab Tours I–III'}
             </p>
           </motion.a>
 
@@ -232,8 +233,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
             <p className="mt-3.5 font-display text-lg sm:text-[19px] font-bold text-[#1F1F2E] dark:text-white tracking-tight tabular-nums flex items-center justify-between">
               <span>
-                12 Tháng & {totalEventsCount}{' '}
-                {lang === 'vi' ? 'Chuỗi Sự Kiện' : 'Event Series'}
+                {lang === 'vi'
+                  ? `12 Tháng & ${totalEventsCount} Chuỗi Sự Kiện`
+                  : `12 Months & ${totalEventsCount} Event Series`}
               </span>
               <ChevronRight className="w-4 h-4 text-[#D97706] dark:text-[#FBBF24] opacity-70 group-hover:translate-x-1 transition-transform" />
             </p>

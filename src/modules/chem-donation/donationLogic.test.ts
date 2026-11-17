@@ -12,6 +12,8 @@ import {
   buildDynamicQrPayload,
   rankDonors,
   applyNewDonation,
+  donorNamesMatch,
+  enrichAndMergeDonors,
 } from './donationLogic';
 import { DonorRecord } from './types';
 
@@ -174,3 +176,42 @@ test('generateTransferSyntax strips Vietnamese diacritics cleanly', () => {
   const syntax = generateTransferSyntax('BWANCHEM', 'QUY2026', 'Nguyễn Đặng Hoàng', 250000);
   assert.equal(syntax.transferMemo, 'BWANCHEM QUY2026 DANGHOANG');
 });
+
+test('donorNamesMatch and enrichAndMergeDonors attach donor messages across remote Apps Script refreshes', () => {
+  assert.equal(donorNamesMatch('Nguyễn Minh Khôi', 'NGUYEN MINH KHOI'), true);
+  assert.equal(donorNamesMatch('BWAN Trần Minh Trí', 'Tran Minh Tri'), true);
+
+  const remoteRecords: DonorRecord[] = [
+    {
+      id: 'sheet-1',
+      name: 'NGUYEN MINH KHOI',
+      affiliation: 'Nhà hảo tâm BWAN CLUB',
+      amountVnd: 50000,
+      message: '',
+      timestampIso: '2026-11-08T08:00:00.000Z',
+      verifiedReceiptCode: 'BWAN-0001',
+    },
+  ];
+
+  const enriched = enrichAndMergeDonors(
+    remoteRecords,
+    [],
+    [
+      {
+        id: 'intent-1',
+        name: 'Nguyễn Minh Khôi',
+        affiliation: 'Cựu học sinh Chuyên Hóa Lê Quý Đôn',
+        amountVnd: 50000,
+        message: 'Chúc BWAN CLUB Gen 6 rực rỡ!',
+        timestampIso: '2026-11-08T07:59:00.000Z',
+      },
+    ],
+    []
+  );
+
+  assert.equal(enriched.length, 1);
+  assert.equal(enriched[0].name, 'Nguyễn Minh Khôi');
+  assert.equal(enriched[0].affiliation, 'Cựu học sinh Chuyên Hóa Lê Quý Đôn');
+  assert.equal(enriched[0].message, 'Chúc BWAN CLUB Gen 6 rực rỡ!');
+});
+

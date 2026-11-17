@@ -4,6 +4,211 @@ import {
   QrCodeRequestParams,
 } from './types';
 
+export interface DonationIntentItem {
+  id: string;
+  paymentLinkId?: string;
+  orderCode?: string | number;
+  name: string;
+  affiliation: string;
+  amountVnd: number;
+  message: string;
+  receiptCode?: string;
+  timestampIso: string;
+}
+
+const LOCAL_DONATION_INTENTS_KEY = 'bwan_donation_messages_v2';
+
+/**
+ * Normalizes a Vietnamese donor name for accent-insensitive, case-insensitive matching
+ * between form inputs ("Trần Minh Trí") and bank/Apps Script leaderboard records ("TRAN MINH TRI").
+ */
+export function normalizeDonorKey(rawName: string): string {
+  return (rawName || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/gi, 'd')
+    .replace(/^.*?\bBWAN\s*/i, '')
+    .replace(/[^a-zA-Z0-9\s]/g, ' ')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function donorNamesMatch(nameA: string, nameB: string): boolean {
+  const normA = normalizeDonorKey(nameA);
+  const normB = normalizeDonorKey(nameB);
+  if (!normA || !normB) return false;
+  if (normA === normB) return true;
+  if (normA.length >= 3 && normB.includes(normA)) return true;
+  if (normB.length >= 3 && normA.includes(normB)) return true;
+  return false;
+}
+
+export function loadLocalDonationIntents(): DonationIntentItem[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(LOCAL_DONATION_INTENTS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveLocalDonationIntent(intent: DonationIntentItem): DonationIntentItem[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const existing = loadLocalDonationIntents();
+    const filtered = existing.filter(
+      (item) =>
+        !(
+          (intent.paymentLinkId && item.paymentLinkId === intent.paymentLinkId) ||
+          (donorNamesMatch(item.name, intent.name) &&
+            Math.round(item.amountVnd) === Math.round(intent.amountVnd) &&
+            item.message === intent.message)
+        )
+    );
+    const updated = [intent, ...filtered].slice(0, 200);
+    window.localStorage.setItem(LOCAL_DONATION_INTENTS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Enriches remote Google Apps Script leaderboard records (which only contain time, name, amount)
+ * with donor messages and affiliations persisted in server verified donations, server donation intents,
+ * browser localStorage intents, and current in-memory donor records.
+ */
+export function enrichAndMergeDonors(
+  remoteRecords: DonorRecord[],
+  localVerified: DonorRecord[] = [],
+  serverIntents: DonationIntentItem[] = [],
+  localIntents: DonationIntentItem[] = [],
+  previousDonors: DonorRecord[] = []
+): DonorRecord[] {
+  // Collect all known metadata sources that have a message or custom affiliation
+  const metadataSources: Array<{
+    name: string;
+    amountVnd: number;
+    message: string;
+    affiliation: string;
+    receiptCode?: string;
+    used?: boolean;
+  }> = [];
+
+  const pushSource = (src: {
+    name: string;
+    amountVnd: number;
+    message?: string;
+    affiliation?: string;
+    receiptCode?: string;
+  }) => {
+    const cleanMsg = (src.message || '').trim();
+    const cleanAff = (src.affiliation || '').trim();
+    if (!cleanMsg && !cleanAff) return;
+    metadataSources.push({
+      name: src.name,
+      amountVnd: Math.round(Number(src.amountVnd) || 0),
+      message: cleanMsg,
+      affiliation: cleanAff,
+      receiptCode: src.receiptCode,
+      used: false,
+    });
+  };
+
+  for (const v of localVerified) {
+    pushSource({
+      name: v.name,
+      amountVnd: v.amountVnd,
+      message: v.message,
+      affiliation: v.affiliation,
+      receiptCode: v.verifiedReceiptCode,
+    });
+  }
+  for (const li of localIntents) {
+    pushSource(li);
+  }
+  for (const si of serverIntents) {
+    pushSource(si);
+  }
+  for (const prev of previousDonors) {
+    if (prev.message && prev.message.trim().length > 0) {
+      pushSource({
+        name: prev.name,
+        amountVnd: prev.amountVnd,
+        message: prev.message,
+        affiliation: prev.affiliation,
+        receiptCode: prev.verifiedReceiptCode,
+      });
+    }
+  }
+
+  const enrichedRemote = remoteRecords.map((remote) => {
+    // 1. Try exact name + amount match with a non-empty message first
+    let matched = metadataSources.find(
+      (src) =>
+        !src.used &&
+        src.message.length > 0 &&
+        src.amountVnd === Math.round(remote.amountVnd) &&
+        donorNamesMatch(src.name, remote.name)
+    );
+
+    // 2. Fallback: match by donor name with a non-empty message (e.g. if donor attached a message to their name)
+    if (!matched) {
+      matched = metadataSources.find(
+        (src) =>
+          !src.used &&
+          src.message.length > 0 &&
+          donorNamesMatch(src.name, remote.name)
+      );
+    }
+
+    // 3. Fallback: match by name + amount for custom affiliation even if no message
+    if (!matched) {
+      matched = metadataSources.find(
+        (src) =>
+          !src.used &&
+          src.amountVnd === Math.round(remote.amountVnd) &&
+          donorNamesMatch(src.name, remote.name)
+      );
+    }
+
+    if (matched) {
+      matched.used = true;
+      return {
+        ...remote,
+        name: matched.name || remote.name,
+        message: remote.message?.trim() || matched.message || '',
+        affiliation:
+          matched.affiliation &&
+          matched.affiliation !== 'Người ủng hộ qua cổng QR CLB BWAN'
+            ? matched.affiliation
+            : remote.affiliation,
+      };
+    }
+
+    return remote;
+  });
+
+  // Also preserve any verified local records not yet reflected in remoteRecords
+  const merged = [...enrichedRemote];
+  for (const localItem of localVerified) {
+    const alreadyInRemote = enrichedRemote.some(
+      (r) =>
+        Math.round(r.amountVnd) === Math.round(localItem.amountVnd) &&
+        donorNamesMatch(r.name, localItem.name)
+    );
+    if (!alreadyInRemote) {
+      merged.unshift(localItem);
+    }
+  }
+
+  return merged;
+}
+
 /**
  * Formats an integer amount in VND with standard dot separators and tabular precision.
  * Example: 1500000 -> "1.500.000 ₫"
@@ -84,6 +289,7 @@ export interface AppsScriptLeaderboardItem {
   time?: string | number;
   name?: string;
   amount?: number | string;
+  message?: string;
 }
 
 export interface AppsScriptLeaderboardResponse {
@@ -139,7 +345,7 @@ export function parseAppsScriptLeaderboardResponse(
       name: cleanName,
       affiliation: 'Người ủng hộ qua cổng QR CLB BWAN',
       amountVnd: Math.round(rawAmount),
-      message: '',
+      message: rawItem.message ? String(rawItem.message).trim() : '',
       timestampIso,
       isAnonymous: false,
       verifiedReceiptCode: receiptCode,
@@ -153,10 +359,13 @@ export function parseAppsScriptLeaderboardResponse(
 }
 
 /**
- * Formats an ISO timestamp into a concise Vietnamese date-time string for the real-time feed.
+ * Formats an ISO timestamp into a concise date-time string for the real-time feed.
  */
-export function formatDonationTimestamp(timestampIso: string): string {
-  if (!timestampIso) return 'Vừa xong';
+export function formatDonationTimestamp(
+  timestampIso: string,
+  lang: 'vi' | 'en' = 'vi'
+): string {
+  if (!timestampIso) return lang === 'en' ? 'Just now' : 'Vừa xong';
   const date = new Date(timestampIso);
   if (Number.isNaN(date.getTime())) {
     return timestampIso;
@@ -171,20 +380,32 @@ export function formatDonationTimestamp(timestampIso: string): string {
  * Validates a unified "Tùy Tâm" donation submission payload.
  * Requires name (unless anonymous) and minimum 2.000 VNĐ as required by the QR payment gateway.
  */
-export function validateDonationPayload(payload: DonationSubmissionPayload): {
+export function validateDonationPayload(
+  payload: DonationSubmissionPayload,
+  lang: 'vi' | 'en' = 'vi'
+): {
   valid: boolean;
   errors: Record<string, string>;
 } {
   const errors: Record<string, string> = {};
 
   if (!payload.isAnonymous && (!payload.donorName || payload.donorName.trim().length < 2)) {
-    errors.donorName = 'Vui lòng nhập Tên người ủng hộ (tối thiểu 2 ký tự).';
+    errors.donorName =
+      lang === 'en'
+        ? 'Please enter the supporter name (minimum 2 characters).'
+        : 'Vui lòng nhập Tên người ủng hộ (tối thiểu 2 ký tự).';
   }
 
   if (!Number.isFinite(payload.amountVnd) || payload.amountVnd < 2_000) {
-    errors.amountVnd = 'Số tiền muốn ủng hộ tối thiểu là 2.000 VNĐ.';
+    errors.amountVnd =
+      lang === 'en'
+        ? 'Minimum donation amount is 2,000 VND.'
+        : 'Số tiền muốn ủng hộ tối thiểu là 2.000 VNĐ.';
   } else if (payload.amountVnd > 10_000_000_000) {
-    errors.amountVnd = 'Số tiền vượt hạn mức tạo mã QR tự động. Vui lòng liên hệ Ban Chủ Nhiệm.';
+    errors.amountVnd =
+      lang === 'en'
+        ? 'Amount exceeds automated QR limit. Please contact the Executive Board.'
+        : 'Số tiền vượt hạn mức tạo mã QR tự động. Vui lòng liên hệ Ban Chủ Nhiệm.';
   }
 
   return {
@@ -261,7 +482,6 @@ export function buildDynamicQrPayload(params: QrCodeRequestParams): {
 
   const emvPayloadString = `VIETQR|BANK:${bankConfig.bankShortCode}|ACC:${bankConfig.accountNumber}|AMOUNT:${safeAmount}|MEMO:${transferMemo}`;
 
-  // Generate 81 deterministic cells (9x9 inner data grid) so the QR visually responds to the exact amount entered
   let seed = (safeAmount ^ 0x5a5a5a5a) >>> 0;
   for (let i = 0; i < emvPayloadString.length; i++) {
     seed = (Math.imul(seed, 31) + emvPayloadString.charCodeAt(i)) >>> 0;
@@ -356,6 +576,9 @@ export function rankDonors(donors: DonorRecord[]): RankedDonorSummary[] {
     } else {
       existing.totalAmountVnd += record.amountVnd;
       existing.donationsCount += 1;
+      if (record.message && !existing.latestMessage) {
+        existing.latestMessage = record.message;
+      }
       if (record.timestampIso >= existing.latestTimestamp) {
         existing.latestTimestamp = record.timestampIso;
         if (record.message) existing.latestMessage = record.message;
@@ -414,9 +637,7 @@ export function applyNewDonation(
     name: payload.isAnonymous ? 'Nhà Hảo Tâm Ẩn Danh' : payload.donorName.trim(),
     affiliation: payload.affiliation.trim() || 'Cộng đồng yêu Hóa học',
     amountVnd: payload.amountVnd,
-    message:
-      payload.message.trim() ||
-      'Chúc Câu lạc bộ Hóa học ngày càng phát triển vững mạnh và lan tỏa đam mê thực nghiệm!',
+    message: payload.message.trim(),
     timestampIso: new Date().toISOString(),
     isAnonymous: payload.isAnonymous,
     verifiedReceiptCode: receiptCode,

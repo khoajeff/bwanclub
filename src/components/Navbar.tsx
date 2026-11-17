@@ -152,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isActive && (
                   <motion.span
                     layoutId="navbar-active-indicator"
-                    className="absolute bottom-0 left-2 right-2 h-[3px] rounded-t-full bg-gradient-to-r from-[#6C63FF] to-[#38BDF8]"
+                    className="absolute bottom-0 left-0.5 right-0.5 h-[4px] rounded-t-full bg-gradient-to-r from-[#6C63FF] to-[#38BDF8]"
                     transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   />
                 )}
@@ -194,10 +194,15 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Language Selector (VI / EN) */}
             <motion.button
               type="button"
+              data-testid="lang-toggle-btn"
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.94 }}
               onClick={onToggleLang}
-              aria-label="Chuyển đổi ngôn ngữ Tiếng Việt hoặc Tiếng Anh"
+              aria-label={
+                lang === 'vi'
+                  ? 'Chuyển đổi ngôn ngữ Tiếng Việt hoặc Tiếng Anh'
+                  : 'Switch language between Vietnamese and English'
+              }
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4F2EE] dark:bg-[#191632] text-[#1F1F2E] dark:text-white hover:text-[#6C63FF] dark:hover:text-[#A39DFF] border border-transparent hover:border-[#6C63FF]/30 transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Globe className="w-3.5 h-3.5 text-[#6C63FF] dark:text-[#A39DFF]" />

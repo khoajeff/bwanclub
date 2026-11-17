@@ -110,7 +110,15 @@ export default function App() {
     () => isStandaloneFullscreenUrl()
   );
   const [isDark, setIsDark] = useState(false);
-  const [lang, setLang] = useState<AppLanguage>('vi');
+  const [lang, setLang] = useState<AppLanguage>(() => {
+    try {
+      const saved = window.localStorage.getItem('bwan_club_lang_v1');
+      if (saved === 'en' || saved === 'vi') return saved;
+    } catch {
+      // Ignore storage access errors
+    }
+    return 'vi';
+  });
   const [projects, setProjects] = useState<ClubProjectItem[]>(
     INITIAL_CLUB_PROJECTS
   );
@@ -119,6 +127,14 @@ export default function App() {
 
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [selectedDivision, setSelectedDivision] = useState('Ban Kỹ Thuật');
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('bwan_club_lang_v1', lang);
+    } catch {
+      // Ignore storage access errors
+    }
+  }, [lang]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -344,7 +360,7 @@ export default function App() {
                     subtitle={
                       lang === 'vi'
                         ? 'Khám phá và trực tiếp trải nghiệm PROJECT “Bạn là nguyên tố nào?”, chuỗi Lab Tour nội bộ I–III, chiến dịch Preorder Valentine và dự án “Tiếp sức mùa thi” của BWAN CLUB.'
-                        : 'Explore and directly experience PROJECT “Which Element Are You?”, internal Lab Tours I–III, Valentine Preorder campaigns, and the live project synchronization hub.'
+                        : 'Explore and directly experience PROJECT “Which Element Are You?”, 3D Organic Molecular Studio, internal Lab Tours I–III, Valentine Preorder campaigns, and the live project synchronization hub.'
                     }
                     lang={lang}
                     onNavigate={handleNavigate}
@@ -445,6 +461,7 @@ export default function App() {
               <ChemClubDonationModule
                 embeddedMode
                 viewMode="all"
+                lang={lang}
                 onNavigateToLeaderboard={() => handleNavigate('/leaderboard')}
                 onNavigateToDonate={() => handleNavigate('/donate')}
               />
@@ -495,7 +512,11 @@ export default function App() {
                   type="button"
                   whileHover={{ scale: 1.03, y: -2 }}
                   whileTap={{ scale: 0.96 }}
-                  onClick={() => handleOpenJoinModal('Ban Kỹ Thuật')}
+                  onClick={() =>
+                    handleOpenJoinModal(
+                      lang === 'vi' ? 'Ban Kỹ Thuật' : 'Technical Division'
+                    )
+                  }
                   className="inline-flex items-center justify-center gap-3 px-9 py-4 sm:px-11 sm:py-4.5 rounded-full google-one-chem-btn font-bold text-base sm:text-lg cursor-pointer whitespace-nowrap shrink-0"
                 >
                   <span>
@@ -525,25 +546,32 @@ export default function App() {
                       </span>
                     </span>
                     <span className="inline-flex items-center px-3 py-1 rounded-full bg-[#F1F0FF] dark:bg-[#1E1A3E] border border-[#DCD9F2] dark:border-[#6C63FF]/35 text-xs font-mono font-semibold text-[#6C63FF] dark:text-[#A39DFF]">
-                      Thành lập 2021 · Thế hệ Gen 6 (2026–2027)
+                      {lang === 'vi'
+                        ? 'Thành lập 2021 · Thế hệ Gen 6 (2026–2027)'
+                        : 'Est. 2021 · Generation 6 (2026–2027)'}
                     </span>
                   </div>
 
                   {/* Club Full Title & Slogan */}
                   <div className="space-y-1.5">
                     <p className="text-base sm:text-[17px] font-semibold text-[#1F1F2E] dark:text-[#F1F5F9] leading-relaxed">
-                      Câu lạc bộ Hóa học trực thuộc Đoàn Trường THPT chuyên Lê Quý
-                      Đôn Đà Nẵng — Tinh thần “LEARN NOT STUDY”.
+                      {lang === 'vi'
+                        ? 'Câu lạc bộ Hóa học trực thuộc Đoàn Trường THPT chuyên Lê Quý Đôn Đà Nẵng — Tinh thần “LEARN NOT STUDY”.'
+                        : 'Official Chemistry Club of Le Quy Don High School for the Gifted, Da Nang — Driven by the “LEARN NOT STUDY” spirit.'}
                     </p>
                     <p className="text-sm text-[#5F6368] dark:text-[#94A3B8] leading-relaxed">
-                      Sáng lập CLB (2021):{' '}
+                      {lang === 'vi'
+                        ? 'Sáng lập CLB (2021): '
+                        : 'Club Co-Founder (2021): '}
                       <span className="font-semibold text-[#1F1F2E] dark:text-[#E2E8F0]">
                         Đỗ Vĩnh Phúc
                       </span>{' '}
                       <span aria-hidden="true" className="mx-1.5">
                         ·
                       </span>{' '}
-                      Đồng Chủ Nhiệm Gen 6:{' '}
+                      {lang === 'vi'
+                        ? 'Đồng Chủ Nhiệm Gen 6: '
+                        : 'Gen 6 Co-Presidents: '}
                       <span className="font-semibold text-[#1F1F2E] dark:text-[#E2E8F0]">
                         Trần Minh Trí & Nguyễn Minh Anh
                       </span>
@@ -553,7 +581,9 @@ export default function App() {
 
                 {/* Clean Human Editorial Navigation Links (Unified Quyên góp) */}
                 <nav
-                  aria-label="Liên kết cuối trang"
+                  aria-label={
+                    lang === 'vi' ? 'Liên kết cuối trang' : 'Footer navigation'
+                  }
                   className="flex flex-wrap items-center gap-x-7 gap-y-3 text-sm sm:text-base font-medium"
                 >
                   {[
@@ -612,18 +642,32 @@ export default function App() {
                 className="pt-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 text-xs sm:text-sm text-[#5F6368] dark:text-[#94A3B8]"
               >
                 <p className="sm:whitespace-nowrap">
-                  © 2026 <strong className="font-semibold text-[#1F1F2E] dark:text-white">BWAN CLUB</strong> · Trường THPT chuyên Lê Quý Đôn Đà Nẵng.
+                  © 2026{' '}
+                  <strong className="font-semibold text-[#1F1F2E] dark:text-white">
+                    BWAN CLUB
+                  </strong>{' '}
+                  ·{' '}
+                  {lang === 'vi'
+                    ? 'Trường THPT chuyên Lê Quý Đôn Đà Nẵng.'
+                    : 'Le Quy Don High School for the Gifted, Da Nang.'}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:whitespace-nowrap">
-                  <span>Thiết kế & phát triển website:</span>
+                  <span>
+                    {lang === 'vi'
+                      ? 'Thiết kế & phát triển website:'
+                      : 'Website design & development:'}
+                  </span>
                   <span className="font-semibold text-[#1F1F2E] dark:text-white">
                     Mai Trần Anh Khoa
                   </span>
                   <span className="text-[#6C63FF] dark:text-[#A39DFF] font-medium">
                     (Founder)
                   </span>
-                  <span aria-hidden="true" className="text-[#9CA3AF] dark:text-white/30 px-0.5">
+                  <span
+                    aria-hidden="true"
+                    className="text-[#9CA3AF] dark:text-white/30 px-0.5"
+                  >
                     &
                   </span>
                   <span className="font-semibold text-[#1F1F2E] dark:text-white">
@@ -632,7 +676,10 @@ export default function App() {
                   <span className="text-[#6C63FF] dark:text-[#A39DFF] font-medium">
                     (Co-Founder)
                   </span>
-                  <span aria-hidden="true" className="text-[#9CA3AF] dark:text-white/30 px-0.5">
+                  <span
+                    aria-hidden="true"
+                    className="text-[#9CA3AF] dark:text-white/30 px-0.5"
+                  >
                     &
                   </span>
                   <span className="font-semibold text-[#1F1F2E] dark:text-white">
@@ -652,6 +699,7 @@ export default function App() {
       <JoinClubModal
         isOpen={joinModalOpen}
         defaultDivision={selectedDivision}
+        lang={lang}
         onClose={() => setJoinModalOpen(false)}
         onRegisterMember={handleRegisterMember}
         registeredMembers={members}

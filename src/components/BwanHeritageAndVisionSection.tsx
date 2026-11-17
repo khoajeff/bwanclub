@@ -26,6 +26,7 @@ interface BwanHeritageAndVisionSectionProps {
 export const BwanHeritageAndVisionSection: React.FC<
   BwanHeritageAndVisionSectionProps
 > = ({ lang, onNavigate }) => {
+  const isEn = lang === 'en';
   const [selectedGenId, setSelectedGenId] = useState<string>('all');
 
   const visibleGenerations =
@@ -47,7 +48,9 @@ export const BwanHeritageAndVisionSection: React.FC<
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F1F0FF] dark:bg-[#6C63FF]/25 border border-[#6C63FF]/30 text-xs font-bold text-[#6C63FF] dark:text-[#A39DFF]">
               <GraduationCap className="w-3.5 h-3.5" />
               <span>
-                CÂU CHUYỆN KHỞI NGUỒN · TẦM NHÌN · GIÁ TRỊ CỐT LÕI BWAN CLUB
+                {isEn
+                  ? 'ORIGIN STORY · VISION · CORE VALUES OF BWAN CLUB'
+                  : 'CÂU CHUYỆN KHỞI NGUỒN · TẦM NHÌN · GIÁ TRỊ CỐT LÕI BWAN CLUB'}
               </span>
             </div>
 
@@ -73,8 +76,14 @@ export const BwanHeritageAndVisionSection: React.FC<
               <strong className="text-[#1F1F2E] dark:text-white">
                 BWAN CLUB
               </strong>{' '}
-              — {BWAN_CLUB_BACKGROUND.schoolAffiliation}.{' '}
-              {BWAN_CLUB_BACKGROUND.backgroundDescription}
+              —{' '}
+              {isEn
+                ? BWAN_CLUB_BACKGROUND.schoolAffiliationEn
+                : BWAN_CLUB_BACKGROUND.schoolAffiliation}
+              .{' '}
+              {isEn
+                ? BWAN_CLUB_BACKGROUND.backgroundDescriptionEn
+                : BWAN_CLUB_BACKGROUND.backgroundDescription}
             </p>
           </div>
 
@@ -89,16 +98,33 @@ export const BwanHeritageAndVisionSection: React.FC<
               <div className="lg:col-span-5 space-y-3">
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#6C63FF] dark:text-[#A39DFF]">
                   <Flame className="w-4 h-4 text-[#F59E0B]" />
-                  <span>HÀNH TRÌNH THÀNH LẬP TỪ NĂM 2021</span>
+                  <span>
+                    {isEn
+                      ? 'FOUNDING JOURNEY SINCE 2021'
+                      : 'HÀNH TRÌNH THÀNH LẬP TỪ NĂM 2021'}
+                  </span>
                 </span>
                 <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-[#1F1F2E] dark:text-white leading-tight">
-                  BWAN CLUB — Đoàn Trường THPT Chuyên Lê Quý Đôn Đà Nẵng
+                  {isEn
+                    ? 'BWAN CLUB — Le Quy Don High School for the Gifted, Da Nang'
+                    : 'BWAN CLUB — Đoàn Trường THPT Chuyên Lê Quý Đôn Đà Nẵng'}
                 </h3>
                 <p className="text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                  Được thành lập vào năm <strong>2021</strong>, đại diện cho thế
-                  hệ <strong>“LEARN NOT STUDY”</strong> — nơi học sinh tiếp cận
-                  Hóa học bằng thực nghiệm trực quan, tư duy bản chất và sáng
-                  tạo không giới hạn.
+                  {isEn ? (
+                    <>
+                      Founded in <strong>2021</strong>, representing the{' '}
+                      <strong>“LEARN NOT STUDY”</strong> generation — where
+                      students approach Chemistry through hands-on experiments,
+                      fundamental thinking, and boundless creativity.
+                    </>
+                  ) : (
+                    <>
+                      Được thành lập vào năm <strong>2021</strong>, đại diện cho
+                      thế hệ <strong>“LEARN NOT STUDY”</strong> — nơi học sinh
+                      tiếp cận Hóa học bằng thực nghiệm trực quan, tư duy bản
+                      chất và sáng tạo không giới hạn.
+                    </>
+                  )}
                 </p>
               </div>
 
@@ -107,7 +133,9 @@ export const BwanHeritageAndVisionSection: React.FC<
                   <span className="font-display text-sm sm:text-base font-bold text-[#1F1F2E] dark:text-white flex items-center gap-2">
                     <Flame className="w-4 h-4 text-[#F59E0B] shrink-0" />
                     <span>
-                      BWAN đã trải qua 5 năm hoạt động thành công (2021 – 2026)
+                      {isEn
+                        ? 'BWAN has celebrated 5 successful years of operation (2021 – 2026)'
+                        : 'BWAN đã trải qua 5 năm hoạt động thành công (2021 – 2026)'}
                     </span>
                   </span>
                   <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#6C63FF] text-white shadow-2xs">
@@ -123,27 +151,27 @@ export const BwanHeritageAndVisionSection: React.FC<
                       {
                         year: '2022',
                         gen: 'Gen 1 – 2',
-                        note: 'Khởi nguồn CLB',
+                        note: isEn ? 'Club Foundation' : 'Khởi nguồn CLB',
                       },
                       {
                         year: '2023',
                         gen: 'Gen 2 – 3',
-                        note: 'Mở rộng thực nghiệm',
+                        note: isEn ? 'Lab Expansion' : 'Mở rộng thực nghiệm',
                       },
                       {
                         year: '2024',
                         gen: 'Gen 3 – 4',
-                        note: 'Bùng nổ sự kiện',
+                        note: isEn ? 'Event Boom' : 'Bùng nổ sự kiện',
                       },
                       {
                         year: '2025',
                         gen: 'Gen 4 – 5',
-                        note: 'Lan tỏa học thuật',
+                        note: isEn ? 'Academic Impact' : 'Lan tỏa học thuật',
                       },
                       {
                         year: '2026',
                         gen: 'Gen 5 – 6',
-                        note: 'Đột phá Gen 6',
+                        note: isEn ? 'Gen 6 Breakthrough' : 'Đột phá Gen 6',
                       },
                     ].map((milestone, idx) => (
                       <div
@@ -180,7 +208,9 @@ export const BwanHeritageAndVisionSection: React.FC<
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-bold text-[#6C63FF] dark:text-[#A39DFF] uppercase tracking-wider flex items-center gap-1.5">
                     <Compass className="w-4 h-4" />
-                    <span>TẦM NHÌN BWAN CLUB</span>
+                    <span>
+                      {isEn ? 'BWAN CLUB VISION' : 'TẦM NHÌN BWAN CLUB'}
+                    </span>
                   </span>
                   <span className="px-3 py-1 rounded-full bg-[#6C63FF]/15 dark:bg-[#6C63FF]/30 text-[#6C63FF] dark:text-[#C4B5FD] font-display text-xs font-extrabold tracking-wide">
                     LEARN NOT STUDY
@@ -188,7 +218,9 @@ export const BwanHeritageAndVisionSection: React.FC<
                 </div>
 
                 <h3 className="mt-3 font-display text-2xl font-extrabold text-[#1F1F2E] dark:text-white">
-                  Chuyển Hóa Tri Thức Thành Giá Trị Thực Tiễn
+                  {isEn
+                    ? 'Transforming Knowledge into Practical Value'
+                    : 'Chuyển Hóa Tri Thức Thành Giá Trị Thực Tiễn'}
                 </h3>
 
                 <div className="mt-6 space-y-5">
@@ -199,18 +231,18 @@ export const BwanHeritageAndVisionSection: React.FC<
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div className="google-one-subcard-pill px-3.5 py-2.5 rounded-xl font-display text-sm font-bold">
-                          {flow.sourceTitle}
+                          {isEn ? flow.sourceTitleEn : flow.sourceTitle}
                         </div>
                         <ArrowRight className="w-5 h-5 text-[#6C63FF] dark:text-[#A39DFF] shrink-0 hidden sm:block" />
                         <div className="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#564CE0] text-white font-display text-sm font-bold shadow-xs">
-                          {flow.targetTitle}
+                          {isEn ? flow.targetTitleEn : flow.targetTitle}
                         </div>
                       </div>
                       <p className="text-xs sm:text-sm text-[#4A4A68] dark:text-[#E2E8F0] leading-relaxed">
-                        {flow.description}
+                        {isEn ? flow.descriptionEn : flow.description}
                       </p>
                       <div className="text-xs font-semibold text-[#0284C7] dark:text-[#38BDF8]">
-                        {flow.formulaTag}
+                        {isEn ? flow.formulaTagEn : flow.formulaTag}
                       </div>
                     </div>
                   ))}
@@ -218,7 +250,11 @@ export const BwanHeritageAndVisionSection: React.FC<
               </div>
 
               <div className="mt-6 pt-4 border-t border-[#DFDCF2] dark:border-[#8B84FF]/25 flex items-center justify-between text-xs text-[#5F6368] dark:text-[#CBD5E1]">
-                <span>Kim chỉ nam xuyên suốt 6 thế hệ</span>
+                <span>
+                  {isEn
+                    ? 'Guiding principle across 6 generations'
+                    : 'Kim chỉ nam xuyên suốt 6 thế hệ'}
+                </span>
                 <span className="font-bold text-[#6C63FF] dark:text-[#A39DFF]">
                   “LEARN NOT STUDY”
                 </span>
@@ -231,15 +267,17 @@ export const BwanHeritageAndVisionSection: React.FC<
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-xs font-bold text-[#0284C7] dark:text-[#38BDF8] uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4" />
-                    <span>GIÁ TRỊ CỐT LÕI</span>
+                    <span>{isEn ? 'CORE VALUES' : 'GIÁ TRỊ CỐT LÕI'}</span>
                   </span>
                   <span className="px-3 py-1 rounded-full bg-[#E0F2FE] dark:bg-[#0284C7]/30 text-[#0284C7] dark:text-[#7DD3FC] text-xs font-bold">
-                    4 Trụ Cột Văn Hóa
+                    {isEn ? '4 Cultural Pillars' : '4 Trụ Cột Văn Hóa'}
                   </span>
                 </div>
 
                 <h3 className="mt-3 font-display text-2xl font-extrabold text-[#1F1F2E] dark:text-white">
-                  4 Giá Trị Cốt Lõi Của BWAN CLUB
+                  {isEn
+                    ? '4 Core Values of BWAN CLUB'
+                    : '4 Giá Trị Cốt Lõi Của BWAN CLUB'}
                 </h3>
 
                 <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -251,17 +289,17 @@ export const BwanHeritageAndVisionSection: React.FC<
                       <div>
                         <div className="flex items-center justify-between gap-2 mb-3">
                           <span className="text-xs font-mono font-bold text-[#6C63FF] dark:text-[#B4AEFF]">
-                            {val.code}
+                            {isEn ? val.codeEn : val.code}
                           </span>
                           <span className="google-one-subcard-pill px-2.5 py-0.5 rounded-md text-[11px] font-mono font-bold">
                             {val.elementBadge}
                           </span>
                         </div>
                         <h4 className="font-display text-base font-bold text-[#1F1F2E] dark:text-white leading-snug">
-                          {val.title}
+                          {isEn ? val.titleEn : val.title}
                         </h4>
                         <p className="mt-2 text-xs sm:text-[13px] text-[#4A4A68] dark:text-[#E2E8F0] leading-relaxed">
-                          {val.description}
+                          {isEn ? val.descriptionEn : val.description}
                         </p>
                       </div>
                     </div>
@@ -270,13 +308,17 @@ export const BwanHeritageAndVisionSection: React.FC<
               </div>
 
               <div className="mt-6 pt-4 border-t border-[#DFDCF2] dark:border-[#8B84FF]/25 flex items-center justify-between text-xs text-[#5F6368] dark:text-[#CBD5E1]">
-                <span>Hóa bản chất · Kết nối khoa học · Ngoại khóa · Lan tỏa</span>
+                <span>
+                  {isEn
+                    ? 'True Essence · Science Connection · Activities · Passion'
+                    : 'Hóa bản chất · Kết nối khoa học · Ngoại khóa · Lan tỏa'}
+                </span>
                 <button
                   type="button"
                   onClick={() => onNavigate('/su-kien')}
                   className="font-semibold text-[#6C63FF] dark:text-[#A39DFF] hover:underline cursor-pointer"
                 >
-                  Xem lộ trình Gen 6 →
+                  {isEn ? 'View Gen 6 Roadmap →' : 'Xem lộ trình Gen 6 →'}
                 </button>
               </div>
             </div>
@@ -295,33 +337,56 @@ export const BwanHeritageAndVisionSection: React.FC<
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#D97706] dark:text-[#FBBF24] uppercase tracking-wider">
                 <Award className="w-4 h-4" />
-                <span>LỊCH SỬ BAN CHỦ NHIỆM QUA CÁC THẾ HỆ (GEN 1 – GEN 5)</span>
+                <span>
+                  {isEn
+                    ? 'LEADERSHIP HISTORY ACROSS GENERATIONS (GEN 1 – GEN 5)'
+                    : 'LỊCH SỬ BAN CHỦ NHIỆM QUA CÁC THẾ HỆ (GEN 1 – GEN 5)'}
+                </span>
               </div>
               <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-[#1F1F2E] dark:text-white tracking-tight text-balance">
-                Những Người Truyền Lửa{' '}
+                {isEn ? 'The Torchbearers of ' : 'Những Người Truyền Lửa '}
                 <span className="google-one-chem-gradient-text">
                   BWAN CLUB (2021 – 2026)
                 </span>
               </h2>
               <p className="mt-2.5 text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                Tri ân nhà đồng sáng lập CLB{' '}
-                <strong className="text-[#1F1F2E] dark:text-white">
-                  Đỗ Vĩnh Phúc (Co-Founder BWAN CLUB)
-                </strong>{' '}
-                và các thế hệ Ban Chủ Nhiệm từ Gen 2 đến Gen 5 đã kiến tạo nên
-                hành trình 5 năm rực rỡ tại Trường THPT chuyên Lê Quý Đôn Đà
-                Nẵng.
+                {isEn ? (
+                  <>
+                    Honoring Club Co-Founder{' '}
+                    <strong className="text-[#1F1F2E] dark:text-white">
+                      Đỗ Vĩnh Phúc (Co-Founder BWAN CLUB)
+                    </strong>{' '}
+                    and the Executive Boards from Gen 2 to Gen 5 who built 5
+                    brilliant years at Le Quy Don High School for the Gifted, Da
+                    Nang.
+                  </>
+                ) : (
+                  <>
+                    Tri ân nhà đồng sáng lập CLB{' '}
+                    <strong className="text-[#1F1F2E] dark:text-white">
+                      Đỗ Vĩnh Phúc (Co-Founder BWAN CLUB)
+                    </strong>{' '}
+                    và các thế hệ Ban Chủ Nhiệm từ Gen 2 đến Gen 5 đã kiến tạo
+                    nên hành trình 5 năm rực rỡ tại Trường THPT chuyên Lê Quý
+                    Đôn Đà Nẵng.
+                  </>
+                )}
               </p>
             </div>
 
             {/* Generation Filter Pills */}
             <div
               role="group"
-              aria-label="Chọn thế hệ Ban Chủ Nhiệm"
+              aria-label={
+                isEn ? 'Select Executive Board generation' : 'Chọn thế hệ Ban Chủ Nhiệm'
+              }
               className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#EAE7E0] dark:bg-[#191632] shrink-0"
             >
               {[
-                { id: 'all', label: 'Tất cả (Gen 1–5)' },
+                {
+                  id: 'all',
+                  label: isEn ? 'All (Gen 1–5)' : 'Tất cả (Gen 1–5)',
+                },
                 { id: 'gen-1-founder', label: 'Co-Founder (Gen 1)' },
                 { id: 'gen-2-bcn', label: 'Gen 2' },
                 { id: 'gen-3-bcn', label: 'Gen 3' },
@@ -384,14 +449,16 @@ export const BwanHeritageAndVisionSection: React.FC<
                     <div className="relative aspect-[16/9] w-full bg-[#121026] overflow-hidden border-b border-[#E5E2DC] dark:border-[#6C63FF]/25">
                       <img
                         src={gen.slideImage}
-                        alt={`${gen.roleTitle} — ${gen.leaders.join(', ')}`}
+                        alt={`${
+                          isEn ? gen.roleTitleEn : gen.roleTitle
+                        } — ${gen.leaders.join(', ')}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
 
                     <div className="p-6">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono font-bold text-[#6C63FF] dark:text-[#A39DFF]">
-                        <span>{gen.genLabel}</span>
+                        <span>{isEn ? gen.genLabelEn : gen.genLabel}</span>
                         <span className="px-2.5 py-0.5 rounded-full bg-[#F1F0FF] dark:bg-[#6C63FF]/25 text-[#6C63FF] dark:text-[#A39DFF]">
                           {gen.period}
                         </span>
@@ -402,17 +469,22 @@ export const BwanHeritageAndVisionSection: React.FC<
                       </h3>
 
                       <p className="text-xs font-semibold text-[#0284C7] dark:text-[#38BDF8] mt-0.5">
-                        {gen.roleTitle} · {gen.elementTag}
+                        {isEn ? gen.roleTitleEn : gen.roleTitle} ·{' '}
+                        {isEn ? gen.elementTagEn : gen.elementTag}
                       </p>
 
                       <p className="mt-3 text-xs sm:text-sm text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                        {gen.summary}
+                        {isEn ? gen.summaryEn : gen.summary}
                       </p>
                     </div>
                   </div>
 
                   <div className="px-6 pb-5 pt-3 border-t border-[#DFDBD2] dark:border-[#6C63FF]/20 flex items-center justify-between text-xs font-mono text-[#5F6368] dark:text-[#94A3B8]">
-                    <span>THPT Chuyên Lê Quý Đôn</span>
+                    <span>
+                      {isEn
+                        ? 'Le Quy Don High School for the Gifted'
+                        : 'THPT Chuyên Lê Quý Đôn'}
+                    </span>
                     <span className="font-bold text-[#1F1F2E] dark:text-white">
                       BWAN CLUB
                     </span>
@@ -432,24 +504,42 @@ export const BwanHeritageAndVisionSection: React.FC<
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-xs font-mono font-bold">
                     <Users className="w-3.5 h-3.5" />
-                    <span>THẾ HỆ HIỆN TẠI · GEN 6 (2026 – 2027)</span>
+                    <span>
+                      {isEn
+                        ? 'CURRENT GENERATION · GEN 6 (2026 – 2027)'
+                        : 'THẾ HỆ HIỆN TẠI · GEN 6 (2026 – 2027)'}
+                    </span>
                   </div>
 
                   <h3 className="mt-4 font-display text-2xl font-extrabold leading-snug">
-                    Ban Quản Lý & “Cơ Cấu Nhà Nước” BWAN CLUB Gen 6
+                    {isEn
+                      ? 'Executive Board & Governance Structure of BWAN CLUB Gen 6'
+                      : 'Ban Quản Lý & “Cơ Cấu Nhà Nước” BWAN CLUB Gen 6'}
                   </h3>
 
                   <p className="mt-2.5 text-xs sm:text-sm text-white/90 leading-relaxed">
-                    Tiếp nối 5 thế hệ đi trước, BWAN CLUB Gen 6 được điều hành
-                    bởi hai Đồng Chủ Nhiệm{' '}
-                    <strong>Trần Minh Trí</strong> &{' '}
-                    <strong>Nguyễn Minh Anh</strong> cùng 4 ban chuyên môn.
+                    {isEn ? (
+                      <>
+                        Continuing the legacy of 5 preceding generations, BWAN
+                        CLUB Gen 6 is led by Co-Presidents{' '}
+                        <strong>Trần Minh Trí</strong> &{' '}
+                        <strong>Nguyễn Minh Anh</strong> across 4 specialized
+                        divisions.
+                      </>
+                    ) : (
+                      <>
+                        Tiếp nối 5 thế hệ đi trước, BWAN CLUB Gen 6 được điều
+                        hành bởi hai Đồng Chủ Nhiệm{' '}
+                        <strong>Trần Minh Trí</strong> &{' '}
+                        <strong>Nguyễn Minh Anh</strong> cùng 4 ban chuyên môn.
+                      </>
+                    )}
                   </p>
 
                   <div className="mt-4 space-y-2.5 rounded-2xl bg-black/20 p-4 text-xs">
                     <div>
                       <span className="block font-mono text-[10px] uppercase tracking-wider text-white/70">
-                        Đồng Chủ Nhiệm Gen 6
+                        {isEn ? 'Gen 6 Co-Presidents' : 'Đồng Chủ Nhiệm Gen 6'}
                       </span>
                       <span className="font-display font-bold text-white">
                         Trần Minh Trí · Nguyễn Minh Anh
@@ -457,7 +547,9 @@ export const BwanHeritageAndVisionSection: React.FC<
                     </div>
                     <div className="border-t border-white/10 pt-2">
                       <span className="block font-mono text-[10px] uppercase tracking-wider text-white/70">
-                        Ban Kỹ Thuật (Tiểu ban Truyền thông · Media · Design)
+                        {isEn
+                          ? 'Technical Division (Communications · Media · Design)'
+                          : 'Ban Kỹ Thuật (Tiểu ban Truyền thông · Media · Design)'}
                       </span>
                       <span className="font-display font-bold text-white">
                         Mai Trần Anh Khoa · Nguyễn Minh Anh · Nguyễn Lương Minh Đức
@@ -465,7 +557,9 @@ export const BwanHeritageAndVisionSection: React.FC<
                     </div>
                     <div className="border-t border-white/10 pt-2">
                       <span className="block font-mono text-[10px] uppercase tracking-wider text-white/70">
-                        Ban Nội Dung · Ban Đối Ngoại · Ban Hậu Cần (Nhân sự & Tài chính)
+                        {isEn
+                          ? 'Content · External Relations · Logistics (HR & Finance)'
+                          : 'Ban Nội Dung · Ban Đối Ngoại · Ban Hậu Cần (Nhân sự & Tài chính)'}
                       </span>
                       <span className="font-display font-bold text-white">
                         Thái Việt Đức · Phan Nhật Nam · Dương Phạm Nguyên Thy · Nguyễn Anh Thư
@@ -480,7 +574,11 @@ export const BwanHeritageAndVisionSection: React.FC<
                     onClick={() => onNavigate('/phan-ban')}
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white text-[#6C63FF] font-display text-xs font-bold hover:bg-[#F4F2EE] transition-colors cursor-pointer"
                   >
-                    <span>Xem Sơ Đồ Cơ Cấu Gen 6</span>
+                    <span>
+                      {isEn
+                        ? 'View Gen 6 Org Chart'
+                        : 'Xem Sơ Đồ Cơ Cấu Gen 6'}
+                    </span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
 
@@ -489,7 +587,11 @@ export const BwanHeritageAndVisionSection: React.FC<
                     onClick={() => onNavigate('/su-kien')}
                     className="inline-flex items-center gap-1 text-xs font-semibold text-white hover:underline cursor-pointer"
                   >
-                    <span>Lộ trình Gen 6 (2026–2027) →</span>
+                    <span>
+                      {isEn
+                        ? 'Gen 6 Roadmap (2026–2027) →'
+                        : 'Lộ trình Gen 6 (2026–2027) →'}
+                    </span>
                   </button>
                 </div>
               </motion.article>

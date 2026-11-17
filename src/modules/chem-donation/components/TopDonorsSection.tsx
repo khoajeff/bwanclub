@@ -4,6 +4,8 @@ import {
   rankDonors,
   formatVnd,
   formatDonationTimestamp,
+  DonationIntentItem,
+  donorNamesMatch,
 } from '../donationLogic';
 import {
   Crown,
@@ -16,27 +18,52 @@ import {
   Sparkles,
   Clock,
   RefreshCw,
+  Send,
+  CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface TopDonorsSectionProps {
   donors: DonorRecord[];
+  wishIntents?: DonationIntentItem[];
   latestDonorName?: string | null;
   isLoadingLeaderboard?: boolean;
+  lang?: 'vi' | 'en';
   onRefreshLeaderboard?: () => void;
   onScrollToDonate: () => void;
+  onAttachWishToDonor?: (
+    donorName: string,
+    message: string,
+    affiliation?: string
+  ) => Promise<{ ok: boolean; matchedName?: string }>;
 }
 
 export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
   donors,
+  wishIntents = [],
   latestDonorName,
   isLoadingLeaderboard = false,
+  lang = 'vi',
   onRefreshLeaderboard,
   onScrollToDonate,
+  onAttachWishToDonor,
 }) => {
+  const isEn = lang === 'en';
   const [activeTab, setActiveTab] = useState<'ranking' | 'recent'>('ranking');
   const [showAllRanks, setShowAllRanks] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  // Form gửi / bổ sung lời chúc cho người đã ủng hộ trên bảng xếp hạng
+  const [showWishForm, setShowWishForm] = useState<boolean>(false);
+  const [wishDonorName, setWishDonorName] = useState<string>('');
+  const [wishAffiliation, setWishAffiliation] = useState<string>('');
+  const [wishText, setWishText] = useState<string>('');
+  const [wishFeedback, setWishFeedback] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const [isSubmittingWish, setIsSubmittingWish] = useState<boolean>(false);
 
   const allRanked = rankDonors(donors);
 
@@ -65,9 +92,50 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
     );
   });
 
-  const donorMessages = donors.filter(
-    (d) => d.message && d.message.trim().length > 0
-  );
+  const donorMessages: DonorRecord[] = React.useMemo(() => {
+    const base = donors.filter(
+      (d) => d.message && d.message.trim().length > 0
+    );
+    const extra: DonorRecord[] = [];
+    for (const intent of wishIntents) {
+      const msg = (intent.message || '').trim();
+      if (!msg) continue;
+      const alreadyShown =
+        base.some(
+          (d) =>
+            donorNamesMatch(d.name, intent.name) &&
+            d.message.trim().toLowerCase() === msg.toLowerCase()
+        ) ||
+        extra.some(
+          (d) =>
+            donorNamesMatch(d.name, intent.name) &&
+            d.message.trim().toLowerCase() === msg.toLowerCase()
+        );
+      if (!alreadyShown) {
+        const matchedDonor = donors.find((d) =>
+          donorNamesMatch(d.name, intent.name)
+        );
+        extra.push({
+          id: intent.id || `wish-${intent.timestampIso}`,
+          name: matchedDonor ? matchedDonor.name : intent.name,
+          affiliation:
+            intent.affiliation ||
+            matchedDonor?.affiliation ||
+            'Nhà hảo tâm BWAN CLUB',
+          amountVnd: matchedDonor
+            ? matchedDonor.amountVnd
+            : Number(intent.amountVnd) || 0,
+          message: msg,
+          timestampIso: intent.timestampIso || new Date().toISOString(),
+          verifiedReceiptCode:
+            matchedDonor?.verifiedReceiptCode ||
+            intent.receiptCode ||
+            'BWAN-WISH',
+        });
+      }
+    }
+    return [...extra, ...base];
+  }, [donors, wishIntents]);
 
   const isHighlightedDonor = (name?: string) =>
     Boolean(
@@ -75,6 +143,81 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
         latestDonorName &&
         name.trim().toLowerCase() === latestDonorName.trim().toLowerCase()
     );
+
+  const translateAffiliation = (aff: string) => {
+    if (!isEn) return aff;
+    if (aff === 'Nhà hảo tâm BWAN CLUB') {
+      return 'BWAN CLUB Supporter';
+    }
+    if (aff === 'Người ủng hộ qua cổng QR CLB BWAN') {
+      return 'Supporter via BWAN CLUB QR Gateway';
+    }
+    if (aff === 'Thành viên & Người yêu Hóa học BWAN CLUB') {
+      return 'BWAN CLUB Member & Chemistry Enthusiast';
+    }
+    if (aff === 'Cộng đồng yêu Hóa học') {
+      return 'Chemistry Enthusiast Community';
+    }
+    return aff;
+  };
+
+  const handleWishSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setWishFeedback(null);
+    const cleanName = wishDonorName.trim();
+    const cleanMsg = wishText.trim();
+
+    if (cleanName.length < 2) {
+      setWishFeedback({
+        type: 'error',
+        text: isEn
+          ? 'Please enter the supporter name as shown on the Leaderboard.'
+          : 'Vui lòng nhập tên người ủng hộ đã có trên Bảng xếp hạng.',
+      });
+      return;
+    }
+    if (cleanMsg.length < 2) {
+      setWishFeedback({
+        type: 'error',
+        text: isEn
+          ? 'Please enter your wish or message for BWAN CLUB.'
+          : 'Vui lòng nhập nội dung lời chúc gửi tới BWAN CLUB.',
+      });
+      return;
+    }
+
+    if (!onAttachWishToDonor) return;
+    setIsSubmittingWish(true);
+    try {
+      const res = await onAttachWishToDonor(
+        cleanName,
+        cleanMsg,
+        wishAffiliation.trim()
+      );
+      if (res.ok) {
+        setWishFeedback({
+          type: 'success',
+          text: isEn
+            ? `Your wish has been linked to ${res.matchedName || cleanName} and displayed below!`
+            : `Đã cập nhật lời chúc của ${res.matchedName || cleanName} lên khung Lời Chúc thành công!`,
+        });
+        setWishText('');
+        setTimeout(() => {
+          setShowWishForm(false);
+          setWishFeedback(null);
+        }, 1800);
+      } else {
+        setWishFeedback({
+          type: 'error',
+          text: isEn
+            ? 'No completed donation found under this name yet. Please use the Donate form above or enter the exact name on the Leaderboard.'
+            : 'Chưa tìm thấy giao dịch ủng hộ trùng tên trên Bảng xếp hạng. Vui lòng nhập đúng tên trên Bảng xếp hạng hoặc tạo mã QR ủng hộ ở phía trên.',
+        });
+      }
+    } finally {
+      setIsSubmittingWish(false);
+    }
+  };
 
   return (
     <>
@@ -92,7 +235,11 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
         >
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#5D50FE] dark:text-[#A39DFF]">
             <Crown className="h-4 w-4 text-amber-500" />
-            <span>Bảng Vinh Danh Thực Tế Thời Gian Thực</span>
+            <span>
+              {isEn
+                ? 'Real-Time Live Honor Roll'
+                : 'Bảng Vinh Danh Thực Tế Thời Gian Thực'}
+            </span>
             <span aria-hidden="true">·</span>
             <span>BWAN CLUB</span>
           </div>
@@ -100,21 +247,24 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
             style={{ textWrap: 'balance' }}
             className="mt-2.5 font-display text-3xl font-extrabold tracking-tight text-[#1F1F2E] dark:text-white sm:text-4xl"
           >
-            Bảng Xếp Hạng{' '}
+            {isEn ? 'Top Donate ' : 'Bảng Xếp Hạng '}
             <span className="google-one-chem-gradient-text">
-              Top Donate BWAN CLUB
+              {isEn ? 'Leaderboard · BWAN CLUB' : 'Top Donate BWAN CLUB'}
             </span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[#525866] dark:text-[#CBD5E1] sm:text-base">
-            Tự động đồng bộ dữ liệu thực tế từ hệ thống CLB và cộng dồn số tiền
-            của những người trùng tên để xếp hạng từ cao xuống thấp.
+            {isEn
+              ? 'Automatically synchronizes verified donation data from the club gateway and aggregates contributions by supporter name from highest to lowest.'
+              : 'Tự động đồng bộ dữ liệu thực tế từ hệ thống CLB và cộng dồn số tiền của những người trùng tên để xếp hạng từ cao xuống thấp.'}
           </p>
 
           {/* Thanh chuyển đổi Tab: Xếp hạng Top Donate (Cộng dồn) & Lượt ủng hộ mới nhất */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <div
               role="tablist"
-              aria-label="Chế độ xem bảng xếp hạng"
+              aria-label={
+                isEn ? 'Leaderboard view mode' : 'Chế độ xem bảng xếp hạng'
+              }
               className="inline-flex items-center rounded-full border border-slate-200/90 dark:border-[#6C63FF]/35 bg-white dark:bg-[#16142E] p-1.5 shadow-xs"
             >
               <button
@@ -137,7 +287,9 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 )}
                 <Crown className="relative z-10 h-3.5 w-3.5" />
                 <span className="relative z-10">
-                  Top Donate Cộng Dồn ({allRanked.length})
+                  {isEn
+                    ? `Cumulative Top Donors (${allRanked.length})`
+                    : `Top Donate Cộng Dồn (${allRanked.length})`}
                 </span>
               </button>
 
@@ -161,7 +313,9 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 )}
                 <Clock className="relative z-10 h-3.5 w-3.5" />
                 <span className="relative z-10">
-                  Lượt Ủng Hộ Mới Nhất ({donors.length})
+                  {isEn
+                    ? `Latest Donations (${donors.length})`
+                    : `Lượt Ủng Hộ Mới Nhất (${donors.length})`}
                 </span>
               </button>
             </div>
@@ -181,7 +335,13 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                   }`}
                 />
                 <span>
-                  {isLoadingLeaderboard ? 'Đang tải...' : 'Cập nhật dữ liệu'}
+                  {isLoadingLeaderboard
+                    ? isEn
+                      ? 'Loading...'
+                      : 'Đang tải...'
+                    : isEn
+                    ? 'Refresh Data'
+                    : 'Cập nhật dữ liệu'}
                 </span>
               </motion.button>
             )}
@@ -201,22 +361,31 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
             <div className="flex flex-col justify-between gap-2 border-b border-slate-100 dark:border-[#6C63FF]/20 px-6 py-5 sm:flex-row sm:items-center">
               <div>
                 <h3 className="text-base font-extrabold text-[#181826] dark:text-white">
-                  Nhật Ký Các Lượt Ủng Hộ Mới Nhất Theo Thời Gian Thực
+                  {isEn
+                    ? 'Real-Time Latest Donation Log'
+                    : 'Nhật Ký Các Lượt Ủng Hộ Mới Nhất Theo Thời Gian Thực'}
                 </h3>
                 <p className="mt-0.5 text-xs text-[#525866] dark:text-[#94A3B8]">
-                  Hiển thị chi tiết từng giao dịch ủng hộ mới nhất từ cổng thanh
-                  toán QR của BWAN CLUB
+                  {isEn
+                    ? 'Displays every verified transaction from the BWAN CLUB QR payment gateway'
+                    : 'Hiển thị chi tiết từng giao dịch ủng hộ mới nhất từ cổng thanh toán QR của BWAN CLUB'}
                 </p>
               </div>
               <span className="font-mono-tabular text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF]">
-                Tổng cộng: {donors.length} lượt ủng hộ
+                {isEn
+                  ? `Total: ${donors.length} donations`
+                  : `Tổng cộng: ${donors.length} lượt ủng hộ`}
               </span>
             </div>
 
             {donors.length === 0 ? (
               <div className="px-6 py-12 text-center text-sm text-[#525866] dark:text-[#94A3B8]">
                 {isLoadingLeaderboard
-                  ? 'Đang tải danh sách lượt ủng hộ mới nhất...'
+                  ? isEn
+                    ? 'Loading latest donations...'
+                    : 'Đang tải danh sách lượt ủng hộ mới nhất...'
+                  : isEn
+                  ? 'No donations recorded yet.'
                   : 'Chưa có lượt ủng hộ nào được ghi nhận.'}
               </div>
             ) : (
@@ -235,8 +404,14 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                           {item.name}
                         </p>
                         <p className="mt-0.5 font-mono-tabular text-xs text-[#525866] dark:text-[#94A3B8]">
-                          Thời gian: {formatDonationTimestamp(item.timestampIso)}
+                          {isEn ? 'Time: ' : 'Thời gian: '}
+                          {formatDonationTimestamp(item.timestampIso, lang)}
                         </p>
+                        {item.message && (
+                          <p className="mt-1 text-xs italic text-[#5D50FE] dark:text-[#A39DFF]">
+                            “{item.message}”
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -275,10 +450,10 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                       </span>
                       <div>
                         <span className="block text-xs font-extrabold tracking-wider text-slate-600 dark:text-slate-200">
-                          TOP 2 · HẠNG BẠC
+                          {isEn ? 'TOP 2 · SILVER TIER' : 'TOP 2 · HẠNG BẠC'}
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                          Á quân ủng hộ CLB
+                          {isEn ? 'Club Runner-Up Patron' : 'Á quân ủng hộ CLB'}
                         </span>
                       </div>
                     </div>
@@ -297,21 +472,25 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                           </h3>
                           {isHighlightedDonor(top2.donorName) && (
                             <span className="text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF]">
-                              · Mới cập nhật
+                              {isEn ? '· Just updated' : '· Mới cập nhật'}
                             </span>
                           )}
                         </div>
                         <p className="mt-1 text-xs font-medium text-[#525866] dark:text-[#94A3B8]">
-                          {top2.affiliation}
+                          {translateAffiliation(top2.affiliation)}
                         </p>
                       </>
                     ) : (
                       <>
                         <h3 className="text-lg font-bold text-slate-500 dark:text-slate-300">
-                          Đang chờ nhà hảo tâm Top 2
+                          {isEn
+                            ? 'Awaiting Top 2 Supporter'
+                            : 'Đang chờ nhà hảo tâm Top 2'}
                         </h3>
                         <p className="mt-1 text-xs text-slate-400 dark:text-slate-400">
-                          Vị trí Á quân Hạng Bạc đang rộng mở
+                          {isEn
+                            ? 'Silver Runner-Up position is open'
+                            : 'Vị trí Á quân Hạng Bạc đang rộng mở'}
                         </p>
                       </>
                     )}
@@ -319,7 +498,7 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
 
                   <div className="mt-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50/90 dark:bg-[#0D0C1D]/80 px-4 py-3.5">
                     <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-                      Tổng số tiền đã ủng hộ
+                      {isEn ? 'Total Donated Amount' : 'Tổng số tiền đã ủng hộ'}
                     </span>
                     <span className="mt-0.5 block font-mono-tabular text-2xl font-extrabold text-slate-800 dark:text-white">
                       {top2 ? formatVnd(top2.totalAmountVnd) : '0 ₫'}
@@ -336,7 +515,11 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 <div className="mt-5 flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-3.5 text-[11px] text-slate-500 dark:text-slate-400">
                   <span>
                     {top2
-                      ? `Số lượt ủng hộ: ${top2.donationsCount} lần`
+                      ? isEn
+                        ? `Donations: ${top2.donationsCount}`
+                        : `Số lượt ủng hộ: ${top2.donationsCount} lần`
+                      : isEn
+                      ? 'No transactions yet'
                       : 'Chưa có giao dịch'}
                   </span>
                   <span className="font-mono-tabular font-medium text-slate-600 dark:text-slate-300">
@@ -362,7 +545,9 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 <div className="-mt-11 mb-3 flex justify-center">
                   <div className="inline-flex items-center gap-2 rounded-full border-2 border-amber-400 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-4 py-1.5 text-xs font-extrabold text-slate-950 shadow-md shadow-amber-500/25">
                     <Crown className="h-4 w-4 fill-slate-950 text-slate-950" />
-                    <span>TOP 1 · VƯƠNG MIỆN VÀNG</span>
+                    <span>
+                      {isEn ? 'TOP 1 · GOLDEN CROWN' : 'TOP 1 · VƯƠNG MIỆN VÀNG'}
+                    </span>
                   </div>
                 </div>
 
@@ -374,10 +559,12 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                       </span>
                       <div>
                         <span className="block text-xs font-extrabold tracking-wider text-amber-700 dark:text-amber-300">
-                          QUÁN QUÂN DONATE
+                          {isEn ? 'CHAMPION PATRON' : 'QUÁN QUÂN DONATE'}
                         </span>
                         <span className="text-xs text-amber-800/80 dark:text-amber-200/80">
-                          Người ủng hộ cao nhất CLB
+                          {isEn
+                            ? 'Highest Club Contributor'
+                            : 'Người ủng hộ cao nhất CLB'}
                         </span>
                       </div>
                     </div>
@@ -397,22 +584,27 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                           {isHighlightedDonor(top1.donorName) && (
                             <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-amber-300">
                               <Sparkles className="h-3.5 w-3.5" />
-                              <span>Vừa lên Top 1!</span>
+                              <span>
+                                {isEn ? 'New Top 1!' : 'Vừa lên Top 1!'}
+                              </span>
                             </span>
                           )}
                         </div>
                         <p className="mt-1 text-xs font-medium text-[#525866] dark:text-[#CBD5E1]">
-                          {top1.affiliation}
+                          {translateAffiliation(top1.affiliation)}
                         </p>
                       </>
                     ) : (
                       <>
                         <h3 className="text-xl font-extrabold text-[#181826] dark:text-white">
-                          Đang chờ Quán Quân đầu tiên
+                          {isEn
+                            ? 'Awaiting First Champion'
+                            : 'Đang chờ Quán Quân đầu tiên'}
                         </h3>
                         <p className="mt-1 text-xs text-[#525866] dark:text-[#CBD5E1]">
-                          Hãy là người đầu tiên quét mã QR ủng hộ để giữ Vương
-                          Miện Vàng!
+                          {isEn
+                            ? 'Be the first to scan the QR code and claim the Golden Crown!'
+                            : 'Hãy là người đầu tiên quét mã QR ủng hộ để giữ Vương Miện Vàng!'}
                         </p>
                       </>
                     )}
@@ -420,7 +612,9 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
 
                   <div className="mt-5 rounded-2xl border-2 border-amber-300/90 dark:border-amber-500/45 bg-gradient-to-r from-amber-50 via-yellow-50/70 to-amber-50 dark:from-amber-950/45 dark:via-yellow-950/30 dark:to-amber-950/45 px-5 py-4">
                     <span className="block text-xs font-bold text-amber-800 dark:text-amber-300">
-                      Tổng số tiền ủng hộ cao nhất
+                      {isEn
+                        ? 'Highest Cumulative Contribution'
+                        : 'Tổng số tiền ủng hộ cao nhất'}
                     </span>
                     <span className="mt-1 block font-mono-tabular text-3xl font-black text-amber-600 dark:text-amber-400">
                       {top1 ? formatVnd(top1.totalAmountVnd) : '0 ₫'}
@@ -437,7 +631,11 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 <div className="mt-6 flex items-center justify-between border-t border-amber-200/60 dark:border-amber-500/25 pt-4 text-xs text-amber-900/70 dark:text-amber-200/80">
                   <span className="font-medium">
                     {top1
-                      ? `Số lượt ủng hộ: ${top1.donationsCount} lần`
+                      ? isEn
+                        ? `Donations: ${top1.donationsCount}`
+                        : `Số lượt ủng hộ: ${top1.donationsCount} lần`
+                      : isEn
+                      ? 'Verified automatically via PayOS'
                       : 'Xác thực tự động qua PayOS'}
                   </span>
                   <span className="font-mono-tabular font-semibold text-amber-700 dark:text-amber-300">
@@ -467,10 +665,10 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                       </span>
                       <div>
                         <span className="block text-xs font-extrabold tracking-wider text-amber-800 dark:text-amber-300">
-                          TOP 3 · HẠNG ĐỒNG
+                          {isEn ? 'TOP 3 · BRONZE TIER' : 'TOP 3 · HẠNG ĐỒNG'}
                         </span>
                         <span className="text-[11px] text-amber-900/70 dark:text-amber-200/75">
-                          Quý quân ủng hộ CLB
+                          {isEn ? 'Third-Place Patron' : 'Quý quân ủng hộ CLB'}
                         </span>
                       </div>
                     </div>
@@ -489,21 +687,25 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                           </h3>
                           {isHighlightedDonor(top3.donorName) && (
                             <span className="text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF]">
-                              · Mới cập nhật
+                              {isEn ? '· Just updated' : '· Mới cập nhật'}
                             </span>
                           )}
                         </div>
                         <p className="mt-1 text-xs font-medium text-[#525866] dark:text-[#94A3B8]">
-                          {top3.affiliation}
+                          {translateAffiliation(top3.affiliation)}
                         </p>
                       </>
                     ) : (
                       <>
                         <h3 className="text-lg font-bold text-slate-500 dark:text-slate-300">
-                          Đang chờ nhà hảo tâm Top 3
+                          {isEn
+                            ? 'Awaiting Top 3 Supporter'
+                            : 'Đang chờ nhà hảo tâm Top 3'}
                         </h3>
                         <p className="mt-1 text-xs text-slate-400 dark:text-slate-400">
-                          Vị trí Quý quân Hạng Đồng đang rộng mở
+                          {isEn
+                            ? 'Bronze tier position is open'
+                            : 'Vị trí Quý quân Hạng Đồng đang rộng mở'}
                         </p>
                       </>
                     )}
@@ -511,7 +713,7 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
 
                   <div className="mt-5 rounded-2xl border border-orange-200/80 dark:border-amber-700/45 bg-orange-50/60 dark:bg-amber-950/35 px-4 py-3.5">
                     <span className="block text-[11px] font-semibold text-amber-900/70 dark:text-amber-300">
-                      Tổng số tiền đã ủng hộ
+                      {isEn ? 'Total Donated Amount' : 'Tổng số tiền đã ủng hộ'}
                     </span>
                     <span className="mt-0.5 block font-mono-tabular text-2xl font-extrabold text-amber-800 dark:text-amber-300">
                       {top3 ? formatVnd(top3.totalAmountVnd) : '0 ₫'}
@@ -528,7 +730,11 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 <div className="mt-5 flex items-center justify-between border-t border-orange-100 dark:border-amber-800/40 pt-3.5 text-[11px] text-amber-900/60 dark:text-amber-200/70">
                   <span>
                     {top3
-                      ? `Số lượt ủng hộ: ${top3.donationsCount} lần`
+                      ? isEn
+                        ? `Donations: ${top3.donationsCount}`
+                        : `Số lượt ủng hộ: ${top3.donationsCount} lần`
+                      : isEn
+                      ? 'No transactions yet'
                       : 'Chưa có giao dịch'}
                   </span>
                   <span className="font-mono-tabular font-medium text-amber-800 dark:text-amber-300">
@@ -550,11 +756,15 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
               >
                 <span>
                   {showAllRanks
-                    ? 'Thu gọn danh sách các Top dưới'
+                    ? isEn
+                      ? 'Hide lower rankings'
+                      : 'Thu gọn danh sách các Top dưới'
                     : allRanked.length > 3
-                    ? `Hiện tất cả các Top (Xem thêm ${
-                        allRanked.length - 3
-                      } nhà hảo tâm)`
+                    ? isEn
+                      ? `Show all rankings (View ${allRanked.length - 3} more supporters)`
+                      : `Hiện tất cả các Top (Xem thêm ${allRanked.length - 3} nhà hảo tâm)`
+                    : isEn
+                    ? 'Show all rankings'
                     : 'Hiện tất cả các Top'}
                 </span>
                 {showAllRanks ? (
@@ -579,11 +789,14 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                   <div className="flex flex-col justify-between gap-4 border-b border-slate-100 dark:border-[#6C63FF]/20 px-6 py-5 sm:flex-row sm:items-center">
                     <div>
                       <h3 className="text-base font-bold text-[#181826] dark:text-white">
-                        Danh Sách Toàn Bộ Bảng Xếp Hạng (Từ Top #04)
+                        {isEn
+                          ? 'Full Leaderboard Rankings (From Top #04)'
+                          : 'Danh Sách Toàn Bộ Bảng Xếp Hạng (Từ Top #04)'}
                       </h3>
                       <p className="mt-0.5 text-xs text-[#525866] dark:text-[#94A3B8]">
-                        Tổng hợp các lượt ủng hộ đã thanh toán thành công theo
-                        thứ tự số tiền đóng góp
+                        {isEn
+                          ? 'Aggregated verified donations ordered by total contribution'
+                          : 'Tổng hợp các lượt ủng hộ đã thanh toán thành công theo thứ tự số tiền đóng góp'}
                       </p>
                     </div>
 
@@ -594,8 +807,16 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                           type="search"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="Tìm tên người ủng hộ..."
-                          aria-label="Tìm tên người ủng hộ trong bảng xếp hạng"
+                          placeholder={
+                            isEn
+                              ? 'Search supporter name...'
+                              : 'Tìm tên người ủng hộ...'
+                          }
+                          aria-label={
+                            isEn
+                              ? 'Search supporter name in leaderboard'
+                              : 'Tìm tên người ủng hộ trong bảng xếp hạng'
+                          }
                           className="w-full rounded-full border border-slate-200 dark:border-[#6C63FF]/35 bg-[#F8F8FB] dark:bg-[#0D0C1D] py-2 pl-10 pr-4 text-xs text-[#181826] dark:text-white placeholder-slate-400 focus:border-[#6c63ff] focus:bg-white dark:focus:bg-[#121026] focus:outline-none"
                         />
                       </div>
@@ -605,7 +826,11 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                   {lowerRanks.length === 0 ? (
                     <div className="px-6 py-10 text-center text-sm text-[#525866] dark:text-[#94A3B8]">
                       {allRanked.length <= 3
-                        ? 'Hiện chưa có nhà hảo tâm ở các hạng từ #04 trở xuống.'
+                        ? isEn
+                          ? 'No supporters in ranks #04 and below yet.'
+                          : 'Hiện chưa có nhà hảo tâm ở các hạng từ #04 trở xuống.'
+                        : isEn
+                        ? 'No matching supporters found.'
                         : 'Không tìm thấy nhà hảo tâm phù hợp với từ khóa tìm kiếm.'}
                     </div>
                   ) : (
@@ -632,12 +857,14 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                                   </span>
                                   {isJustUpdated && (
                                     <span className="text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF]">
-                                      · Vừa thanh toán thành công
+                                      {isEn
+                                        ? '· Just verified'
+                                        : '· Vừa thanh toán thành công'}
                                     </span>
                                   )}
                                 </div>
                                 <p className="mt-0.5 text-xs text-[#525866] dark:text-[#94A3B8]">
-                                  {row.affiliation}
+                                  {translateAffiliation(row.affiliation)}
                                 </p>
                                 {row.latestMessage && (
                                   <p className="mt-1 text-xs italic text-slate-500 dark:text-slate-300">
@@ -676,33 +903,195 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#5D50FE] dark:text-[#A39DFF]">
               <MessageSquareHeart className="h-4 w-4" />
-              <span>Lời Nhắn Gửi Thực Tế</span>
+              <span>
+                {isEn ? 'Verified Supporter Wishes' : 'Lời Nhắn Gửi Thực Tế'}
+              </span>
             </div>
             <h2 className="mt-1.5 font-display text-2xl font-extrabold tracking-tight text-[#1F1F2E] dark:text-white sm:text-3xl">
-              Lời Chúc Từ Cộng Đồng Ủng Hộ BWAN CLUB
+              {isEn
+                ? 'Community Wishes for BWAN CLUB'
+                : 'Lời Chúc Từ Cộng Đồng Ủng Hộ BWAN CLUB'}
             </h2>
           </div>
 
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={onScrollToDonate}
-            className="inline-flex items-center gap-2 rounded-full google-one-chem-btn px-5 py-2.5 text-xs font-bold text-white cursor-pointer whitespace-nowrap self-start sm:self-auto"
-          >
-            <span>Gửi lời nhắn & Ủng hộ ngay</span>
-          </motion.button>
+          <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+            {onAttachWishToDonor && (
+              <motion.button
+                type="button"
+                data-testid="toggle-attach-wish-btn"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => {
+                  setShowWishForm((prev) => !prev);
+                  setWishFeedback(null);
+                }}
+                className="inline-flex items-center gap-2 rounded-full border border-[#5D50FE]/40 dark:border-[#6C63FF]/45 bg-white dark:bg-[#16142E] px-4 py-2.5 text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF] hover:bg-[#5D50FE]/5 dark:hover:bg-[#6C63FF]/20 transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <MessageSquareHeart className="h-3.5 w-3.5" />
+                <span>
+                  {isEn
+                    ? 'Add Wish for Completed Donation'
+                    : 'Bổ sung lời chúc đã donate'}
+                </span>
+              </motion.button>
+            )}
+
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={onScrollToDonate}
+              className="inline-flex items-center gap-2 rounded-full google-one-chem-btn px-5 py-2.5 text-xs font-bold text-white cursor-pointer whitespace-nowrap"
+            >
+              <span>
+                {isEn
+                  ? 'Send a Wish & Donate Now'
+                  : 'Gửi lời nhắn & Ủng hộ ngay'}
+              </span>
+            </motion.button>
+          </div>
         </div>
+
+        {/* Khung bổ sung lời chúc cho người đã donate trên bảng xếp hạng */}
+        <AnimatePresence>
+          {showWishForm && (
+            <motion.form
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              onSubmit={handleWishSubmit}
+              className="mt-6 overflow-hidden rounded-3xl border border-[#5D50FE]/30 dark:border-[#6C63FF]/40 bg-white dark:bg-[#16142E] p-6 shadow-md"
+            >
+              <div className="flex items-center justify-between gap-2 mb-4">
+                <div>
+                  <h3 className="text-sm font-extrabold text-[#181826] dark:text-white">
+                    {isEn
+                      ? 'Attach or Update Your Wish on the Leaderboard'
+                      : 'Gửi / Cập nhật Lời Chúc cho giao dịch đã ủng hộ'}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-[#525866] dark:text-[#94A3B8]">
+                    {isEn
+                      ? 'If you already completed a QR donation, enter your name as shown on the Leaderboard and your wish below.'
+                      : 'Nếu bạn đã hoàn tất quét mã QR ủng hộ, hãy nhập đúng tên trên Bảng xếp hạng để hiển thị lời chúc của bạn ngay lập tức.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div>
+                  <label
+                    htmlFor="wish-donor-name"
+                    className="block text-xs font-bold text-[#181826] dark:text-white"
+                  >
+                    {isEn
+                      ? 'Your Name on Leaderboard *'
+                      : 'Tên trên Bảng xếp hạng *'}
+                  </label>
+                  <input
+                    id="wish-donor-name"
+                    data-testid="attach-wish-name-input"
+                    type="text"
+                    value={wishDonorName}
+                    onChange={(e) => setWishDonorName(e.target.value)}
+                    placeholder={
+                      top1?.donorName
+                        ? `${isEn ? 'e.g.,' : 'VD:'} ${top1.donorName}`
+                        : isEn
+                        ? 'Enter your name'
+                        : 'Nhập tên của bạn'
+                    }
+                    className="mt-1.5 w-full rounded-xl border border-slate-200 dark:border-[#6C63FF]/35 bg-[#F8F8FB] dark:bg-[#0D0C1D] px-3.5 py-2.5 text-xs text-[#181826] dark:text-white placeholder-slate-400 focus:border-[#5D50FE] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="wish-affiliation"
+                    className="block text-xs font-bold text-[#181826] dark:text-white"
+                  >
+                    {isEn
+                      ? 'Division / Cohort (Optional)'
+                      : 'Phân ban / Khóa (Tùy chọn)'}
+                  </label>
+                  <input
+                    id="wish-affiliation"
+                    type="text"
+                    value={wishAffiliation}
+                    onChange={(e) => setWishAffiliation(e.target.value)}
+                    placeholder={
+                      isEn
+                        ? 'e.g., BWAN Gen 6'
+                        : 'VD: Thành viên BWAN Gen 6'
+                    }
+                    className="mt-1.5 w-full rounded-xl border border-slate-200 dark:border-[#6C63FF]/35 bg-[#F8F8FB] dark:bg-[#0D0C1D] px-3.5 py-2.5 text-xs text-[#181826] dark:text-white placeholder-slate-400 focus:border-[#5D50FE] focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="wish-message-input"
+                    className="block text-xs font-bold text-[#181826] dark:text-white"
+                  >
+                    {isEn ? 'Wish for BWAN CLUB *' : 'Lời chúc gửi BWAN CLUB *'}
+                  </label>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <input
+                      id="wish-message-input"
+                      data-testid="attach-wish-message-input"
+                      type="text"
+                      value={wishText}
+                      onChange={(e) => setWishText(e.target.value)}
+                      placeholder={
+                        isEn
+                          ? 'Write your wish here...'
+                          : 'Nhập lời chúc của bạn...'
+                      }
+                      className="w-full rounded-xl border border-slate-200 dark:border-[#6C63FF]/35 bg-[#F8F8FB] dark:bg-[#0D0C1D] px-3.5 py-2.5 text-xs text-[#181826] dark:text-white placeholder-slate-400 focus:border-[#5D50FE] focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      data-testid="submit-attach-wish-btn"
+                      disabled={isSubmittingWish}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-[#5D50FE] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#4B3FE8] disabled:opacity-60 cursor-pointer"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      <span>{isEn ? 'Post Wish' : 'Gửi lời chúc'}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {wishFeedback && (
+                <div
+                  role="status"
+                  className={`mt-3 flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-xs font-semibold ${
+                    wishFeedback.type === 'success'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40'
+                      : 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/40'
+                  }`}
+                >
+                  {wishFeedback.type === 'success' ? (
+                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                  ) : (
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                  )}
+                  <span>{wishFeedback.text}</span>
+                </div>
+              )}
+            </motion.form>
+          )}
+        </AnimatePresence>
 
         {donorMessages.length === 0 ? (
           <div className="mt-8 rounded-3xl border border-dashed border-slate-300 dark:border-[#6C63FF]/35 bg-white/80 dark:bg-[#16142E]/80 p-10 text-center">
             <MessageSquareHeart className="mx-auto h-8 w-8 text-[#5D50FE]/60 dark:text-[#A39DFF]/70" />
             <p className="mt-3 text-base font-bold text-[#181826] dark:text-white">
-              Chưa có lời nhắn quyên góp nào
+              {isEn ? 'No donation wishes yet' : 'Chưa có lời nhắn quyên góp nào'}
             </p>
             <p className="mx-auto mt-1 max-w-md text-xs leading-relaxed text-[#525866] dark:text-[#CBD5E1]">
-              Các lời chúc thực tế của người ủng hộ sẽ tự động xuất hiện tại đây
-              ngay sau khi hoàn tất quét mã QR thanh toán.
+              {isEn
+                ? 'Supporters’ wishes will automatically appear here as soon as their QR payment is completed, or you can click "Add Wish for Completed Donation" above.'
+                : 'Các lời chúc thực tế của người ủng hộ sẽ tự động xuất hiện tại đây ngay sau khi hoàn tất quét mã QR thanh toán, hoặc bấm “Bổ sung lời chúc đã donate” ở trên.'}
             </p>
           </div>
         ) : (
@@ -717,6 +1106,7 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                 <motion.article
                   key={record.id}
                   whileHover={{ y: -4 }}
+                  data-testid="donor-wish-card"
                   className="flex flex-col justify-between rounded-2xl border border-slate-200/80 dark:border-[#6C63FF]/30 bg-white dark:bg-[#16142E] p-6 shadow-xs"
                 >
                   <div>
@@ -735,15 +1125,21 @@ export const TopDonorsSection: React.FC<TopDonorsSectionProps> = ({
                     <div>
                       <p className="text-sm font-bold text-[#181826] dark:text-white">
                         {record.isAnonymous
-                          ? 'Nhà Hảo Tâm Ẩn Danh'
+                          ? isEn
+                            ? 'Anonymous Supporter'
+                            : 'Nhà Hảo Tâm Ẩn Danh'
                           : record.name}
                       </p>
                       <p className="text-xs text-[#525866] dark:text-[#94A3B8]">
-                        {record.affiliation}
+                        {translateAffiliation(record.affiliation)}
                       </p>
                     </div>
                     <span className="font-mono-tabular text-sm font-extrabold text-[#5D50FE] dark:text-[#A39DFF]">
-                      {formatVnd(record.amountVnd)}
+                      {record.amountVnd > 0
+                        ? formatVnd(record.amountVnd)
+                        : isEn
+                        ? 'Verified Supporter'
+                        : 'Đã ủng hộ CLB'}
                     </span>
                   </div>
                 </motion.article>

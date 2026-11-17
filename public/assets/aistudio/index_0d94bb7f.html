@@ -1,0 +1,3900 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Which Element Are You? — BWAN Gen 6</title>
+  <meta name="description" content="Khám phá nguyên tố hóa học đại diện cho tính cách, tư duy và phong cách sáng tạo của bạn cùng BWAN Gen 6!" />
+  <link id="dynamicFavicon" rel="icon" type="image/png" href="" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6c63ff;
+      --primary-light: #a29bfe;
+      --primary-dark: #4b42d6;
+      --primary-glow: rgba(108, 99, 255, 0.55);
+      --bg-black: #05050a;
+      --bg-card: rgba(12, 12, 24, 0.82);
+      --bg-card-hover: rgba(26, 25, 48, 0.94);
+      --border-subtle: rgba(108, 99, 255, 0.32);
+      --border-bright: rgba(108, 99, 255, 0.78);
+      --text-main: #f4f4fb;
+      --text-muted: #a5a8c4;
+      --radius-lg: 24px;
+      --radius-md: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-black);
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(108, 99, 255, 0.22) 0%, transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(108, 99, 255, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(108, 99, 255, 0.2) 0%, transparent 45%),
+        linear-gradient(180deg, #040408 0%, #0a0916 50%, #040408 100%);
+      color: var(--text-main);
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(108, 99, 255, 0.065) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(108, 99, 255, 0.065) 1px, transparent 1px);
+      background-size: 54px 54px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* HỆ THỐNG ICON HÓA HỌC CỠ ĐẠI LƠ LỬNG SIÊU CHẬM & CHILL */
+    .floating-lab {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .lab-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: var(--primary-light);
+      opacity: 0.25;
+      filter: drop-shadow(0 0 24px rgba(108, 99, 255, 0.65));
+      user-select: none;
+      will-change: transform;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lab-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      border: 2.5px solid rgba(108, 99, 255, 0.62);
+      background: rgba(108, 99, 255, 0.14);
+      padding: 12px 24px;
+      border-radius: 18px;
+      font-size: 1.48rem;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 2;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 20px 72px;
+    }
+
+    /* Thanh điều hướng */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+      background: rgba(12, 12, 24, 0.84);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      margin-bottom: 32px;
+      box-shadow: 0 12px 38px rgba(0, 0, 0, 0.6), 0 0 24px rgba(108, 99, 255, 0.12);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .club-logo-box {
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 14px rgba(108, 99, 255, 0.65));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .brand-wrap:hover .club-logo-box {
+      transform: scale(1.08) rotate(-3deg);
+      filter: drop-shadow(0 0 22px rgba(108, 99, 255, 0.95));
+    }
+
+    .bwan-logo-img {
+      display: block;
+      object-fit: contain;
+      user-select: none;
+    }
+
+    .brand-text h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff 0%, #cdc9ff 50%, #6c63ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-ghost {
+      background: rgba(108, 99, 255, 0.14);
+      color: #dedbff;
+      border: 1px solid rgba(108, 99, 255, 0.4);
+      padding: 9px 16px;
+      border-radius: 11px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.22s ease;
+      font-family: inherit;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(108, 99, 255, 0.28);
+      border-color: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(108, 99, 255, 0.28);
+    }
+
+    /* Chuyển cảnh */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: sceneEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .screen.dramatic-reveal {
+      display: block;
+      animation: dramaticReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes sceneEnter {
+      0% { opacity: 0; transform: translateY(28px) scale(0.96); filter: blur(10px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+    }
+
+    @keyframes dramaticReveal {
+      0% { opacity: 0; transform: scale(0.88) translateY(40px); filter: blur(18px) brightness(2); }
+      55% { filter: blur(0px) brightness(1.2); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0px) brightness(1); }
+    }
+
+    .question-stage {
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .question-stage.slide-out-left {
+      opacity: 0;
+      transform: translateX(-32px) scale(0.98);
+      filter: blur(5px);
+    }
+
+    .question-stage.slide-in-right {
+      animation: slideInRight 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .question-stage.slide-in-left {
+      animation: slideInLeft 0.36s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(34px); filter: blur(5px); }
+      to { opacity: 1; transform: translateX(0); filter: blur(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-34px); filter: blur(5px); }
+      to { opacity: 1; transform: translateX(0); filter: blur(0); }
+    }
+
+    /* Màn hình 1: Giới thiệu (Hero) */
+    .hero-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 46px 36px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 480px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(108, 99, 255, 0.36) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(108, 99, 255, 0.16);
+      border: 1px solid rgba(108, 99, 255, 0.5);
+      color: #d0ccff;
+      padding: 7px 18px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      box-shadow: 0 0 24px rgba(108, 99, 255, 0.25);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4.6vw, 3.1rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      color: var(--primary);
+      text-shadow: 0 0 30px rgba(108, 99, 255, 0.65);
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto 28px;
+      font-size: 1rem;
+    }
+
+    .dimension-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .dim-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.83rem;
+      color: #dcdcf0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dim-tag span {
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+
+    .user-input-group {
+      max-width: 420px;
+      margin: 0 auto 26px;
+      text-align: left;
+    }
+
+    .user-input-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: #cbcbe0;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(8, 8, 16, 0.9);
+      border: 1.5px solid rgba(108, 99, 255, 0.4);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.96rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.22);
+    }
+
+    .hero-btn-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6c63ff 0%, #5146e6 100%);
+      color: #fff;
+      border: none;
+      padding: 15px 34px;
+      border-radius: 14px;
+      font-size: 1.02rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(108, 99, 255, 0.48);
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 14px 36px rgba(108, 99, 255, 0.7);
+      filter: brightness(1.08);
+    }
+
+    /* Màn hình 2: Trắc nghiệm */
+    .quiz-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.68);
+      overflow: hidden;
+    }
+
+    .quiz-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(108, 99, 255, 0.18);
+      border: 1px solid rgba(108, 99, 255, 0.48);
+      color: #d4d0ff;
+      padding: 5px 14px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .progress-counter {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6c63ff, #b3aeff);
+      border-radius: 99px;
+      box-shadow: 0 0 14px var(--primary);
+      transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .question-title {
+      font-size: clamp(1.18rem, 2.5vw, 1.44rem);
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: #fff;
+      line-height: 1.45;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: rgba(16, 16, 32, 0.84);
+      border: 1.5px solid rgba(108, 99, 255, 0.24);
+      border-radius: 14px;
+      padding: 15px 18px;
+      text-align: left;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--primary);
+      transform: translateX(5px);
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.24);
+    }
+
+    .option-btn.selected {
+      background: rgba(108, 99, 255, 0.26);
+      border-color: var(--primary);
+      box-shadow: 0 0 24px rgba(108, 99, 255, 0.45);
+      transform: scale(1.01);
+    }
+
+    .option-key {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(108, 99, 255, 0.16);
+      border: 1px solid rgba(108, 99, 255, 0.45);
+      color: #d0ccff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.86rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover .option-key,
+    .option-btn.selected .option-key {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .quiz-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 26px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* MÀN HÌNH 2.5: BÌNH CẦU THÍ NGHIỆM ĐẦY DẦN 0% -> 100% RỒI SÔI TRÀN */
+    .analyzing-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-bright);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px 42px;
+      text-align: center;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 25px 75px rgba(0, 0, 0, 0.82), 0 0 50px rgba(108, 99, 255, 0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flask-stage-wrap {
+      width: 245px;
+      height: 255px;
+      margin: 0 auto 16px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flask-svg {
+      width: 245px;
+      height: 255px;
+      overflow: visible;
+      filter: drop-shadow(0 0 28px rgba(108, 99, 255, 0.5));
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .flask-svg.boiling-over {
+      animation: flaskShake 0.42s ease-in-out infinite;
+      filter: drop-shadow(0 0 48px rgba(162, 155, 254, 1));
+    }
+
+    @keyframes flaskShake {
+      0%, 100% { transform: translateX(0) rotate(0deg) scale(1.04); }
+      25% { transform: translateX(-3.5px) rotate(-1.8deg) scale(1.05); }
+      75% { transform: translateX(3.5px) rotate(1.8deg) scale(1.05); }
+    }
+
+    .liquid-wave-back {
+      animation: waveMoveBack 2.4s linear infinite;
+    }
+
+    .liquid-wave-front {
+      animation: waveMoveFront 1.7s linear infinite;
+    }
+
+    @keyframes waveMoveFront {
+      0% { transform: translateX(0px); }
+      100% { transform: translateX(-120px); }
+    }
+
+    @keyframes waveMoveBack {
+      0% { transform: translateX(-120px); }
+      100% { transform: translateX(0px); }
+    }
+
+    .rising-bubble {
+      animation: bubbleRise 2.1s ease-in infinite;
+    }
+
+    @keyframes bubbleRise {
+      0% { transform: translateY(30px) scale(0.7); opacity: 0.2; }
+      60% { opacity: 0.75; }
+      100% { transform: translateY(-95px) scale(1.15); opacity: 0; }
+    }
+
+    .overflow-group {
+      opacity: 0;
+      transform: translateY(8px) scale(0.9);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .overflow-group.active {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+
+    .overflow-drip-left {
+      animation: dripDown 0.85s ease-in infinite;
+    }
+
+    .overflow-drip-right {
+      animation: dripDown 0.85s ease-in 0.35s infinite;
+    }
+
+    @keyframes dripDown {
+      0% { transform: translateY(0px); opacity: 1; }
+      100% { transform: translateY(72px); opacity: 0; }
+    }
+
+    .flask-percent-Readout {
+      position: absolute;
+      bottom: 46px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 0 22px #6c63ff;
+      pointer-events: none;
+    }
+
+    .analyzing-title {
+      font-size: 1.52rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .analyzing-live-status {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #bdb6ff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      min-height: 24px;
+    }
+
+    .analyze-progress-bar-wrap {
+      max-width: 500px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      margin: 0 auto 22px;
+      overflow: hidden;
+      border: 1px solid rgba(108, 99, 255, 0.35);
+    }
+
+    .analyze-progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6c63ff, #c7c2ff, #6c63ff);
+      background-size: 200% 100%;
+      animation: shimmerBar 2s linear infinite;
+      border-radius: 99px;
+      transition: width 0.08s linear;
+    }
+
+    @keyframes shimmerBar {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .analysis-steps-box {
+      max-width: 530px;
+      margin: 0 auto;
+      text-align: left;
+      background: rgba(8, 8, 18, 0.82);
+      border: 1px solid rgba(108, 99, 255, 0.35);
+      border-radius: 16px;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .step-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #7c7e9d;
+      transition: all 0.35s ease;
+    }
+
+    .step-line.active-step {
+      color: #c5c0ff;
+      transform: translateX(4px);
+    }
+
+    .step-line.done {
+      color: #f4f4ff;
+      font-weight: 600;
+    }
+
+    .step-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1.5px solid rgba(108, 99, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.76rem;
+      flex-shrink: 0;
+    }
+
+    .step-line.active-step .step-dot {
+      border-color: #fff;
+      background: rgba(108, 99, 255, 0.4);
+      box-shadow: 0 0 12px var(--primary);
+    }
+
+    .step-line.done .step-dot {
+      background: var(--primary);
+      border-color: #fff;
+      color: #fff;
+      box-shadow: 0 0 14px var(--primary);
+    }
+
+    /* Màn hình 3: Kết quả */
+    .result-wrapper {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .element-result-card {
+      border-radius: 24px;
+      padding: 36px 34px 28px;
+      position: relative;
+      overflow: hidden;
+      border: 2.5px solid rgba(108, 99, 255, 0.7);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(108, 99, 255, 0.25);
+    }
+
+    .card-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .result-header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #e6e3ff;
+      background: rgba(0, 0, 0, 0.48);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 7px 15px;
+      border-radius: 99px;
+    }
+
+    .card-brand-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #e2dfff;
+      background: rgba(108, 99, 255, 0.22);
+      border: 1px solid rgba(108, 99, 255, 0.5);
+      padding: 6px 15px;
+      border-radius: 99px;
+    }
+
+    .element-hero-box {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .periodic-tile {
+      width: 138px;
+      height: 138px;
+      border-radius: 22px;
+      background: rgba(8, 8, 16, 0.86);
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 32px rgba(108, 99, 255, 0.5), inset 0 0 18px rgba(108, 99, 255, 0.22);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px 16px;
+      flex-shrink: 0;
+    }
+
+    .tile-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #c5c0ff;
+    }
+
+    .tile-symbol {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.35rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .tile-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #e0e0f5;
+    }
+
+    .element-main-info {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .element-archetype-group {
+      font-size: 0.86rem;
+      color: #d2ceff;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .element-title {
+      font-size: clamp(1.65rem, 3.5vw, 2.35rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.22;
+      margin-bottom: 10px;
+    }
+
+    .element-CoreKeywords {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #f4f2ff;
+      background: rgba(108, 99, 255, 0.28);
+      border-left: 4px solid var(--primary);
+      padding: 8px 16px;
+      border-radius: 0 10px 10px 0;
+      display: inline-block;
+    }
+
+    .personal-decode-box {
+      background: rgba(8, 8, 18, 0.76);
+      border: 1.5px solid rgba(108, 99, 255, 0.5);
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+    }
+
+    .personal-decode-box h4 {
+      font-size: 0.95rem;
+      color: #d0cbff;
+      margin-bottom: 8px;
+    }
+
+    .personal-decode-box p {
+      font-size: 0.94rem;
+      color: #ededfa;
+      line-height: 1.68;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .analysis-box {
+      background: rgba(8, 8, 16, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 15px;
+      padding: 18px 20px;
+    }
+
+    .analysis-box h4 {
+      font-size: 0.93rem;
+      color: #c8c3ff;
+      margin-bottom: 8px;
+    }
+
+    .analysis-box p {
+      font-size: 0.92rem;
+      color: #ebebf7;
+      line-height: 1.6;
+    }
+
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 22px;
+    }
+
+    .stat-card {
+      background: rgba(10, 10, 20, 0.8);
+      border: 1px solid rgba(108, 99, 255, 0.32);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .stat-card h3 {
+      font-size: 0.98rem;
+      margin-bottom: 14px;
+      color: #fff;
+    }
+
+    .bar-item {
+      margin-bottom: 12px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      margin-bottom: 5px;
+      color: #d4d5ea;
+      font-weight: 600;
+    }
+
+    .bar-bg {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6c63ff, #b5b0ff);
+      border-radius: 99px;
+    }
+
+    .secondary-elements {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sec-el-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 14px;
+      border-radius: 12px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .sec-el-row:hover {
+      border-color: var(--primary);
+      background: rgba(108, 99, 255, 0.15);
+    }
+
+    .sec-el-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sec-el-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: rgba(108, 99, 255, 0.24);
+      border: 1.5px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .card-Capture-Footer {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #b4aeff;
+    }
+
+    /* KHUNG KIỂM TRA ĐỘ HỢP CẠ VỚI NHÓM NGƯỜI KHÁC */
+    .chemistry-matcher-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 24px 28px;
+      backdrop-filter: blur(14px);
+    }
+
+    .matcher-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 14px 0 18px;
+    }
+
+    .matcher-select {
+      flex: 1;
+      min-width: 220px;
+      padding: 12px 16px;
+      background: rgba(8, 8, 18, 0.92);
+      border: 1.5px solid rgba(108, 99, 255, 0.45);
+      border-radius: 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .reaction-output-box {
+      background: rgba(8, 8, 18, 0.75);
+      border: 1px solid rgba(108, 99, 255, 0.35);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 0.93rem;
+      color: #e8e8f8;
+      line-height: 1.65;
+    }
+
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, #8b5cf6 0%, #6c63ff 100%);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(108, 99, 255, 0.45);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(108, 99, 255, 0.68);
+      filter: brightness(1.08);
+    }
+
+    .btn-download:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+
+    /* Modal chung */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 3, 8, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: sceneEnter 0.3s ease forwards;
+    }
+
+    .modal-content {
+      background: #0e0e1a;
+      border: 1px solid var(--border-bright);
+      border-radius: 22px;
+      max-width: 920px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.85);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 12px;
+    }
+
+    .elements-18-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
+      gap: 14px;
+    }
+
+    .el-card-preview {
+      border-radius: 16px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .el-card-preview:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.28);
+    }
+
+    .el-card-preview .sym-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .el-card-preview .archetype-name {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #d6d3ff;
+      margin-bottom: 6px;
+    }
+
+    .el-card-preview .short-traits {
+      font-size: 0.86rem;
+      color: #e0e0ef;
+      opacity: 0.9;
+    }
+
+    /* Hộp Xem & Lưu Ảnh trên Điện thoại (Hỗ trợ cả Nhấn giữ Lưu ảnh & Nút Share gốc) */
+    .mobile-save-guide {
+      background: rgba(108, 99, 255, 0.16);
+      border: 1px solid rgba(108, 99, 255, 0.5);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+      font-size: 0.88rem;
+      color: #eae8ff;
+      text-align: center;
+    }
+
+    .preview-png-img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      border: 1.5px solid rgba(108, 99, 255, 0.5);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+      display: block;
+      margin: 0 auto;
+      -webkit-touch-callout: default;
+      user-select: auto;
+    }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: rgba(18, 17, 36, 0.96);
+      border: 1.5px solid var(--primary);
+      color: #fff;
+      padding: 13px 24px;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 24px rgba(108, 99, 255, 0.4);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 640px) {
+      .hero-card, .quiz-card, .element-result-card, .analyzing-card, .chemistry-matcher-card {
+        padding: 24px 18px;
+      }
+      .navbar {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Lưới nền -->
+  <div class="bg-grid"></div>
+
+  <!-- HỆ THỐNG ICON HÓA HỌC CỠ ĐẠI TRÔI SIÊU CHẬM & CHILL -->
+  <div class="floating-lab" id="floatingLab"></div>
+
+  <!-- Thông báo Toast -->
+  <div class="toast-box" id="toastNotification">✨ Đã thực hiện thành công!</div>
+
+  <div class="app-container">
+    <!-- Thanh điều hướng -->
+    <header class="navbar">
+      <div class="brand-wrap" onclick="restartQuiz()" title="Về trang chủ BWAN Gen 6">
+        <div class="club-logo-box">
+          <img class="bwan-logo-img bwan-dynamic-logo" width="52" height="52" alt="BWAN Club Logo" />
+        </div>
+        <div class="brand-text">
+          <h1>BWAN GEN 6 — CHEMISTRY LAB</h1>
+          <p>Which Element Are You? • Personality Test</p>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-ghost" onclick="openElementsModal()">
+          🧪 Bảng 18 Nguyên Tố
+        </button>
+      </div>
+    </header>
+
+    <!-- MÀN HÌNH 1: TRANG CHỦ GIỚI THIỆU -->
+    <section id="introScreen" class="screen active">
+      <div class="hero-card">
+        <div style="margin-bottom: 14px; display:flex; justify-content:center;">
+          <img class="bwan-logo-img bwan-dynamic-logo" width="76" height="76" style="filter: drop-shadow(0 0 22px rgba(108, 99, 255, 0.75));" alt="BWAN Logo" />
+        </div>
+        <div class="badge-pill">
+          <span>⚛️</span> Hệ thống giải mã 18 Nguyên tố Nhân cách — BWAN Gen 6
+        </div>
+        <h2 class="hero-title">
+          Nguyên Tố Hóa Học Nào<br /><span>Đại Diện Cho Bạn?</span>
+        </h2>
+        <p class="hero-desc">
+          Không có đáp án đúng hay sai — mỗi lựa chọn phản ánh thói quen, bản năng và nguồn năng lượng tự nhiên nhất của bạn qua 5 chiều sâu: tính cách, tư duy, làm việc nhóm, xử lý áp lực và phong cách sáng tạo.
+        </p>
+
+        <div class="dimension-tags">
+          <div class="dim-tag"><span>01</span> Tính cách</div>
+          <div class="dim-tag"><span>02</span> Tư duy</div>
+          <div class="dim-tag"><span>03</span> Làm việc nhóm</div>
+          <div class="dim-tag"><span>04</span> Xử lý áp lực</div>
+          <div class="dim-tag"><span>05</span> Phong cách sáng tạo</div>
+        </div>
+
+        <div class="user-input-group">
+          <label for="userNameInput">Nhập tên hoặc biệt danh của bạn (in lên thẻ kết quả):</label>
+          <input type="text" id="userNameInput" class="input-field" placeholder="VD: Minh Anh — BWAN Gen 6..." maxlength="36" />
+        </div>
+
+        <div class="hero-btn-row">
+          <button class="btn-primary" onclick="startQuiz()">
+            <span>Bắt Đầu Phản Ứng</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÀN HÌNH 2: CÂU HỎI TRẮC NGHIỆM -->
+    <section id="quizScreen" class="screen">
+      <div class="quiz-card">
+        <div class="quiz-top-bar">
+          <div class="category-badge" id="qCategoryBadge">NHÓM 1/5 • BẢN SẮC TÍNH CÁCH</div>
+          <div class="progress-counter" id="qCounterText">01 / 15</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div id="questionStage" class="question-stage">
+          <h3 class="question-title" id="questionText">Đang tải câu hỏi...</h3>
+          <div class="options-grid" id="optionsContainer"></div>
+        </div>
+
+        <div class="quiz-footer">
+          <button class="btn-ghost" id="prevBtn" onclick="prevQuestion()">← Câu trước</button>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">Hãy chọn phản xạ giống bạn nhất ngoài đời thực</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÀN HÌNH 2.5: CẢNH CHỜ BÌNH CẦU ĐẦY DẦN 0% -> 100% RỒI SÔI TRÀN -->
+    <section id="analyzingScreen" class="screen">
+      <div class="analyzing-card">
+        <div class="flask-stage-wrap">
+          <svg id="analyzingFlaskSvg" class="flask-svg" viewBox="0 0 220 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <clipPath id="flaskInteriorClip">
+                <path d="M92 26 H128 V78 C164 92 182 126 182 160 C182 200 150 226 110 226 C70 226 38 200 38 160 C38 126 56 92 92 78 Z" />
+              </clipPath>
+              <linearGradient id="liquidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#d4cfff" />
+                <stop offset="35%" stop-color="#6c63ff" />
+                <stop offset="100%" stop-color="#291f7a" />
+              </linearGradient>
+              <linearGradient id="overflowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="30%" stop-color="#a29bfe" />
+                <stop offset="100%" stop-color="#6c63ff" />
+              </linearGradient>
+            </defs>
+
+            <g clip-path="url(#flaskInteriorClip)">
+              <g id="flaskLiquidLevelGroup" transform="translate(0, 230)">
+                <path class="liquid-wave-back"
+                      d="M -60 0 Q -30 -11 0 0 T 60 0 T 120 0 T 180 0 T 240 0 T 300 0 T 360 0 V 260 H -60 Z"
+                      fill="rgba(162, 155, 254, 0.58)" />
+                <path class="liquid-wave-front"
+                      d="M -60 4 Q -30 15 0 4 T 60 4 T 120 4 T 180 4 T 240 4 T 300 4 T 360 4 V 260 H -60 Z"
+                      fill="url(#liquidGrad)" />
+                <circle class="rising-bubble" cx="82" cy="95" r="5" fill="rgba(255,255,255,0.55)" style="animation-delay: 0s;" />
+                <circle class="rising-bubble" cx="128" cy="115" r="7" fill="rgba(255,255,255,0.45)" style="animation-delay: 0.6s;" />
+                <circle class="rising-bubble" cx="106" cy="135" r="4.5" fill="rgba(255,255,255,0.6)" style="animation-delay: 1.1s;" />
+                <circle class="rising-bubble" cx="76" cy="150" r="6" fill="rgba(255,255,255,0.4)" style="animation-delay: 1.5s;" />
+                <circle class="rising-bubble" cx="138" cy="160" r="5.5" fill="rgba(255,255,255,0.5)" style="animation-delay: 0.3s;" />
+              </g>
+            </g>
+
+            <g id="flaskOverflowEffect" class="overflow-group">
+              <ellipse cx="110" cy="23" rx="32" ry="11" fill="url(#overflowGrad)" />
+              <circle cx="85" cy="21" r="10" fill="#c7c2ff" />
+              <circle cx="110" cy="16" r="13" fill="#ffffff" />
+              <circle cx="135" cy="21" r="10" fill="#c7c2ff" />
+              <circle cx="98" cy="14" r="8" fill="#e2dfff" />
+              <circle cx="123" cy="15" r="8.5" fill="#e2dfff" />
+              <path d="M82 23 C73 36 75 56 71 78 C69 90 79 90 82 75 C85 56 87 38 90 25 Z" fill="url(#overflowGrad)" />
+              <path d="M138 23 C147 36 145 58 149 82 C151 94 141 94 138 78 C135 58 133 38 130 25 Z" fill="url(#overflowGrad)" />
+              <circle class="overflow-drip-left" cx="71" cy="84" r="6.5" fill="#a29bfe" />
+              <circle class="overflow-drip-left" cx="58" cy="46" r="4.5" fill="#ffffff" />
+              <circle class="overflow-drip-right" cx="149" cy="88" r="7" fill="#a29bfe" />
+              <circle class="overflow-drip-right" cx="162" cy="50" r="5" fill="#ffffff" />
+            </g>
+
+            <path d="M84 26 H136" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+            <path d="M92 26 V78 C56 92 38 126 38 160 C38 200 70 226 110 226 C150 226 182 200 182 160 C182 126 164 92 128 78 V26"
+                  stroke="#dedbff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="rgba(255,255,255,0.03)" />
+            <path d="M54 155 C54 130 68 106 88 94" stroke="rgba(255,255,255,0.45)" stroke-width="3.5" stroke-linecap="round" />
+            <line x1="146" y1="120" x2="162" y2="120" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" />
+            <line x1="152" y1="145" x2="168" y2="145" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" />
+            <line x1="152" y1="170" x2="168" y2="170" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" />
+            <line x1="144" y1="195" x2="160" y2="195" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" />
+          </svg>
+
+          <div class="flask-percent-Readout" id="analyzePercent">0%</div>
+        </div>
+
+        <h3 class="analyzing-title" id="analyzingMainTitle">Đang Chưng Cất & Giải Mã Phổ Nguyên Tố...</h3>
+        <div class="analyzing-live-status" id="analyzingLiveStatus">
+          Đang dẫn truyền 15 phản xạ vào bình cầu phân tích BWAN Gen 6...
+        </div>
+
+        <div class="analyze-progress-bar-wrap">
+          <div class="analyze-progress-bar-fill" id="analyzeBarFill"></div>
+        </div>
+
+        <div class="analysis-steps-box">
+          <div class="step-line" id="step1">
+            <span class="step-dot">1</span>
+            <span>Đo lường Bản sắc Tính cách & Biểu đạt tự nhiên...</span>
+          </div>
+          <div class="step-line" id="step2">
+            <span class="step-dot">2</span>
+            <span>Giải mã cấu trúc Tư duy & Phản xạ nhìn nhận vấn đề...</span>
+          </div>
+          <div class="step-line" id="step3">
+            <span class="step-dot">3</span>
+            <span>Đo tần số Tương tác tập thể & Vai trò trong đội nhóm...</span>
+          </div>
+          <div class="step-line" id="step4">
+            <span class="step-dot">4</span>
+            <span>Kiểm tra cơ chế Tự cân bằng trước biến động & Áp lực...</span>
+          </div>
+          <div class="step-line" id="step5">
+            <span class="step-dot">5</span>
+            <span>Đối chiếu Dấu ấn Sáng tạo với 18 nguyên tố chuẩn...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÀN HÌNH 3: KẾT QUẢ CHI TIẾT -->
+    <section id="resultScreen" class="screen">
+      <div class="result-wrapper">
+        <div class="element-result-card" id="resultCardBox">
+          <div class="card-top-bar">
+            <div class="result-header-tag" id="resultUserHeader">
+              ✨ HỒ SƠ CỦA: MINH ANH
+            </div>
+            <div class="card-brand-mini">
+              <img class="bwan-logo-img bwan-dynamic-logo" width="24" height="24" alt="BWAN" />
+              <span>WHICH ELEMENT ARE YOU? • BWAN GEN 6</span>
+            </div>
+          </div>
+
+          <div class="element-hero-box">
+            <div class="periodic-tile" id="resTile">
+              <div class="tile-top">
+                <span id="resAtomicNum">26</span>
+                <span id="resGroupCode">#26</span>
+              </div>
+              <div class="tile-symbol" id="resSymbol">Fe</div>
+              <div class="tile-name" id="resElementName">Iron</div>
+            </div>
+
+            <div class="element-main-info">
+              <div class="element-archetype-group" id="resArchetypeGroup">NHÓM KIÊN ĐỊNH & CHU TOÀN</div>
+              <h2 class="element-title" id="resFullTitle">Iron — Người kiên định</h2>
+              <div class="element-CoreKeywords" id="resCoreKeywords">
+                ✦ Trách nhiệm, bền bỉ, đáng tin cậy.
+              </div>
+            </div>
+          </div>
+
+          <p id="resDeepDesc" style="font-size: 1rem; color: #f0f0fa; margin-bottom: 18px; line-height: 1.65;"></p>
+
+          <!-- Hộp giải mã sát thực tế -->
+          <div class="personal-decode-box" id="personalDecodeBox">
+            <h4 id="personalDecodeTitle">🔬 Giải mã thực tế từ chuỗi 15 phản xạ của bạn:</h4>
+            <p id="resPersonalDecode"></p>
+          </div>
+
+          <div class="analysis-grid">
+            <div class="analysis-box">
+              <h4 id="boxTitle1">⚡ Chất riêng nổi bật</h4>
+              <p id="resStrengths"></p>
+            </div>
+            <div class="analysis-box">
+              <h4 id="boxTitle2">🤝 Vai trò trong tập thể</h4>
+              <p id="resTeamRole"></p>
+            </div>
+            <div class="analysis-box">
+              <h4 id="boxTitle3">💞 Nhóm người phù hợp nhất</h4>
+              <p id="resBestMatch"></p>
+            </div>
+          </div>
+
+          <div class="stats-section">
+            <div class="stat-card">
+              <h3>📊 Bản đồ 5 chiều năng lượng của bạn</h3>
+              <div id="dimensionBars"></div>
+            </div>
+            <div class="stat-card">
+              <h3>🧬 Top 3 Nguyên tố đồng điệu nhất</h3>
+              <div class="secondary-elements" id="topMatchesList"></div>
+            </div>
+          </div>
+
+          <div class="card-Capture-Footer">
+            <span style="display:inline-flex; align-items:center; gap:9px;">
+              <img class="bwan-logo-img bwan-dynamic-logo" width="22" height="22" alt="BWAN" />
+              <span>BWAN GEN 6 CHEMISTRY LAB • PERSONALITY ELEMENT CARD</span>
+            </span>
+            <span id="resFooterElementCode">ELEMENT #26 • FE (IRON)</span>
+          </div>
+        </div>
+
+        <!-- KHUNG KIỂM TRA ĐỘ ĂN Ý GIỮA CÁC KIỂU NGƯỜI -->
+        <div class="chemistry-matcher-card">
+          <h3 style="font-size: 1.1rem; color: #fff;">
+            💞 Kiểm Tra Độ Hợp Cạ Giữa Hai Kiểu Nhân Cách
+          </h3>
+          <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 4px;">
+            Chọn nguyên tố của một người bạn để xem khi hai kiểu tính cách này kết hợp trong học tập, công việc và cuộc sống sẽ bù trừ cho nhau thế nào:
+          </p>
+          <div class="matcher-controls">
+            <div style="font-weight: 700; color: #c8c3ff; font-size: 0.95rem;" id="matcherMyElementLabel">
+              Bạn: Fe (Iron — Người kiên định)
+            </div>
+            <span style="font-weight: 800; color: var(--primary);">+</span>
+            <select id="friendElementSelect" class="matcher-select" onchange="updateChemistryReaction()">
+            </select>
+          </div>
+          <div class="reaction-output-box" id="reactionOutputBox">
+            Hãy chọn một nguyên tố ở trên để xem mức độ ăn ý!
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button class="btn-download" id="downloadBtn" onclick="downloadResultCardPNG()">
+            📸 Tải / Lưu Ảnh Thẻ Kết Quả (PC & Điện Thoại)
+          </button>
+          <button class="btn-ghost" onclick="copyShareResult()">
+            📋 Sao Chép Kết Quả Chia Sẻ
+          </button>
+          <button class="btn-primary" onclick="restartQuiz()">
+            🔄 Làm Lại Bài Test
+          </button>
+          <button class="btn-ghost" onclick="openElementsModal()">
+            🔍 Xem Bộ 18 Nguyên Tố
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL BẢNG 18 NGUYÊN TỐ -->
+  <div class="modal-overlay" id="elementsModal" onclick="if(event.target === this) closeElementsModal()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem; color: #fff;">Bộ 18 Nguyên Tố & Hình Tượng Tính Cách — BWAN Gen 6</h3>
+          <p style="font-size: 0.84rem; color: var(--text-muted);">
+            Bấm vào bất kỳ nguyên tố nào để xem chi tiết hồ sơ tính cách & nhóm người phù hợp
+          </p>
+        </div>
+        <button class="btn-ghost" onclick="closeElementsModal()">✕ Đóng</button>
+      </div>
+      <div class="elements-18-grid" id="modalElementsGrid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL LƯU ẢNH CHUYÊN DỤNG CHO ĐIỆN THOẠI (CHỐNG CHẶN TẢI TRÊN MESSENGER/ZALO/IOS) -->
+  <div class="modal-overlay" id="imageSaveModal" onclick="if(event.target === this) closeImageSaveModal()">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 style="font-size: 1.12rem; color: #fff;">📸 Thẻ Kết Quả Của Bạn Đã Sẵn Sàng!</h3>
+        <button class="btn-ghost" onclick="closeImageSaveModal()">✕ Đóng</button>
+      </div>
+
+      <div class="mobile-save-guide">
+        📱 <b>Trên Điện thoại (iOS / Android / Messenger / Zalo):</b><br />
+        Bạn hãy bấm nút <b>"📲 Lưu / Chia Sẻ Ảnh"</b> bên dưới, hoặc <b>nhấn giữ ngón tay (2 giây) thẳng vào tấm ảnh</b> ➔ chọn <b>Lưu vào Ảnh / Tải hình ảnh</b> nhé!
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+        <button class="btn-download" id="nativeShareImgBtn" onclick="shareOrSaveImageMobile()" style="padding: 11px 20px; font-size: 0.9rem;">
+          📲 Lưu / Chia Sẻ Ảnh Vào Máy
+        </button>
+        <a id="directBlobDownloadLink" class="btn-ghost" download="BWAN-Gen6-Card.png" style="text-decoration:none; padding: 11px 18px; font-size: 0.9rem;">
+          ⬇️ Tải File PNG Trực Tiếp
+        </a>
+      </div>
+
+      <img id="generatedCardPreviewImg" class="preview-png-img" alt="Thẻ Kết Quả BWAN Gen 6" />
+    </div>
+  </div>
+
+  <!-- MODAL DỰ PHÒNG SAO CHÉP -->
+  <div class="modal-overlay" id="copyFallbackModal" onclick="if(event.target === this) closeCopyModal()">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; color: #fff;">📋 Sao chép kết quả của bạn</h3>
+        <button class="btn-ghost" onclick="closeCopyModal()">✕ Đóng</button>
+      </div>
+      <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 12px;">
+        Văn bản đã được bôi đen sẵn, bạn chỉ cần bấm <b>Ctrl + C</b> (hoặc giữ chọn Sao chép trên điện thoại):
+      </p>
+      <textarea id="fallbackCopyTextarea" class="input-field" rows="6" readonly style="resize: none; font-size: 0.9rem;"></textarea>
+    </div>
+  </div>
+
+  <script>
+    /*************************************************************************
+     * 0. DỰNG LOGO LỤC GIÁC BWAN CHUẨN HÌNH HỌC 100% & HÀM BO GÓC ĐA NỀN TẢNG
+     *************************************************************************/
+    let BWAN_LOGO_DATA_URL = "";
+    let BWAN_LOGO_IMAGE_OBJ = null;
+    let LAST_GENERATED_BLOB = null;
+    let LAST_GENERATED_FILENAME = "BWAN-Gen6-Element.png";
+
+    // Hàm vẽ khung bo góc tương thích 100% mọi đời điện thoại iOS/Android (Không dùng ctx.roundRect dễ gây lỗi)
+    function drawRoundRectPath(ctx, x, y, w, h, r) {
+      const radius = Math.max(0, Math.min(r, w / 2, h / 2));
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function drawRoundedPoly(ctx, pts, radius) {
+      const len = pts.length;
+      if (len < 3) return;
+      ctx.beginPath();
+      for (let i = 0; i < len; i++) {
+        const p0 = pts[(i - 1 + len) % len];
+        const p1 = pts[i];
+        const p2 = pts[(i + 1) % len];
+
+        const v1x = p0[0] - p1[0], v1y = p0[1] - p1[1];
+        const v2x = p2[0] - p1[0], v2y = p2[1] - p1[1];
+        const l1 = Math.hypot(v1x, v1y), l2 = Math.hypot(v2x, v2y);
+        const r = Math.min(radius, l1 * 0.35, l2 * 0.35);
+
+        const startX = p1[0] + (v1x / l1) * r;
+        const startY = p1[1] + (v1y / l1) * r;
+        const endX = p1[0] + (v2x / l2) * r;
+        const endY = p1[1] + (v2y / l2) * r;
+
+        if (i === 0) ctx.moveTo(startX, startY);
+        else ctx.lineTo(startX, startY);
+        ctx.quadraticCurveTo(p1[0], p1[1], endX, endY);
+      }
+      ctx.closePath();
+    }
+
+    function offsetSegment(pA, pB, nx, ny, dist) {
+      return [
+        [pA[0] + nx * dist, pA[1] + ny * dist],
+        [pB[0] + nx * dist, pB[1] + ny * dist]
+      ];
+    }
+
+    function lineIntersect(p1, p2, p3, p4) {
+      const x1 = p1[0], y1 = p1[1], x2 = p2[0], y2 = p2[1];
+      const x3 = p3[0], y3 = p3[1], x4 = p4[0], y4 = p4[1];
+      const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+      if (Math.abs(denom) < 1e-6) return [(x2 + x3) / 2, (y2 + y3) / 2];
+      const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+      const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+      return [px, py];
+    }
+
+    function buildExactBwanLogoDataURL() {
+      const size = 1000;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+
+      const V0 = [500, 70];
+      const V1 = [872.4, 285];
+      const V2 = [872.4, 715];
+      const V3 = [500, 930];
+      const V4 = [127.6, 715];
+      const V5 = [127.6, 285];
+
+      const P_peak = [476, 214];
+      const E_bl = [218, 767];
+      const E_r  = [872.4, 658];
+      const E_tl = [127.6, 344];
+      const E_br = [598, 873];
+      const E_tr = [700, 185.5];
+
+      const lenSlash = Math.hypot(E_bl[0] - P_peak[0], E_bl[1] - P_peak[1]);
+      const nSlash = [(E_bl[1] - P_peak[1]) / lenSlash, -(E_bl[0] - P_peak[0]) / lenSlash];
+
+      const lenBack = Math.hypot(E_r[0] - P_peak[0], E_r[1] - P_peak[1]);
+      const nBack = [-(E_r[1] - P_peak[1]) / lenBack, (E_r[0] - P_peak[0]) / lenBack];
+
+      const g = 13;
+
+      const L1_left  = offsetSegment(P_peak, E_bl, -nSlash[0], -nSlash[1], g);
+      const L1_right = offsetSegment(P_peak, E_bl,  nSlash[0],  nSlash[1], g);
+      const E_lr_end = [696 - 258, 185.5 + 553];
+      const L4_left  = offsetSegment(E_tr, E_lr_end, -nSlash[0], -nSlash[1], g);
+      const L4_right = offsetSegment(E_tr, E_lr_end,  nSlash[0],  nSlash[1], g);
+      const L2_top   = offsetSegment(P_peak, E_r, -nBack[0], -nBack[1], g);
+      const L2_bot   = offsetSegment(P_peak, E_r,  nBack[0],  nBack[1], g);
+      const L3_top   = offsetSegment(E_tl, E_br, -nBack[0], -nBack[1], g);
+      const L3_bot   = offsetSegment(E_tl, E_br,  nBack[0],  nBack[1], g);
+
+      const s1_p1 = lineIntersect(V5, V4, L3_top[0], L3_top[1]);
+      const s1_p2 = lineIntersect(L3_top[0], L3_top[1], L1_left[0], L1_left[1]);
+      const s1_p3 = lineIntersect(L1_left[0], L1_left[1], L2_top[0], L2_top[1]);
+      const s1_p4 = lineIntersect(L2_top[0], L2_top[1], L4_left[0], L4_left[1]);
+      const s1_p5 = lineIntersect(L4_left[0], L4_left[1], V0, V1);
+      const shard1 = [V5, V0, s1_p5, s1_p4, s1_p3, s1_p2, s1_p1];
+
+      const s2_p1 = lineIntersect(V5, V4, L3_bot[0], L3_bot[1]);
+      const s2_p2 = lineIntersect(L3_bot[0], L3_bot[1], L1_left[0], L1_left[1]);
+      const s2_p3 = lineIntersect(L1_left[0], L1_left[1], V4, V3);
+      const shard2 = [s2_p1, s2_p2, s2_p3, V4];
+
+      const s3_p1 = lineIntersect(L1_right[0], L1_right[1], L2_bot[0], L2_bot[1]);
+      const s3_p2 = lineIntersect(L2_bot[0], L2_bot[1], L4_left[0], L4_left[1]);
+      const s3_p3 = lineIntersect(L4_left[0], L4_left[1], L3_top[0], L3_top[1]);
+      const s3_p4 = lineIntersect(L3_top[0], L3_top[1], L1_right[0], L1_right[1]);
+      const shard3 = [s3_p1, s3_p2, s3_p3, s3_p4];
+
+      const s4_p1 = lineIntersect(L1_right[0], L1_right[1], L3_bot[0], L3_bot[1]);
+      const s4_p2 = lineIntersect(L3_bot[0], L3_bot[1], V3, V2);
+      const s4_p3 = lineIntersect(L1_right[0], L1_right[1], V4, V3);
+      const shard4 = [s4_p1, s4_p2, V3, s4_p3];
+
+      const s5_p1 = lineIntersect(L4_right[0], L4_right[1], V0, V1);
+      const s5_p2 = lineIntersect(L2_top[0], L2_top[1], V1, V2);
+      const s5_p3 = lineIntersect(L4_right[0], L4_right[1], L2_top[0], L2_top[1]);
+      const shard5 = [s5_p1, V1, s5_p2, s5_p3];
+
+      const s6_p1 = lineIntersect(L4_right[0], L4_right[1], L2_bot[0], L2_bot[1]);
+      const s6_p2 = lineIntersect(L2_bot[0], L2_bot[1], V1, V2);
+      const s6_p3 = lineIntersect(L3_top[0], L3_top[1], V3, V2);
+      const s6_p4 = lineIntersect(L4_right[0], L4_right[1], L3_top[0], L3_top[1]);
+      const shard6 = [s6_p1, s6_p2, V2, s6_p3, s6_p4];
+
+      const globalGrad = ctx.createLinearGradient(160, 140, 860, 880);
+      globalGrad.addColorStop(0, "#756bff");
+      globalGrad.addColorStop(0.48, "#6359f2");
+      globalGrad.addColorStop(0.78, "#4c43c4");
+      globalGrad.addColorStop(1, "#2d266e");
+
+      ctx.fillStyle = globalGrad;
+
+      [shard1, shard2, shard3, shard4, shard5, shard6].forEach(poly => {
+        drawRoundedPoly(ctx, poly, 15);
+        ctx.fill();
+      });
+
+      BWAN_LOGO_DATA_URL = canvas.toDataURL("image/png");
+      BWAN_LOGO_IMAGE_OBJ = new Image();
+      BWAN_LOGO_IMAGE_OBJ.src = BWAN_LOGO_DATA_URL;
+
+      document.querySelectorAll(".bwan-dynamic-logo").forEach(img => {
+        img.src = BWAN_LOGO_DATA_URL;
+      });
+      const fav = document.getElementById("dynamicFavicon");
+      if (fav) fav.href = BWAN_LOGO_DATA_URL;
+    }
+
+    /*************************************************************************
+     * 1. DỮ LIỆU 18 NGUYÊN TỐ CHUẨN TÂM LÝ HỌC
+     *************************************************************************/
+    const ELEMENTS_DATA = {
+      Fe: {
+        symbol: "Fe", number: 26, name: "Iron",
+        title: "Iron — Người kiên định",
+        shortDesc: "Trách nhiệm, bền bỉ, đáng tin cậy.",
+        groupName: "Nhóm Kiên Định & Chu Toàn (Guardians)",
+        cardBg: "linear-gradient(135deg, #1d263b 0%, #0f1422 100%)",
+        bgStart: "#1d263b", bgEnd: "#0e1320", accentHex: "#7c93c3",
+        deepDesc: "Giống như Sắt (Fe) — trụ cột vững chãi của mọi công trình, bạn là điểm tựa đáng tin cậy nhất trong tập thể. Khi đứng trước những nhiệm vụ dài hơi hay thử thách cam go, chính sự điềm tĩnh, cam kết làm tới cùng và tinh thần trách nhiệm của bạn giữ cho cả đội không bao giờ chệch hướng.",
+        strengths: "Kiên trì hiếm có, nói được làm được, giữ chữ tín tuyệt đối và không bao giờ bỏ cuộc giữa chừng.",
+        teamRole: "Người giữ nhịp thực thi, đảm bảo tiến độ và gánh vác vững vàng những phần việc trụ cột của nhóm.",
+        partners: ["Ca", "Zn", "C"],
+        profile: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 }
+      },
+      Au: {
+        symbol: "Au", number: 79, name: "Gold",
+        title: "Gold — Người bản lĩnh",
+        shortDesc: "Tự tin, có tiêu chuẩn, theo đuổi chất lượng.",
+        groupName: "Nhóm Bản Lĩnh & Hành Động (Leaders)",
+        cardBg: "linear-gradient(135deg, #3c2f1d 0%, #1c150c 100%)",
+        bgStart: "#3c2f1d", bgEnd: "#19130a", accentHex: "#f59e0b",
+        deepDesc: "Vàng (Au) luôn giữ trọn giá trị trước thử thách — và bạn cũng vậy. Bạn sở hữu gu thẩm mỹ cùng hệ tiêu chuẩn chất lượng rất rõ ràng. Dù ở vị trí nào, bạn luôn toát ra phong thái tự tin, dám nhận trọng trách và luôn muốn tạo ra thành quả xuất sắc nhất.",
+        strengths: "Tư duy chuẩn mực cao, bản lĩnh vững vàng trước sóng gió, truyền cảm hứng về sự xuất sắc.",
+        teamRole: "Người định hình tiêu chuẩn chất lượng đầu ra và dẫn dắt đội nhóm chinh phục mục tiêu lớn.",
+        partners: ["Ag", "Cl", "Cu"],
+        profile: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 }
+      },
+      Cu: {
+        symbol: "Cu", number: 29, name: "Copper",
+        title: "Copper — Người kết nối",
+        shortDesc: "Giao tiếp, hợp tác, thấu hiểu.",
+        groupName: "Nhóm Kết Nối & Truyền Lửa (Connectors)",
+        cardBg: "linear-gradient(135deg, #382227 0%, #1b1013 100%)",
+        bgStart: "#382227", bgEnd: "#180e11", accentHex: "#fb7185",
+        deepDesc: "Đồng (Cu) là chất dẫn truyền tuyệt vời nhất — tượng trưng cho khả năng kết nối con người tự nhiên của bạn. Bạn nhạy bén với cảm xúc xung quanh, biết lắng nghe và dễ dàng biến những cá nhân rời rạc thành một tập thể hòa hợp, ăn ý.",
+        strengths: "Giao tiếp khéo léo, giàu sự đồng cảm, dễ dàng tạo thiện cảm và xây dựng bầu không khí gắn kết.",
+        teamRole: "Cầu nối truyền thông nội bộ & đối ngoại, giúp mọi ý kiến được lắng nghe và phối hợp nhịp nhàng.",
+        partners: ["O", "P", "Ne"],
+        profile: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 }
+      },
+      Ag: {
+        symbol: "Ag", number: 47, name: "Silver",
+        title: "Silver — Người tinh tế",
+        shortDesc: "Quan sát, chỉn chu, nhạy với chi tiết.",
+        groupName: "Nhóm Tinh Tế & Tự Do (Adapters)",
+        cardBg: "linear-gradient(135deg, #2b213a 0%, #15101e 100%)",
+        bgStart: "#2b213a", bgEnd: "#130e1c", accentHex: "#c084fc",
+        deepDesc: "Bạc (Ag) có độ phản chiếu ánh sáng sắc nét nhất. Bạn sở hữu đôi mắt quan sát tinh tường, nhận ra những sắc thái và chi tiết nhỏ nhất mà người khác dễ bỏ lỡ. Sự chỉn chu của bạn giúp mọi kế hoạch hay sản phẩm đạt tới độ hoàn thiện đáng kinh ngạc.",
+        strengths: "Tỉ mỉ, nhạy bén với cái đẹp và chi tiết nhỏ, cẩn trọng và có chiều sâu nội tâm.",
+        teamRole: "Người chăm chút độ hoàn thiện, nâng tầm trải nghiệm và sự tinh xảo cho các sản phẩm của nhóm.",
+        partners: ["Au", "Zn", "N"],
+        profile: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 }
+      },
+      S: {
+        symbol: "S", number: 16, name: "Sulfur",
+        title: "Sulfur — Người khơi nguồn",
+        shortDesc: "Sáng tạo, tò mò, thích thử nghiệm.",
+        groupName: "Nhóm Sáng Tạo & Tỏa Sáng (Innovators)",
+        cardBg: "linear-gradient(135deg, #382e20 0%, #1b160f 100%)",
+        bgStart: "#382e20", bgEnd: "#19140d", accentHex: "#facc15",
+        deepDesc: "Lưu huỳnh (S) nổi tiếng với khả năng biến hóa đa dạng. Bạn mang trong mình trí tò mò không giới hạn, luôn đặt câu hỏi 'Sẽ ra sao nếu mình thử cách mới này?' và luôn là người khơi mào những ý tưởng đột phá cho tập thể.",
+        strengths: "Tư duy mở, giàu trí tưởng tượng, thích khám phá và không ngại thử nghiệm phương pháp mới.",
+        teamRole: "Trạm phát ý tưởng (Brainstormer), giúp cả đội thoát khỏi lối mòn quen thuộc.",
+        partners: ["I", "Li", "C"],
+        profile: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 }
+      },
+      C: {
+        symbol: "C", number: 6, name: "Carbon",
+        title: "Carbon — Người kiến tạo",
+        shortDesc: "Logic, hệ thống, xây dựng ý tưởng.",
+        groupName: "Nhóm Logic & Điềm Tĩnh (Analysts)",
+        cardBg: "linear-gradient(135deg, #1e233d 0%, #0f1222 100%)",
+        bgStart: "#1e233d", bgEnd: "#0e1120", accentHex: "#818cf8",
+        deepDesc: "Carbon (C) tạo nên mạng tinh thể kim cương bền vững nhờ cấu trúc liên kết chặt chẽ. Bạn yêu thích sự mạch lạc: khi đứng trước những ý tưởng ngổn ngang, bạn biết cách sắp xếp chúng thành một hệ thống có quy trình rõ ràng và khả thi.",
+        strengths: "Tư duy hệ thống, lập kế hoạch bài bản, biến ý tưởng trừu tượng thành lộ trình rõ ràng.",
+        teamRole: "Kiến trúc sư kế hoạch (Strategist), thiết kế khung xương sống cho mọi dự án của CLB.",
+        partners: ["Si", "Fe", "N"],
+        profile: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 }
+      },
+      Si: {
+        symbol: "Si", number: 14, name: "Silicon",
+        title: "Silicon — Người giải mã",
+        shortDesc: "Phân tích, tìm quy luật, giải quyết vấn đề.",
+        groupName: "Nhóm Logic & Điềm Tĩnh (Analysts)",
+        cardBg: "linear-gradient(135deg, #162c3d 0%, #0c1822 100%)",
+        bgStart: "#162c3d", bgEnd: "#0b1620", accentHex: "#38bdf8",
+        deepDesc: "Silicon (Si) là trái tim của kỷ nguyên công nghệ và trí tuệ. Bạn bị cuốn hút bởi những bài toán khó, thích đào sâu tìm ra nguyên nhân gốc rễ và quy luật vận hành đằng sau mọi vấn đề thay vì chỉ nhìn bề nổi.",
+        strengths: "Phân tích sắc bén, nhạy với quy luật logic và cực kỳ bình tĩnh khi tháo gỡ các nút thắt.",
+        teamRole: "Chuyên gia giải quyết vấn đề (Problem Solver), tìm ra lời giải thông minh khi dự án gặp bế tắc.",
+        partners: ["C", "N", "Al"],
+        profile: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 }
+      },
+      Ne: {
+        symbol: "Ne", number: 10, name: "Neon",
+        title: "Neon — Người tỏa sáng",
+        shortDesc: "Biểu đạt, truyền cảm hứng, tạo dấu ấn.",
+        groupName: "Nhóm Sáng Tạo & Tỏa Sáng (Innovators)",
+        cardBg: "linear-gradient(135deg, #38203a 0%, #1c101d 100%)",
+        bgStart: "#38203a", bgEnd: "#190e1a", accentHex: "#f472b6",
+        deepDesc: "Ánh sáng rực rỡ của đèn Neon (Ne) luôn thu hút mọi ánh nhìn. Bạn giàu cảm xúc, có khả năng diễn đạt cuốn hút và biết cách biến những thông điệp bình thường trở nên sống động, đầy màu sắc và chạm tới trái tim mọi người.",
+        strengths: "Khả năng biểu đạt cuốn hút, truyền cảm hứng mạnh mẽ và dễ dàng tạo dấu ấn khó quên.",
+        teamRole: "Người thổi hồn và truyền tải thông điệp, giúp các sản phẩm của nhóm tỏa sáng rực rỡ.",
+        partners: ["P", "Cu", "I"],
+        profile: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 }
+      },
+      Al: {
+        symbol: "Al", number: 13, name: "Aluminium",
+        title: "Aluminium — Người thích nghi",
+        shortDesc: "Linh hoạt, thực tế, xoay xở tốt.",
+        groupName: "Nhóm Tinh Tế & Tự Do (Adapters)",
+        cardBg: "linear-gradient(135deg, #1b3328 0%, #0e1a14 100%)",
+        bgStart: "#1b3328", bgEnd: "#0c1712", accentHex: "#34d399",
+        deepDesc: "Nhôm (Al) vừa nhẹ, vừa bền, dễ dàng ứng dụng trong mọi hoàn cảnh. Bạn là người cực kỳ linh hoạt và thực tế: dù kế hoạch thay đổi vào phút chót hay thiếu hụt nguồn lực, bạn vẫn nhanh nhạy xoay xở để tìm ra phương án tối ưu.",
+        strengths: "Ứng biến nhanh nhạy, thực tế, dễ hòa nhập và luôn giữ được sự chủ động trước thay đổi.",
+        teamRole: "Người điều phối linh hoạt, sẵn sàng lấp đầy mọi khoảng trống và xử lý tình huống phát sinh.",
+        partners: ["Li", "He", "Ca"],
+        profile: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 }
+      },
+      He: {
+        symbol: "He", number: 2, name: "Helium",
+        title: "Helium — Tinh thần tự do",
+        shortDesc: "Độc lập, lạc quan, thích khám phá.",
+        groupName: "Nhóm Tinh Tế & Tự Do (Adapters)",
+        cardBg: "linear-gradient(135deg, #193333 0%, #0d1b1b 100%)",
+        bgStart: "#193333", bgEnd: "#0c1818", accentHex: "#2dd4bf",
+        deepDesc: "Helium (He) luôn bay cao vượt khỏi lực hút thông thường. Bạn yêu không gian tự do, ghét sự gò bó cứng nhắc và luôn giữ cái nhìn lạc quan trước mọi tình huống. Sự thoải mái của bạn giúp xua tan căng thẳng cho những người xung quanh.",
+        strengths: "Tự chủ cao, lạc quan, góc nhìn thoáng đạt và không bị đóng khung bởi những quy tắc cũ.",
+        teamRole: "Nguồn năng lượng tươi mới giúp cả nhóm giải tỏa áp lực và mở rộng góc nhìn phóng khoáng.",
+        partners: ["Li", "Al", "S"],
+        profile: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 }
+      },
+      N: {
+        symbol: "N", number: 7, name: "Nitrogen",
+        title: "Nitrogen — Người điềm tĩnh",
+        shortDesc: "Bình tĩnh, kín đáo, suy nghĩ trước khi hành động.",
+        groupName: "Nhóm Logic & Điềm Tĩnh (Analysts)",
+        cardBg: "linear-gradient(135deg, #36281e 0%, #1b140e 100%)",
+        bgStart: "#36281e", bgEnd: "#19120c", accentHex: "#d6a374",
+        deepDesc: "Chiếm 78% bầu khí quyển và giữ cho mọi phản ứng trong tầm kiểm soát, Nitơ (N) đại diện cho sự điềm tĩnh sâu sắc. Bạn không thích phô trương ồn ào mà luôn quan sát kỹ lưỡng, suy xét thấu đáo mọi khía cạnh trước khi hành động.",
+        strengths: "Điềm đạm, làm chủ cảm xúc cực tốt, sâu sắc và không bao giờ bị cuốn theo đám đông.",
+        teamRole: "Người giữ cái đầu lạnh (Calm Strategist), giúp tập thể tránh được những quyết định vội vàng.",
+        partners: ["Si", "Ag", "C"],
+        profile: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 }
+      },
+      O: {
+        symbol: "O", number: 8, name: "Oxygen",
+        title: "Oxygen — Người tiếp sức",
+        shortDesc: "Quan tâm, hỗ trợ, tiếp thêm năng lượng.",
+        groupName: "Nhóm Kết Nối & Truyền Lửa (Connectors)",
+        cardBg: "linear-gradient(135deg, #1b2e40 0%, #0d1721 100%)",
+        bgStart: "#1b2e40", bgEnd: "#0c151e", accentHex: "#38bdf8",
+        deepDesc: "Không có Oxy (O), sự sống và ngọn lửa đều không thể duy trì. Bạn là người ấm áp, tinh tế nhận ra khi nào đồng đội đang mệt mỏi để kịp thời động viên, sẻ chia và tiếp thêm sinh lực. Có bạn, không ai cảm thấy bị bỏ lại phía sau.",
+        strengths: "Giàu lòng trắc ẩn, biết lắng nghe chân thành, luôn nâng đỡ và tiếp thêm năng lượng cho tập thể.",
+        teamRole: "Trái tim ấm áp của đội nhóm, chăm sóc tinh thần và gắn kết bền chặt mọi thành viên.",
+        partners: ["Cu", "P", "Zn"],
+        profile: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 }
+      },
+      P: {
+        symbol: "P", number: 15, name: "Phosphorus",
+        title: "Phosphorus — Người truyền lửa",
+        shortDesc: "Nhiệt huyết, chủ động, thúc đẩy hành động.",
+        groupName: "Nhóm Kết Nối & Truyền Lửa (Connectors)",
+        cardBg: "linear-gradient(135deg, #2a223a 0%, #14101d 100%)",
+        bgStart: "#2a223a", bgEnd: "#130f1c", accentHex: "#a855f7",
+        deepDesc: "Photpho (P) là nguyên tố phát sáng và bắt lửa mạnh mẽ. Bạn tràn đầy nhiệt huyết, luôn chủ động xung phong và có khả năng biến sự chần chừ của tập thể thành hành động sôi nổi. Năng lượng của bạn có sức lan tỏa cực lớn.",
+        strengths: "Nhiệt tình, chủ động dấn thân, truyền động lực mạnh mẽ và kích hoạt tinh thần hành động.",
+        teamRole: "Người châm ngòi năng lượng (Motivator), đẩy nhanh tốc độ triển khai và khuấy động phong trào.",
+        partners: ["O", "Ne", "Li"],
+        profile: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 }
+      },
+      I: {
+        symbol: "I", number: 53, name: "Iodine",
+        title: "Iodine — Người khác biệt",
+        shortDesc: "Cá tính, độc đáo, có góc nhìn riêng.",
+        groupName: "Nhóm Sáng Tạo & Tỏa Sáng (Innovators)",
+        cardBg: "linear-gradient(135deg, #352135 0%, #1a101a 100%)",
+        bgStart: "#352135", bgEnd: "#180e18", accentHex: "#e879f9",
+        deepDesc: "Iốt (I) thăng hoa trực tiếp thành làn khói tím huyền ảo đầy ấn tượng. Bạn sở hữu bản sắc cá nhân rõ nét, dám nhìn vấn đề ở một chiều kích hoàn toàn khác biệt và luôn tạo ra những sản phẩm mang đậm dấu ấn độc bản.",
+        strengths: "Cá tính độc lập, gu thẩm mỹ và tư duy nguyên bản, dám đi ngược lối mòn để tạo đột phá.",
+        teamRole: "Người kiến tạo chất riêng (Original Creator), mang lại góc nhìn và bản sắc không đụng hàng cho CLB.",
+        partners: ["S", "Ne", "He"],
+        profile: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 }
+      },
+      Zn: {
+        symbol: "Zn", number: 30, name: "Zinc",
+        title: "Zinc — Người bảo trợ",
+        shortDesc: "Chu đáo, ổn định, quan tâm chất lượng.",
+        groupName: "Nhóm Kiên Định & Chu Toàn (Guardians)",
+        cardBg: "linear-gradient(135deg, #1e243b 0%, #0f121f 100%)",
+        bgStart: "#1e243b", bgEnd: "#0e111d", accentHex: "#93c5fd",
+        deepDesc: "Kẽm (Zn) luôn âm thầm bảo vệ kết cấu bên trong khỏi mọi tác động khắc nghiệt. Bạn chu đáo, ổn định và luôn chuẩn bị sẵn các phương án dự phòng để đảm bảo công việc của tập thể diễn ra an toàn, đạt chất lượng cao nhất.",
+        strengths: "Chu toàn, cẩn thận, quản trị rủi ro tốt và luôn mang lại cảm giác yên tâm tuyệt đối cho đồng đội.",
+        teamRole: "Lá chắn bảo trợ chất lượng (Quality Guardian), chăm lo từng khâu để không xảy ra sai sót.",
+        partners: ["Fe", "Ca", "Ag"],
+        profile: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 }
+      },
+      Li: {
+        symbol: "Li", number: 3, name: "Lithium",
+        title: "Lithium — Người tiên phong",
+        shortDesc: "Nhanh nhạy, thích khám phá, sẵn sàng bắt đầu.",
+        groupName: "Nhóm Bản Lĩnh & Hành Động (Leaders)",
+        cardBg: "linear-gradient(135deg, #1b2b3d 0%, #0e1620 100%)",
+        bgStart: "#1b2b3d", bgEnd: "#0d151e", accentHex: "#60a5fa",
+        deepDesc: "Là kim loại nhẹ nhất dẫn đầu kỷ nguyên năng lượng hiện đại, Lithium (Li) đại diện cho tốc độ và sự khởi đầu. Khi có cơ hội hay dự án mới, bạn là người nhạy bén nắm bắt đầu tiên, sẵn sàng mở đường vào lĩnh vực chưa ai từng thử.",
+        strengths: "Bắt nhịp xu hướng cực nhanh, hành động tốc độ, yêu thích khám phá và giàu tinh thần khởi xướng.",
+        teamRole: "Người mở đường tiên phong (Pioneer), khởi động nhanh các dự án và trào lưu mới cho CLB.",
+        partners: ["Al", "P", "He"],
+        profile: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 }
+      },
+      Cl: {
+        symbol: "Cl", number: 17, name: "Chlorine",
+        title: "Chlorine — Người quyết đoán",
+        shortDesc: "Thẳng thắn, dứt khoát, tập trung mục tiêu.",
+        groupName: "Nhóm Bản Lĩnh & Hành Động (Leaders)",
+        cardBg: "linear-gradient(135deg, #1e2b29 0%, #0f1716 100%)",
+        bgStart: "#1e2b29", bgEnd: "#0e1514", accentHex: "#2dd4bf",
+        deepDesc: "Clo (Cl) có hoạt tính mạnh mẽ và tác dụng làm rõ mọi thứ tức thì. Bạn ghét sự vòng vo, luôn nhìn thẳng vào trọng tâm vấn đề và đưa ra quyết định dứt khoát. Khi nhóm bị sa lầy trong tranh luận, chính bạn là người chốt phương án để tiến lên.",
+        strengths: "Rõ ràng, thẳng thắn, tốc độ ra quyết định nhanh và tập trung 100% vào mục tiêu cuối cùng.",
+        teamRole: "Người cầm trịch quyết định (Decision Maker), giữ kỷ luật mục tiêu và tối ưu hiệu suất.",
+        partners: ["Au", "C", "Fe"],
+        profile: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 }
+      },
+      Ca: {
+        symbol: "Ca", number: 20, name: "Calcium",
+        title: "Calcium — Người xây nền",
+        shortDesc: "Vững vàng, thực tế, tạo nền tảng cho tập thể.",
+        groupName: "Nhóm Kiên Định & Chu Toàn (Guardians)",
+        cardBg: "linear-gradient(135deg, #352b20 0%, #1b1610 100%)",
+        bgStart: "#352b20", bgEnd: "#18130e", accentHex: "#fbbf24",
+        deepDesc: "Canxi (Ca) tạo nên khung xương vững chắc cho cơ thể và nền móng cho những công trình bền lâu. Bạn thực tế, đáng tin cậy và giỏi xây dựng quy trình, hậu cần cũng như văn hóa gắn kết giúp tập thể phát triển vững vàng.",
+        strengths: "Tư duy thực tiễn cao, tổ chức nền tảng vững chắc, kiên nhẫn bồi đắp giá trị cho tập thể.",
+        teamRole: "Người kiến tạo nền móng (Foundation Builder), chăm lo nguồn lực và hậu phương cho toàn CLB.",
+        partners: ["Fe", "Zn", "O"],
+        profile: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 }
+      }
+    };
+
+    /*************************************************************************
+     * 2. BỘ 15 CÂU HỎI CHUẨN TÂM LÝ HỌC 6 NHÓM CỐT LÕI × 3 SẮC THÁI (18 NGUYÊN TỐ)
+     *************************************************************************/
+    const BASE_QUESTIONS = [
+      // ==================== NHÓM 1/5: BẢN SẮC TÍNH CÁCH ====================
+      {
+        category: "NHÓM 1/5 • BẢN SẮC TÍNH CÁCH",
+        dimGroup: "personality",
+        question: "Khi tham gia vào một môi trường mới hoặc bắt đầu một hành trình mới cùng CLB, nét tính cách tự nhiên nào ở bạn thể hiện rõ nhất?",
+        options: [
+          {
+            text: "Đáng tin cậy và bền bỉ — ít nói lời hoa mỹ nhưng một khi đã nhận việc gì là kiên trì làm tới cùng.",
+            weights: { Fe: 5, Ca: 2.5, Zn: 1.5 },
+            dims: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 },
+            traitTag: "sống trách nhiệm, bền bỉ và giữ chữ tín tuyệt đối"
+          },
+          {
+            text: "Tự tin và có tiêu chuẩn cao — luôn định hướng bản thân tạo ra những kết quả thực sự chất lượng.",
+            weights: { Au: 5, Cl: 2.5, Li: 1.5 },
+            dims: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 },
+            traitTag: "tự tin, bản lĩnh và luôn theo đuổi tiêu chuẩn chất lượng"
+          },
+          {
+            text: "Mạch lạc và có hệ thống — thích sắp xếp các ý tưởng và công việc thành một cấu trúc logic rõ ràng.",
+            weights: { C: 5, Si: 2.5, N: 1.5 },
+            dims: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 },
+            traitTag: "tư duy có hệ thống, logic và biết cách xây dựng ý tưởng"
+          },
+          {
+            text: "Quan sát tinh tế và chỉn chu — dễ dàng nhận ra những chi tiết nhỏ và luôn chăm chút mọi thứ gọn gàng.",
+            weights: { Ag: 5, Al: 2.5, He: 1.5 },
+            dims: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 },
+            traitTag: "quan sát tinh tường, chỉn chu và nhạy cảm với chi tiết"
+          },
+          {
+            text: "Cởi mở và thích kết nối — chủ động trò chuyện, lắng nghe để tạo sự gắn kết giữa mọi người.",
+            weights: { Cu: 5, O: 2.5, P: 1.5 },
+            dims: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 },
+            traitTag: "giao tiếp khéo léo, dễ dàng kết nối và thấu hiểu mọi người"
+          },
+          {
+            text: "Tò mò và thích thử nghiệm — luôn hào hứng khám phá những ý tưởng mới lạ chưa ai thử qua.",
+            weights: { S: 5, I: 2.5, Ne: 1.5 },
+            dims: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 },
+            traitTag: "giàu trí tò mò, sáng tạo và thích thử nghiệm cái mới"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 1/5 • BẢN SẮC TÍNH CÁCH",
+        dimGroup: "personality",
+        question: "Trong nhịp sống hàng ngày, điều gì mang lại cho bạn cảm giác hài lòng và thấy 'đúng là mình' nhất?",
+        options: [
+          {
+            text: "Tạo dựng được nền tảng thực tế, vững vàng để bản thân và tập thể yên tâm phát triển lâu dài.",
+            weights: { Ca: 5, Zn: 2.5, Fe: 1.5 },
+            dims: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 },
+            traitTag: "vững vàng, thực tế và luôn tạo nền tảng cho tập thể"
+          },
+          {
+            text: "Giải quyết dứt khoát từng mục tiêu đã đề ra bằng sự thẳng thắn, nhanh gọn, không dây dưa.",
+            weights: { Cl: 5, Au: 2.5, Li: 1.5 },
+            dims: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 },
+            traitTag: "thẳng thắn, quyết đoán và tập trung cao độ vào mục tiêu"
+          },
+          {
+            text: "Đào sâu phân tích một vấn đề thú vị để tìm ra quy luật cốt lõi và lời giải thuyết phục nhất.",
+            weights: { Si: 5, C: 2.5, N: 1.5 },
+            dims: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 },
+            traitTag: "đam mê phân tích, tìm quy luật và giải mã vấn đề"
+          },
+          {
+            text: "Linh hoạt xoay xở êm đẹp mọi việc phát sinh bằng cách tiếp cận thực tế, không bị gò bó cứng nhắc.",
+            weights: { Al: 5, He: 2.5, Ag: 1.5 },
+            dims: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 },
+            traitTag: "linh hoạt, thực tế và thích nghi nhanh với mọi hoàn cảnh"
+          },
+          {
+            text: "Quan tâm, hỗ trợ và tiếp thêm năng lượng tích cực khi thấy những người xung quanh đang cần điểm tựa.",
+            weights: { O: 5, Cu: 2.5, P: 1.5 },
+            dims: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 },
+            traitTag: "ấm áp, biết quan tâm và luôn tiếp thêm năng lượng cho người khác"
+          },
+          {
+            text: "Thể hiện được cá tính độc đáo và góc nhìn riêng biệt không trộn lẫn với số đông.",
+            weights: { I: 5, S: 2.5, Ne: 1.5 },
+            dims: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 },
+            traitTag: "cá tính, độc đáo và luôn giữ góc nhìn riêng"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 1/5 • BẢN SẮC TÍNH CÁCH",
+        dimGroup: "personality",
+        question: "Khi bạn bè thân thiết miêu tả về năng lượng của bạn, nhận xét nào dưới đây khớp với bạn nhất?",
+        options: [
+          {
+            text: "Chu đáo và ổn định — luôn lo liệu kỹ lưỡng từ những điều nhỏ nhất để đảm bảo chất lượng chung.",
+            weights: { Zn: 5, Fe: 2.5, Ca: 1.5 },
+            dims: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 },
+            traitTag: "chu đáo, ổn định và luôn quan tâm bảo vệ chất lượng"
+          },
+          {
+            text: "Nhanh nhạy và tiên phong — luôn háo hức khám phá những điều mới mẻ và sẵn sàng đi đầu.",
+            weights: { Li: 5, Cl: 2.5, Au: 1.5 },
+            dims: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 },
+            traitTag: "nhanh nhạy khám phá và sẵn sàng tiên phong bắt đầu"
+          },
+          {
+            text: "Bình tĩnh và kín đáo — luôn giữ sự điềm đạm sâu sắc và suy nghĩ thấu đáo trước khi hành động.",
+            weights: { N: 5, Si: 2.5, C: 1.5 },
+            dims: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 },
+            traitTag: "bình tĩnh, kín đáo và luôn suy xét kỹ trước khi hành động"
+          },
+          {
+            text: "Độc lập và lạc quan — mang tinh thần tự do, thoáng đạt, ở bên cạnh lúc nào cũng thấy nhẹ nhõm.",
+            weights: { He: 5, Al: 2.5, Ag: 1.5 },
+            dims: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 },
+            traitTag: "độc lập, lạc quan và yêu thích sự tự do khám phá"
+          },
+          {
+            text: "Nhiệt huyết và chủ động — luôn là ngọn lửa khuấy động tinh thần và thúc đẩy mọi người cùng hành động.",
+            weights: { P: 5, O: 2.5, Cu: 1.5 },
+            dims: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 },
+            traitTag: "tràn đầy nhiệt huyết, chủ động truyền lửa hành động"
+          },
+          {
+            text: "Rực rỡ và truyền cảm hứng — có khả năng biểu đạt cuốn hút và luôn biết cách tạo dấu ấn riêng.",
+            weights: { Ne: 5, S: 2.5, I: 1.5 },
+            dims: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 },
+            traitTag: "biểu đạt cuốn hút, truyền cảm hứng và tạo dấu ấn"
+          }
+        ]
+      },
+
+      // ==================== NHÓM 2/5: PHONG CÁCH TƯ DUY ====================
+      {
+        category: "NHÓM 2/5 • PHONG CÁCH TƯ DUY",
+        dimGroup: "thinking",
+        question: "Khi bắt đầu lên kế hoạch cho một dự án hoặc bài thuyết trình quan trọng, hướng tiếp cận tự nhiên của bạn là:",
+        options: [
+          {
+            text: "Xác định rõ trách nhiệm từng phần và bám sát lộ trình một cách bền bỉ, chắc chắn từ đầu tới cuối.",
+            weights: { Fe: 5, Ca: 2.5, Zn: 1.5 },
+            dims: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 },
+            traitTag: "tiếp cận công việc bằng sự kiên định và cam kết thực thi"
+          },
+          {
+            text: "Đặt ra tiêu chuẩn chất lượng cao nhất ngay từ đầu để làm thước đo cho toàn bộ sản phẩm.",
+            weights: { Au: 5, Cl: 2.5, Li: 1.5 },
+            dims: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 },
+            traitTag: "luôn lấy tiêu chuẩn chất lượng cao làm kim chỉ nam trong tư duy"
+          },
+          {
+            text: "Vẽ sơ đồ cấu trúc tổng thể, sắp xếp các luận điểm thành một hệ thống logic chặt chẽ.",
+            weights: { C: 5, Si: 2.5, N: 1.5 },
+            dims: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 },
+            traitTag: "luôn hệ thống hóa các ý tưởng theo cấu trúc logic chặt chẽ"
+          },
+          {
+            text: "Quan sát kỹ lưỡng các chi tiết nhỏ, trau chuốt từ hình thức đến nội dung cho thật chỉn chu.",
+            weights: { Ag: 5, Al: 2.5, He: 1.5 },
+            dims: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 },
+            traitTag: "chú trọng sự tinh tế và độ chỉn chu trong từng chi tiết"
+          },
+          {
+            text: "Trao đổi, lắng nghe ý kiến của các thành viên để kết nối góc nhìn của mọi người lại với nhau.",
+            weights: { Cu: 5, O: 2.5, P: 1.5 },
+            dims: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 },
+            traitTag: "tư duy mở, luôn lắng nghe và kết nối góc nhìn của tập thể"
+          },
+          {
+            text: "Đặt ra những câu hỏi mới lạ và đề xuất thử nghiệm các ý tưởng sáng tạo chưa từng có.",
+            weights: { S: 5, I: 2.5, Ne: 1.5 },
+            dims: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 },
+            traitTag: "luôn tìm tòi và khơi nguồn những hướng thử nghiệm mới"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 2/5 • PHONG CÁCH TƯ DUY",
+        dimGroup: "thinking",
+        question: "Khi đứng trước một bài toán khó hoặc một vướng mắc chưa có lời giải, cách bạn tháo gỡ vấn đề là:",
+        options: [
+          {
+            text: "Kiểm tra lại các yếu tố nền tảng thực tế và giải quyết từng bước vững chắc từ gốc lên ngọn.",
+            weights: { Ca: 5, Fe: 2.5, Zn: 1.5 },
+            dims: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 },
+            traitTag: "bám sát thực tế và xây dựng lời giải từ nền tảng vững vàng"
+          },
+          {
+            text: "Loại bỏ ngay các yếu tố rườm rà, nhìn thẳng vào mục tiêu trọng tâm và chốt phương án dứt khoát.",
+            weights: { Cl: 5, Au: 2.5, Li: 1.5 },
+            dims: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 },
+            traitTag: "tư duy trực diện, dứt khoát cắt bỏ sự rườm rà để chốt mục tiêu"
+          },
+          {
+            text: "Thu thập dữ liệu, phân tích nguyên nhân gốc rễ và tìm ra quy luật ẩn đằng sau vấn đề đó.",
+            weights: { Si: 5, C: 2.5, N: 1.5 },
+            dims: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 },
+            traitTag: "phân tích sắc bén để tìm ra quy luật giải quyết vấn đề"
+          },
+          {
+            text: "Tận dụng linh hoạt những nguồn lực đang có sẵn để ứng biến và xoay xở phương án khả thi nhất.",
+            weights: { Al: 5, He: 2.5, Ag: 1.5 },
+            dims: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 },
+            traitTag: "ứng biến linh hoạt và xoay xở thực tế cực kỳ nhạy bén"
+          },
+          {
+            text: "Hỏi han, hỗ trợ những người đang gặp khó khăn và cùng nhau tìm hướng tháo gỡ nhẹ nhàng.",
+            weights: { O: 5, Cu: 2.5, P: 1.5 },
+            dims: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 },
+            traitTag: "luôn đặt sự hỗ trợ và đồng hành cùng con người lên trước nhất"
+          },
+          {
+            text: "Lật ngược vấn đề theo một góc nhìn độc đáo, khác biệt hoàn toàn với những cách giải thông thường.",
+            weights: { I: 5, S: 2.5, Ne: 1.5 },
+            dims: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 },
+            traitTag: "nhìn nhận vấn đề qua lăng kính độc đáo và khác biệt"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 2/5 • PHONG CÁCH TƯ DUY",
+        dimGroup: "thinking",
+        question: "Trước khi đưa ra một quyết định quan trọng, tâm trí bạn thường ưu tiên điều gì nhất?",
+        options: [
+          {
+            text: "Rà soát chu đáo các rủi ro để đảm bảo sự ổn định và chất lượng an toàn cho cả tập thể.",
+            weights: { Zn: 5, Ca: 2.5, Fe: 1.5 },
+            dims: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 },
+            traitTag: "cẩn trọng rà soát để bảo trợ sự ổn định và chất lượng"
+          },
+          {
+            text: "Nắm bắt nhanh cơ hội mới — dám tiên phong bắt đầu ngay khi thấy tiềm năng khám phá.",
+            weights: { Li: 5, Cl: 2.5, Au: 1.5 },
+            dims: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 },
+            traitTag: "nhanh nhạy nắm bắt cơ hội và sẵn sàng tiên phong mở lối"
+          },
+          {
+            text: "Dành thời gian tĩnh lặng để suy xét thấu đáo mọi hệ quả trước khi chính thức hành động.",
+            weights: { N: 5, Si: 2.5, C: 1.5 },
+            dims: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 },
+            traitTag: "điềm tĩnh suy ngẫm thấu đáo trước mọi quyết định"
+          },
+          {
+            text: "Lựa chọn hướng đi giữ được sự độc lập, tự do khám phá và tinh thần lạc quan thoải mái.",
+            weights: { He: 5, Al: 2.5, Ag: 1.5 },
+            dims: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 },
+            traitTag: "ưu tiên không gian tự do, độc lập và góc nhìn lạc quan"
+          },
+          {
+            text: "Chọn phương án tạo ra động lực mạnh mẽ nhất để thúc đẩy cả nhóm bắt tay vào hành động ngay.",
+            weights: { P: 5, O: 2.5, Cu: 1.5 },
+            dims: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 },
+            traitTag: "luôn hướng tới việc khơi dậy nhiệt huyết và thúc đẩy hành động"
+          },
+          {
+            text: "Chọn hướng đi giàu sức truyền cảm hứng và tạo được dấu ấn biểu đạt ấn tượng nhất.",
+            weights: { Ne: 5, S: 2.5, I: 1.5 },
+            dims: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 },
+            traitTag: "chú trọng sức lan tỏa cảm hứng và dấu ấn sáng tạo"
+          }
+        ]
+      },
+
+      // ==================== NHÓM 3/5: LÀM VIỆC NHÓM & KẾT NỐI ====================
+      {
+        category: "NHÓM 3/5 • TƯƠNG TÁC TẬP THỂ",
+        dimGroup: "teamwork",
+        question: "Khi làm việc chung trong một dự án của CLB, vai trò nào giúp bạn phát huy tối đa thế mạnh của mình?",
+        options: [
+          {
+            text: "Người thực thi kiên định — bền bỉ gánh vác các đầu việc nặng và đảm bảo hoàn thành đúng cam kết.",
+            weights: { Fe: 5, Ca: 2.5, Zn: 1.5 },
+            dims: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 },
+            traitTag: "là điểm tựa kiên định, bền bỉ gánh vác trách nhiệm trong nhóm"
+          },
+          {
+            text: "Người dẫn dắt tiêu chuẩn — giữ sự tự tin, định hướng chất lượng và truyền bản lĩnh cho cả đội.",
+            weights: { Au: 5, Cl: 2.5, Li: 1.5 },
+            dims: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 },
+            traitTag: "định chuẩn chất lượng và dẫn dắt tập thể bằng sự bản lĩnh"
+          },
+          {
+            text: "Người kiến tạo kế hoạch — thiết kế quy trình hệ thống, phân bổ đầu việc logic và khoa học.",
+            weights: { C: 5, Si: 2.5, N: 1.5 },
+            dims: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 },
+            traitTag: "kiến tạo khung kế hoạch logic giúp cả đội phối hợp mạch lạc"
+          },
+          {
+            text: "Người tinh chỉnh chi tiết — quan sát kỹ lưỡng và chăm chút độ chỉn chu cho sản phẩm cuối cùng.",
+            weights: { Ag: 5, Al: 2.5, He: 1.5 },
+            dims: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 },
+            traitTag: "nâng tầm sản phẩm chung bằng sự quan sát tinh tế và chỉn chu"
+          },
+          {
+            text: "Người kết nối thành viên — giao tiếp khéo léo, lắng nghe và giữ sự hợp tác ăn ý giữa các ban.",
+            weights: { Cu: 5, O: 2.5, P: 1.5 },
+            dims: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 },
+            traitTag: "là cầu nối giao tiếp giúp các thành viên thấu hiểu và hợp tác ăn ý"
+          },
+          {
+            text: "Người khơi nguồn ý tưởng — liên tục đề xuất các thử nghiệm mới mẻ giúp dự án đột phá.",
+            weights: { S: 5, I: 2.5, Ne: 1.5 },
+            dims: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 },
+            traitTag: "khơi nguồn sáng tạo giúp cả nhóm luôn có ý tưởng mới"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 3/5 • TƯƠNG TÁC TẬP THỂ",
+        dimGroup: "teamwork",
+        question: "Khi một người bạn cùng nhóm đang gặp khó khăn hoặc cả đội bị chững lại, bạn thường hỗ trợ theo cách nào?",
+        options: [
+          {
+            text: "Xây dựng lại nền tảng công việc thực tế, phụ giúp phần hậu cần để bạn mình có chỗ dựa vững chắc.",
+            weights: { Ca: 5, Zn: 2.5, Fe: 1.5 },
+            dims: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 },
+            traitTag: "âm thầm tạo dựng nền tảng thực tế vững vàng cho đồng đội"
+          },
+          {
+            text: "Chỉ rõ mục tiêu trọng tâm cần giải quyết trước và đưa ra hướng xử lý thẳng thắn, dứt khoát.",
+            weights: { Cl: 5, Au: 2.5, Li: 1.5 },
+            dims: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 },
+            traitTag: "giúp cả đội gỡ rối nhanh bằng sự thẳng thắn và quyết đoán"
+          },
+          {
+            text: "Cùng ngồi xuống phân tích nguyên nhân, tìm ra quy luật lỗi để giải quyết tận gốc vấn đề.",
+            weights: { Si: 5, C: 2.5, N: 1.5 },
+            dims: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 },
+            traitTag: "hỗ trợ đồng đội bằng khả năng phân tích và giải quyết vấn đề"
+          },
+          {
+            text: "Linh hoạt san sẻ đầu việc và cùng bạn tìm cách xoay xở thực tế, dễ làm nhất ngay lúc đó.",
+            weights: { Al: 5, He: 2.5, Ag: 1.5 },
+            dims: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 },
+            traitTag: "sẵn sàng thích nghi và cùng đồng đội xoay xở linh hoạt"
+          },
+          {
+            text: "Dành sự quan tâm chân thành, lắng nghe tâm sự và tiếp thêm năng lượng tinh thần cho bạn.",
+            weights: { O: 5, Cu: 2.5, P: 1.5 },
+            dims: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 },
+            traitTag: "luôn quan tâm, sẻ chia và tiếp thêm sinh lực cho mọi người"
+          },
+          {
+            text: "Gợi mở một góc nhìn hoàn toàn khác biệt, độc đáo giúp bạn mình thoát khỏi sự bế tắc.",
+            weights: { I: 5, S: 2.5, Ne: 1.5 },
+            dims: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 },
+            traitTag: "mang đến những góc nhìn độc đáo giúp tập thể bứt phá"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 3/5 • TƯƠNG TÁC TẬP THỂ",
+        dimGroup: "teamwork",
+        question: "Trong các buổi họp hoặc hoạt động chung của CLB, sự hiện diện của bạn mang lại giá trị đặc biệt gì cho tập thể?",
+        options: [
+          {
+            text: "Sự chu đáo và yên tâm — luôn để ý bảo vệ chất lượng và chuẩn bị sẵn phương án dự phòng ổn định.",
+            weights: { Zn: 5, Fe: 2.5, Ca: 1.5 },
+            dims: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 },
+            traitTag: "mang lại sự ổn định và bảo trợ chất lượng chu toàn cho nhóm"
+          },
+          {
+            text: "Tinh thần tiên phong — luôn nhạy bén xung phong thử sức với những nhiệm vụ mới mẻ nhất.",
+            weights: { Li: 5, Cl: 2.5, Au: 1.5 },
+            dims: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 },
+            traitTag: "truyền tinh thần tiên phong, sẵn sàng bắt đầu thử thách mới"
+          },
+          {
+            text: "Sự điềm tĩnh tin cậy — giữ nhịp bình tĩnh cho cả đội, giúp mọi người suy nghĩ kỹ trước khi làm.",
+            weights: { N: 5, Si: 2.5, C: 1.5 },
+            dims: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 },
+            traitTag: "giữ sự điềm tĩnh sâu sắc làm điểm cân bằng cho cả đội"
+          },
+          {
+            text: "Bầu không khí tự do và lạc quan — giúp buổi họp bớt căng thẳng nhờ góc nhìn thoáng đạt, cởi mở.",
+            weights: { He: 5, Al: 2.5, Ag: 1.5 },
+            dims: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 },
+            traitTag: "lan tỏa tinh thần tự do, lạc quan giúp tập thể luôn thoải mái"
+          },
+          {
+            text: "Ngọn lửa nhiệt huyết — khuấy động không khí sôi nổi và thúc đẩy cả nhóm chuyển sang hành động.",
+            weights: { P: 5, O: 2.5, Cu: 1.5 },
+            dims: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 },
+            traitTag: "thổi bùng ngọn lửa nhiệt huyết thúc đẩy tập thể hành động"
+          },
+          {
+            text: "Sức hút truyền cảm hứng — trình bày ý tưởng sống động, giúp thông điệp của nhóm tỏa sáng.",
+            weights: { Ne: 5, S: 2.5, I: 1.5 },
+            dims: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 },
+            traitTag: "biểu đạt sống động và truyền cảm hứng cho toàn đội"
+          }
+        ]
+      },
+
+      // ==================== NHÓM 4/5: XỬ LÝ ÁP LỰC & BIẾN ĐỘNG ====================
+      {
+        category: "NHÓM 4/5 • XỬ LÝ ÁP LỰC",
+        dimGroup: "pressure",
+        question: "Khi thời hạn (deadline) đang đến rất gần mà khối lượng công việc vẫn còn ngổn ngang, phản ứng tự nhiên của bạn là:",
+        options: [
+          {
+            text: "Phát huy sức bền và tinh thần trách nhiệm cao độ, kiên trì làm từng phần tới khi hoàn thành mới nghỉ.",
+            weights: { Fe: 5, Ca: 2.5, Zn: 1.5 },
+            dims: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 },
+            traitTag: "vượt qua áp lực bằng sự kiên định và sức bền đáng tin cậy"
+          },
+          {
+            text: "Giữ vững bản lĩnh và sự tự tin, tập trung tối đa để sản phẩm dù gấp vẫn đạt tiêu chuẩn chất lượng cao.",
+            weights: { Au: 5, Cl: 2.5, Li: 1.5 },
+            dims: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 },
+            traitTag: "giữ vững bản lĩnh và không bao giờ thỏa hiệp về chất lượng"
+          },
+          {
+            text: "Lập tức chia lại hệ thống công việc theo thứ tự ưu tiên logic để kiểm soát tiến độ một cách khoa học.",
+            weights: { C: 5, Si: 2.5, N: 1.5 },
+            dims: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 },
+            traitTag: "dùng tư duy hệ thống và trật tự logic để làm chủ áp lực"
+          },
+          {
+            text: "Tập trung quan sát kỹ từng chi tiết để tránh sai sót đáng tiếc trong lúc mọi người đang vội vàng.",
+            weights: { Ag: 5, Al: 2.5, He: 1.5 },
+            dims: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 },
+            traitTag: "giữ sự chỉn chu và nhạy bén chi tiết ngay cả khi gấp rút"
+          },
+          {
+            text: "Chủ động kết nối với đồng đội để phối hợp nhịp nhàng, chia sẻ đầu việc và giữ tinh thần đoàn kết.",
+            weights: { Cu: 5, O: 2.5, P: 1.5 },
+            dims: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 },
+            traitTag: "hóa giải áp lực bằng sự hợp tác và kết nối chặt chẽ với đồng đội"
+          },
+          {
+            text: "Thử nghiệm ngay một cách làm sáng tạo mới giúp rút ngắn thời gian mà vẫn tạo ra kết quả thú vị.",
+            weights: { S: 5, I: 2.5, Ne: 1.5 },
+            dims: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 },
+            traitTag: "biến áp lực thành chất xúc tác để thử nghiệm cách làm sáng tạo"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 4/5 • XỬ LÝ ÁP LỰC",
+        dimGroup: "pressure",
+        question: "Giả sử kế hoạch đang chạy trơn tru thì gặp một sự cố thay đổi bất ngờ vào phút chót, bạn sẽ ứng phó thế nào?",
+        options: [
+          {
+            text: "Dựa vào những nền tảng thực tế đã chuẩn bị để giữ cho hoạt động cốt lõi của tập thể vẫn đứng vững.",
+            weights: { Ca: 5, Zn: 2.5, Fe: 1.5 },
+            dims: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 },
+            traitTag: "giữ vững nền tảng thực tế để tập thể không bị xáo trộn"
+          },
+          {
+            text: "Nhìn thẳng vào tình huống mới và đưa ra quyết định điều chỉnh dứt khoát ngay lập tức.",
+            weights: { Cl: 5, Au: 2.5, Li: 1.5 },
+            dims: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 },
+            traitTag: "chốt phương án xử lý dứt khoát và nhanh gọn trước biến cố"
+          },
+          {
+            text: "Nhanh chóng phân tích nguyên nhân sự cố, tìm ra quy luật khắc phục hợp lý và hiệu quả nhất.",
+            weights: { Si: 5, C: 2.5, N: 1.5 },
+            dims: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 },
+            traitTag: "bình tĩnh giải mã nguyên nhân để xử lý sự cố tận gốc"
+          },
+          {
+            text: "Ứng biến linh hoạt theo điều kiện thực tế lúc đó, xoay xở khéo léo bằng những gì đang có sẵn.",
+            weights: { Al: 5, He: 2.5, Ag: 1.5 },
+            dims: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 },
+            traitTag: "xoay xở cực kỳ linh hoạt và thích nghi ngay với hoàn cảnh mới"
+          },
+          {
+            text: "Trấn an, động viên tinh thần mọi người xung quanh và kịp thời hỗ trợ chỗ nào đang thiếu người.",
+            weights: { O: 5, Cu: 2.5, P: 1.5 },
+            dims: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 },
+            traitTag: "kịp thời nâng đỡ tinh thần và tiếp sức cho đồng đội vượt khó"
+          },
+          {
+            text: "Biến chính sự cố bất ngờ đó thành một điểm nhấn độc đáo mang đậm dấu ấn cá tính riêng.",
+            weights: { I: 5, S: 2.5, Ne: 1.5 },
+            dims: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 },
+            traitTag: "chuyển hóa biến cố thành điểm nhấn độc đáo có một không hai"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 4/5 • XỬ LÝ ÁP LỰC",
+        dimGroup: "pressure",
+        question: "Khi đối diện với những lời phê bình hoặc thử thách căng thẳng kéo dài, cách bạn giữ cân bằng cho mình là:",
+        options: [
+          {
+            text: "Lấy phương án dự phòng chu đáo ra áp dụng và kiên nhẫn củng cố lại chất lượng cho thật ổn định.",
+            weights: { Zn: 5, Fe: 2.5, Ca: 1.5 },
+            dims: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 },
+            traitTag: "luôn có sự chuẩn bị chu đáo để giữ vững sự ổn định"
+          },
+          {
+            text: "Không để bản thân chần chừ lâu, nhanh nhạy bước sang khám phá và bắt đầu ngay một hướng đi mới.",
+            weights: { Li: 5, Cl: 2.5, Au: 1.5 },
+            dims: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 },
+            traitTag: "nhanh nhạy lật sang trang mới với tinh thần tiên phong"
+          },
+          {
+            text: "Giữ sự bình tĩnh và kín đáo, tự mình suy ngẫm thấu đáo mọi việc trong không gian tĩnh lặng.",
+            weights: { N: 5, Si: 2.5, C: 1.5 },
+            dims: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 },
+            traitTag: "làm chủ cảm xúc bằng sự điềm tĩnh và chiều sâu nội tâm"
+          },
+          {
+            text: "Giữ cái nhìn lạc quan, tự do, bước ra ngoài hít thở và khám phá điều thú vị để tâm trí nhẹ nhõm.",
+            weights: { He: 5, Al: 2.5, Ag: 1.5 },
+            dims: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 },
+            traitTag: "giữ tâm thế tự do, lạc quan để không bị áp lực trói buộc"
+          },
+          {
+            text: "Biến thử thách thành ngọn lửa động lực, càng khó khăn càng chủ động hành động mạnh mẽ hơn.",
+            weights: { P: 5, O: 2.5, Cu: 1.5 },
+            dims: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 },
+            traitTag: "chuyển hóa áp lực thành ngọn lửa nhiệt huyết hành động"
+          },
+          {
+            text: "Giải tỏa cảm xúc qua việc biểu đạt nghệ thuật, trò chuyện truyền cảm hứng và làm mới hình ảnh bản thân.",
+            weights: { Ne: 5, S: 2.5, I: 1.5 },
+            dims: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 },
+            traitTag: "tái tạo năng lượng bằng sự biểu đạt cảm xúc và truyền cảm hứng"
+          }
+        ]
+      },
+
+      // ==================== NHÓM 5/5: PHONG CÁCH SÁNG TẠO & DẤU ẤN ====================
+      {
+        category: "NHÓM 5/5 • PHONG CÁCH SÁNG TẠO",
+        dimGroup: "creativity",
+        question: "Khi tham gia sáng tạo một sản phẩm mới cùng CLB, bạn muốn thổi 'chất riêng' nào vào tác phẩm đó?",
+        options: [
+          {
+            text: "Giá trị bền vững và đáng tin cậy — một sản phẩm được hoàn thành bằng sự tận tâm và trách nhiệm cao nhất.",
+            weights: { Fe: 5, Ca: 2.5, Zn: 1.5 },
+            dims: { personality: 68, thinking: 82, teamwork: 88, pressure: 98, creativity: 66 },
+            traitTag: "tạo nên những sản phẩm có độ bền vững và giá trị đáng tin cậy"
+          },
+          {
+            text: "Đẳng cấp và chất lượng vượt trội — một tác phẩm thể hiện rõ bản lĩnh và tiêu chuẩn cao của cả đội.",
+            weights: { Au: 5, Cl: 2.5, Li: 1.5 },
+            dims: { personality: 92, thinking: 86, teamwork: 80, pressure: 92, creativity: 82 },
+            traitTag: "theo đuổi sự xuất sắc và tiêu chuẩn chất lượng đỉnh cao"
+          },
+          {
+            text: "Bố cục thông minh và có hệ thống — các phần được liên kết chặt chẽ, logic từ đầu đến cuối.",
+            weights: { C: 5, Si: 2.5, N: 1.5 },
+            dims: { personality: 70, thinking: 99, teamwork: 82, pressure: 88, creativity: 84 },
+            traitTag: "kiến tạo ý tưởng dựa trên cấu trúc hệ thống chặt chẽ"
+          },
+          {
+            text: "Sự tinh tế trong từng chi tiết — màu sắc, câu chữ và bố cục được chăm chút chỉn chu, hài hòa.",
+            weights: { Ag: 5, Al: 2.5, He: 1.5 },
+            dims: { personality: 72, thinking: 90, teamwork: 80, pressure: 84, creativity: 90 },
+            traitTag: "thổi hồn vào tác phẩm bằng sự tinh tế và chỉn chu trong từng chi tiết"
+          },
+          {
+            text: "Sự đồng cảm và gắn kết — một sản phẩm dễ dàng chạm tới trái tim và kết nối mọi người với nhau.",
+            weights: { Cu: 5, O: 2.5, P: 1.5 },
+            dims: { personality: 92, thinking: 74, teamwork: 99, pressure: 78, creativity: 82 },
+            traitTag: "sáng tạo hướng tới sự giao tiếp, thấu hiểu và gắn kết con người"
+          },
+          {
+            text: "Sự mới lạ đầy tính thử nghiệm — kết hợp những chất liệu độc đáo kích thích trí tò mò của người xem.",
+            weights: { S: 5, I: 2.5, Ne: 1.5 },
+            dims: { personality: 84, thinking: 84, teamwork: 76, pressure: 76, creativity: 99 },
+            traitTag: "luôn khơi nguồn sáng tạo bằng những thử nghiệm mới mẻ"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 5/5 • PHONG CÁCH SÁNG TẠO",
+        dimGroup: "creativity",
+        question: "Theo góc nhìn của bạn, một ý tưởng sáng tạo thực sự thành công là ý tưởng mang lại điều gì?",
+        options: [
+          {
+            text: "Tạo ra nền tảng thực tế vững chắc, mang lại lợi ích thiết thực lâu dài cho toàn tập thể.",
+            weights: { Ca: 5, Zn: 2.5, Fe: 1.5 },
+            dims: { personality: 74, thinking: 84, teamwork: 95, pressure: 92, creativity: 70 },
+            traitTag: "đề cao tính thực tế và khả năng tạo nền tảng vững vàng cho tập thể"
+          },
+          {
+            text: "Truyền tải thông điệp thẳng thắn, dứt khoát và giải quyết trực diện mục tiêu đã đặt ra.",
+            weights: { Cl: 5, Au: 2.5, Li: 1.5 },
+            dims: { personality: 84, thinking: 94, teamwork: 78, pressure: 95, creativity: 74 },
+            traitTag: "yêu thích sự sắc gọn, quyết đoán và đi thẳng vào mục tiêu"
+          },
+          {
+            text: "Chứa đựng quy luật thông minh, giúp giải mã và tháo gỡ triệt để một bài toán hóc búa.",
+            weights: { Si: 5, C: 2.5, N: 1.5 },
+            dims: { personality: 66, thinking: 99, teamwork: 76, pressure: 90, creativity: 82 },
+            traitTag: "kết hợp sáng tạo với khả năng phân tích và giải quyết vấn đề"
+          },
+          {
+            text: "Có tính ứng dụng linh hoạt, dễ dàng biến tấu và thích nghi tốt với nhiều điều kiện thực tế.",
+            weights: { Al: 5, He: 2.5, Ag: 1.5 },
+            dims: { personality: 82, thinking: 84, teamwork: 88, pressure: 92, creativity: 82 },
+            traitTag: "sáng tạo linh hoạt, thực tế và dễ dàng thích nghi"
+          },
+          {
+            text: "Lan tỏa sự quan tâm ấm áp, nâng đỡ tinh thần và tiếp thêm năng lượng tích cực cho người đón nhận.",
+            weights: { O: 5, Cu: 2.5, P: 1.5 },
+            dims: { personality: 86, thinking: 74, teamwork: 99, pressure: 82, creativity: 78 },
+            traitTag: "dùng sự sáng tạo để quan tâm, hỗ trợ và tiếp sức cho mọi người"
+          },
+          {
+            text: "Thể hiện được cá tính độc bản và góc nhìn riêng biệt không đi theo bất kỳ lối mòn nào.",
+            weights: { I: 5, S: 2.5, Ne: 1.5 },
+            dims: { personality: 86, thinking: 86, teamwork: 72, pressure: 80, creativity: 99 },
+            traitTag: "khẳng định chất riêng bằng góc nhìn độc đáo và khác biệt"
+          }
+        ]
+      },
+      {
+        category: "NHÓM 5/5 • PHONG CÁCH SÁNG TẠO",
+        dimGroup: "creativity",
+        question: "Khép lại hành trình tại phòng thí nghiệm BWAN Gen 6, dấu ấn cá nhân bạn muốn để lại trong lòng mọi người là:",
+        options: [
+          {
+            text: "Người bảo trợ chu đáo — luôn giữ sự ổn định, tận tâm chăm chút chất lượng cho mọi hoạt động chung.",
+            weights: { Zn: 5, Fe: 2.5, Ca: 1.5 },
+            dims: { personality: 72, thinking: 86, teamwork: 92, pressure: 92, creativity: 74 },
+            traitTag: "ghi dấu ấn bởi sự chu đáo, ổn định và luôn quan tâm chất lượng"
+          },
+          {
+            text: "Người tiên phong nhạy bén — luôn thích khám phá cái mới và sẵn sàng dẫn đầu mọi khởi đầu mới.",
+            weights: { Li: 5, Cl: 2.5, Au: 1.5 },
+            dims: { personality: 92, thinking: 82, teamwork: 82, pressure: 86, creativity: 92 },
+            traitTag: "ghi dấu ấn của một người tiên phong nhanh nhạy và ưa khám phá"
+          },
+          {
+            text: "Người điềm tĩnh sâu sắc — luôn bình tĩnh, kín đáo và đưa ra những góc nhìn thấu đáo nhất.",
+            weights: { N: 5, Si: 2.5, C: 1.5 },
+            dims: { personality: 64, thinking: 94, teamwork: 78, pressure: 99, creativity: 76 },
+            traitTag: "để lại ấn tượng sâu sắc về sự bình tĩnh, kín đáo và thấu đáo"
+          },
+          {
+            text: "Tâm hồn tự do và lạc quan — sống độc lập, phóng khoáng và luôn mang lại năng lượng tích cực.",
+            weights: { He: 5, Al: 2.5, Ag: 1.5 },
+            dims: { personality: 88, thinking: 76, teamwork: 76, pressure: 86, creativity: 94 },
+            traitTag: "tỏa ra nguồn năng lượng độc lập, lạc quan và tự do khám phá"
+          },
+          {
+            text: "Ngọn lửa nhiệt huyết — luôn chủ động truyền lửa và thúc đẩy tập thể biến ước mơ thành hành động.",
+            weights: { P: 5, O: 2.5, Cu: 1.5 },
+            dims: { personality: 97, thinking: 76, teamwork: 94, pressure: 84, creativity: 88 },
+            traitTag: "truyền ngọn lửa nhiệt huyết và thúc đẩy hành động mạnh mẽ"
+          },
+          {
+            text: "Ngôi sao tỏa sáng — giàu sức biểu đạt, luôn truyền cảm hứng và tạo ra những dấu ấn rực rỡ.",
+            weights: { Ne: 5, S: 2.5, I: 1.5 },
+            dims: { personality: 99, thinking: 72, teamwork: 88, pressure: 76, creativity: 96 },
+            traitTag: "tỏa sáng rực rỡ với khả năng biểu đạt và truyền cảm hứng"
+          }
+        ]
+      }
+    ];
+
+    /*************************************************************************
+     * 3. ENGINE VẬT LÝ KHÓA THEO THỜI GIAN THỰC (DELTA-TIME) SIÊU CHẬM & CHILL
+     *************************************************************************/
+    let floatingBodies = [];
+    let animationFrameId = null;
+    let lastFrameTime = 0;
+
+    function initFloatingLab() {
+      const container = document.getElementById("floatingLab");
+      const vw = Math.max(window.innerWidth || 1280, 360);
+      const vh = Math.max(window.innerHeight || 800, 600);
+      const isMobile = vw < 768;
+      const scaleFactor = isMobile ? 0.62 : 1;
+
+      const rawSpecs = [
+        {
+          ax: 0.09, ay: 0.14, size: 265, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <ellipse cx="50" cy="50" rx="45" ry="17" transform="rotate(30 50 50)"/>
+                  <ellipse cx="50" cy="50" rx="45" ry="17" transform="rotate(-30 50 50)"/>
+                  <ellipse cx="50" cy="50" rx="45" ry="17" transform="rotate(90 50 50)"/>
+                  <circle cx="50" cy="50" r="7.5" fill="currentColor"/>
+                  <circle cx="85" cy="30" r="4" fill="#fff"/><circle cx="15" cy="70" r="4" fill="#fff"/>
+                </svg>`
+        },
+        {
+          ax: 0.89, ay: 0.15, size: 250, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+                  <path d="M22 86h56M35 86v-8h30v8"/>
+                  <path d="M56 20l-12 28 10 4 12-28-10-4z"/>
+                  <path d="M62 34c14 6 20 22 12 36-4 6-10 8-18 8H36"/>
+                  <circle cx="62" cy="34" r="4.5" fill="currentColor"/>
+                </svg>`
+        },
+        {
+          ax: 0.10, ay: 0.56, size: 245, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round">
+                  <path d="M36 16h28M42 16v20L20 78a7 7 0 006.2 10h47.6A7 7 0 0080 78L58 36V16"/>
+                  <path d="M27 64c10-5 16 5 26 0s12 5 20 0" stroke-dasharray="5 3"/>
+                  <circle cx="44" cy="74" r="4.5"/><circle cx="55" cy="68" r="3.5"/><circle cx="48" cy="52" r="3.5"/>
+                </svg>`
+        },
+        {
+          ax: 0.88, ay: 0.58, size: 250, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <path d="M14 42h72M14 82h72M20 42v46M80 42v46"/>
+                  <rect x="28" y="18" width="10" height="56" rx="5"/>
+                  <rect x="45" y="18" width="10" height="56" rx="5"/>
+                  <rect x="62" y="18" width="10" height="56" rx="5"/>
+                </svg>`
+        },
+        {
+          ax: 0.34, ay: 0.22, size: 240, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <polygon points="38,16 64,31 64,61 38,76 12,61 12,31"/>
+                  <circle cx="38" cy="46" r="15" stroke-dasharray="6 4"/>
+                  <polygon points="90,16 116,31 116,61 90,76 64,61 64,31"/>
+                  <circle cx="90" cy="46" r="15"/>
+                </svg>`
+        },
+        {
+          ax: 0.67, ay: 0.25, size: 235, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <path d="M38 14h24M44 14v16a22 22 0 1012 0V14"/>
+                  <path d="M30 52c8-4 14 4 20 0s12 4 20 0"/>
+                  <path d="M50 74c-6 6-8 12 0 18 8-6 6-12 0-18z" fill="currentColor"/>
+                </svg>`
+        },
+        {
+          ax: 0.33, ay: 0.78, size: 235, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <path d="M25 10c28 20 28 35 0 55s-28 35 0 55"/>
+                  <path d="M68 10c-28 20-28 35 0 55s28 35 0 55"/>
+                  <line x1="32" y1="22" x2="60" y2="22"/><line x1="36" y1="38" x2="56" y2="38"/>
+                  <line x1="32" y1="54" x2="60" y2="54"/>
+                </svg>`
+        },
+        {
+          ax: 0.66, ay: 0.76, size: 210, isBadge: false,
+          html: `<img src="${BWAN_LOGO_DATA_URL}" width="100%" height="100%" style="opacity: 0.78; object-fit:contain;" alt="" />`
+        },
+        {
+          ax: 0.50, ay: 0.48, size: 225, isBadge: false,
+          html: `<svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.3">
+                  <rect x="45" y="6" width="10" height="44" rx="2"/>
+                  <path d="M42 36h16M50 50v8"/>
+                  <circle cx="50" cy="64" r="2.5" fill="currentColor"/>
+                  <path d="M32 70h36v20a4 4 0 01-4 4H36a4 4 0 01-4-4V70z"/>
+                </svg>`
+        },
+        { ax: 0.14, ay: 0.88, size: 150, isBadge: true, html: `Fe • 26` },
+        { ax: 0.84, ay: 0.88, size: 150, isBadge: true, html: `Au • 79` },
+        { ax: 0.48, ay: 0.10, size: 170, isBadge: true, html: `BWAN • GEN 6` },
+        { ax: 0.18, ay: 0.36, size: 150, isBadge: true, html: `Ne • 10` },
+        { ax: 0.82, ay: 0.38, size: 150, isBadge: true, html: `Si • 14` }
+      ];
+
+      const specs = isMobile ? rawSpecs.filter((_, idx) => idx % 2 === 0) : rawSpecs;
+
+      container.innerHTML = specs.map((sp, i) => {
+        const w = Math.round(sp.size * scaleFactor);
+        if (sp.isBadge) {
+          return `<div class="lab-item lab-badge" id="floatItem_${i}">${sp.html}</div>`;
+        }
+        return `<div class="lab-item" id="floatItem_${i}" style="width:${w}px;height:${w}px;">${sp.html}</div>`;
+      }).join("");
+
+      floatingBodies = specs.map((sp, i) => {
+        const el = document.getElementById(`floatItem_${i}`);
+        const radius = Math.round((sp.size * scaleFactor) * 0.52);
+        const homeX = sp.ax * vw;
+        const homeY = sp.ay * vh;
+        const angle = (i * 2.39996) % (Math.PI * 2);
+        const speedPxPerSec = 3.8 + (i % 3) * 0.7;
+        return {
+          el,
+          x: homeX,
+          y: homeY,
+          homeX,
+          homeY,
+          vx: Math.cos(angle) * speedPxPerSec,
+          vy: Math.sin(angle) * speedPxPerSec,
+          radius,
+          w: sp.isBadge ? 160 * scaleFactor : sp.size * scaleFactor,
+          h: sp.isBadge ? 54 * scaleFactor : sp.size * scaleFactor,
+          phase: i * 1.1,
+          roamRadius: isMobile ? 95 : 190
+        };
+      });
+
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      lastFrameTime = performance.now();
+      animationFrameId = requestAnimationFrame(animateFloatingLab);
+    }
+
+    function animateFloatingLab(now) {
+      const dt = Math.min(0.05, Math.max(0.001, (now - lastFrameTime) / 1000));
+      lastFrameTime = now;
+
+      const vw = window.innerWidth || 1280;
+      const vh = window.innerHeight || 800;
+      const n = floatingBodies.length;
+
+      for (let i = 0; i < n; i++) {
+        const b = floatingBodies[i];
+        b.x += b.vx * dt;
+        b.y += b.vy * dt;
+        b.phase += dt * 0.25;
+
+        const dxHome = b.homeX - b.x;
+        const dyHome = b.homeY - b.y;
+        const distHome = Math.hypot(dxHome, dyHome);
+        if (distHome > b.roamRadius) {
+          b.vx += (dxHome / distHome) * 2.2 * dt;
+          b.vy += (dyHome / distHome) * 2.2 * dt;
+        }
+
+        const pad = b.radius + 10;
+        if (b.x < pad) { b.x = pad; b.vx = Math.abs(b.vx); }
+        if (b.x > vw - pad) { b.x = vw - pad; b.vx = -Math.abs(b.vx); }
+        if (b.y < pad) { b.y = pad; b.vy = Math.abs(b.vy); }
+        if (b.y > vh - pad) { b.y = vh - pad; b.vy = -Math.abs(b.vy); }
+      }
+
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const a = floatingBodies[i];
+          const b = floatingBodies[j];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy) || 1;
+          const minDist = a.radius + b.radius + 22;
+
+          if (dist < minDist) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const overlap = (minDist - dist) * 0.5;
+            a.x -= nx * overlap;
+            a.y -= ny * overlap;
+            b.x += nx * overlap;
+            b.y += ny * overlap;
+
+            const kx = a.vx - b.vx;
+            const ky = a.vy - b.vy;
+            const p = kx * nx + ky * ny;
+            if (p > 0) {
+              a.vx -= p * nx * 0.5;
+              a.vy -= p * ny * 0.5;
+              b.vx += p * nx * 0.5;
+              b.vy += p * ny * 0.5;
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < n; i++) {
+        const b = floatingBodies[i];
+        const spd = Math.hypot(b.vx, b.vy);
+        if (spd > 6.0) {
+          b.vx = (b.vx / spd) * 6.0;
+          b.vy = (b.vy / spd) * 6.0;
+        } else if (spd < 2.5) {
+          b.vx = (b.vx / (spd || 1)) * 3.5;
+          b.vy = (b.vy / (spd || 1)) * 3.5;
+        }
+        const tx = (b.x - b.w / 2).toFixed(1);
+        const ty = (b.y - b.h / 2).toFixed(1);
+        const rot = (Math.sin(b.phase) * 5.5).toFixed(2);
+        b.el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
+      }
+
+      animationFrameId = requestAnimationFrame(animateFloatingLab);
+    }
+
+    /*************************************************************************
+     * 4. LOGIC TRẮC NGHIỆM, XÁO TRỘN ĐÁP ÁN & BÌNH CẦU SÔI TRÀN
+     *************************************************************************/
+    let activeQuestions = [];
+    let currentQuestionIndex = 0;
+    let userAnswers = [];
+    let currentWinnerSymbol = "Fe";
+    let currentUserProfile = null;
+    let currentTop3List = [];
+    let currentPersonalDecodeText = "";
+    let currentBestMatchText = "";
+    let isTransitioning = false;
+    let analyzeIntervalId = null;
+    let analyzeTimeoutId = null;
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toastNotification");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3400);
+    }
+
+    function showScreen(screenId, isDramatic = false) {
+      document.querySelectorAll(".screen").forEach(s => {
+        s.classList.remove("active", "dramatic-reveal");
+      });
+      const target = document.getElementById(screenId);
+      if (isDramatic) {
+        target.classList.add("dramatic-reveal");
+      } else {
+        target.classList.add("active");
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startQuiz() {
+      activeQuestions = BASE_QUESTIONS.map(q => ({
+        ...q,
+        options: shuffleArray(q.options)
+      }));
+      currentQuestionIndex = 0;
+      userAnswers = new Array(activeQuestions.length).fill(null);
+      renderQuestion("none");
+      showScreen("quizScreen");
+    }
+
+    function renderQuestion(animDirection = "none") {
+      const stage = document.getElementById("questionStage");
+      stage.classList.remove("slide-out-left", "slide-in-right", "slide-in-left");
+
+      if (animDirection === "next") {
+        stage.classList.add("slide-in-right");
+      } else if (animDirection === "prev") {
+        stage.classList.add("slide-in-left");
+      }
+
+      const qObj = activeQuestions[currentQuestionIndex];
+      document.getElementById("qCategoryBadge").textContent = qObj.category;
+      const currentNum = String(currentQuestionIndex + 1).padStart(2, "0");
+      const totalNum = String(activeQuestions.length).padStart(2, "0");
+      document.getElementById("qCounterText").textContent = `${currentNum} / ${totalNum}`;
+
+      const percent = ((currentQuestionIndex + 1) / activeQuestions.length) * 100;
+      document.getElementById("progressBar").style.width = `${percent}%`;
+
+      document.getElementById("questionText").textContent = qObj.question;
+
+      const letters = ["A", "B", "C", "D", "E", "F"];
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = qObj.options.map((opt, idx) => {
+        const isSelected = userAnswers[currentQuestionIndex] === idx;
+        return `
+          <button class="option-btn ${isSelected ? "selected" : ""}" onclick="selectOption(${idx})">
+            <span class="option-key">${letters[idx]}</span>
+            <span>${opt.text}</span>
+          </button>
+        `;
+      }).join("");
+
+      const prevBtn = document.getElementById("prevBtn");
+      prevBtn.style.visibility = currentQuestionIndex > 0 ? "visible" : "hidden";
+    }
+
+    function selectOption(optionIdx) {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      userAnswers[currentQuestionIndex] = optionIdx;
+      renderQuestion("none");
+
+      const stage = document.getElementById("questionStage");
+
+      setTimeout(() => {
+        if (currentQuestionIndex < activeQuestions.length - 1) {
+          stage.classList.add("slide-out-left");
+          setTimeout(() => {
+            currentQuestionIndex++;
+            renderQuestion("next");
+            isTransitioning = false;
+          }, 210);
+        } else {
+          isTransitioning = false;
+          runAnalyzingSequence();
+        }
+      }, 230);
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0 && !isTransitioning) {
+        currentQuestionIndex--;
+        renderQuestion("prev");
+      }
+    }
+
+    function runAnalyzingSequence() {
+      showScreen("analyzingScreen");
+      const pctEl = document.getElementById("analyzePercent");
+      const barFill = document.getElementById("analyzeBarFill");
+      const liveStatus = document.getElementById("analyzingLiveStatus");
+      const mainTitle = document.getElementById("analyzingMainTitle");
+      const liquidGroup = document.getElementById("flaskLiquidLevelGroup");
+      const overflowEffect = document.getElementById("flaskOverflowEffect");
+      const flaskSvg = document.getElementById("analyzingFlaskSvg");
+
+      overflowEffect.classList.remove("active");
+      flaskSvg.classList.remove("boiling-over");
+      mainTitle.textContent = "Đang Chưng Cất & Giải Mã Phổ Nguyên Tố...";
+      liquidGroup.setAttribute("transform", "translate(0, 230)");
+
+      const steps = [
+        document.getElementById("step1"),
+        document.getElementById("step2"),
+        document.getElementById("step3"),
+        document.getElementById("step4"),
+        document.getElementById("step5")
+      ];
+
+      steps.forEach((s, idx) => {
+        s.classList.remove("done", "active-step");
+        s.querySelector(".step-dot").textContent = idx + 1;
+      });
+      steps[0].classList.add("active-step");
+
+      let currentPct = 0;
+      pctEl.textContent = "0%";
+      barFill.style.width = "0%";
+
+      if (analyzeIntervalId) clearInterval(analyzeIntervalId);
+      if (analyzeTimeoutId) clearTimeout(analyzeTimeoutId);
+
+      analyzeIntervalId = setInterval(() => {
+        currentPct += 1;
+        if (currentPct > 100) currentPct = 100;
+        pctEl.textContent = `${currentPct}%`;
+        barFill.style.width = `${currentPct}%`;
+
+        const liquidY = 228 - (currentPct / 100) * 206;
+        liquidGroup.setAttribute("transform", `translate(0, ${liquidY.toFixed(1)})`);
+
+        if (currentPct === 6) {
+          liveStatus.textContent = "Đang nạp 15 phản xạ vào buồng chưng cất phân tử...";
+        }
+        if (currentPct === 22) {
+          steps[0].classList.remove("active-step");
+          steps[0].classList.add("done");
+          steps[0].querySelector(".step-dot").textContent = "✓";
+          steps[1].classList.add("active-step");
+          liveStatus.textContent = "Mực dung dịch 22% — Đang tách lớp cấu trúc Tư duy & Logic...";
+        }
+        if (currentPct === 42) {
+          steps[1].classList.remove("active-step");
+          steps[1].classList.add("done");
+          steps[1].querySelector(".step-dot").textContent = "✓";
+          steps[2].classList.add("active-step");
+          liveStatus.textContent = "Mực dung dịch 42% — Đang đo tần số Tương tác đội nhóm...";
+        }
+        if (currentPct === 62) {
+          steps[2].classList.remove("active-step");
+          steps[2].classList.add("done");
+          steps[2].querySelector(".step-dot").textContent = "✓";
+          steps[3].classList.add("active-step");
+          liveStatus.textContent = "Mực dung dịch 62% — Đang thử nghiệm áp suất & phản xạ biến cố...";
+        }
+        if (currentPct === 82) {
+          steps[3].classList.remove("active-step");
+          steps[3].classList.add("done");
+          steps[3].querySelector(".step-dot").textContent = "✓";
+          steps[4].classList.add("active-step");
+          liveStatus.textContent = "Dung dịch dâng lên cổ bình — Đang kết tinh Nguyên tố chủ đạo...";
+        }
+        if (currentPct === 95) {
+          steps[4].classList.remove("active-step");
+          steps[4].classList.add("done");
+          steps[4].querySelector(".step-dot").textContent = "✓";
+          liveStatus.textContent = "Áp suất chạm ngưỡng 100% — Kích hoạt phản ứng tràn!";
+        }
+
+        if (currentPct >= 100) {
+          clearInterval(analyzeIntervalId);
+          overflowEffect.classList.add("active");
+          flaskSvg.classList.add("boiling-over");
+          mainTitle.textContent = "💥 Phản Ứng Đạt 100% — Dung Dịch Sôi Tràn!";
+          liveStatus.textContent = "✨ Đã giải mã hoàn tất Nguyên tố đại diện cho bạn!";
+
+          analyzeTimeoutId = setTimeout(() => {
+            calculateAndShowResult();
+          }, 2100);
+        }
+      }, 65);
+    }
+
+    /*************************************************************************
+     * 5. THUẬT TOÁN TÍNH ĐIỂM & ĐỒNG BỘ 1-ĐỐI-1 TUYỆT ĐỐI
+     *************************************************************************/
+    function cleanShortDesc(desc) {
+      return desc.replace(/\.+$/, "").toLowerCase();
+    }
+
+    function calculateAndShowResult() {
+      const directScores = {};
+      const primaryHits = {};
+      Object.keys(ELEMENTS_DATA).forEach(sym => {
+        directScores[sym] = 0;
+        primaryHits[sym] = 0;
+      });
+
+      const dimSums = { personality: 0, thinking: 0, teamwork: 0, pressure: 0, creativity: 0 };
+      const dimCounts = { personality: 0, thinking: 0, teamwork: 0, pressure: 0, creativity: 0 };
+      const chosenRecords = [];
+
+      userAnswers.forEach((ansIdx, qIdx) => {
+        if (ansIdx === null) return;
+        const qObj = activeQuestions[qIdx];
+        const chosenOption = qObj.options[ansIdx];
+
+        Object.entries(chosenOption.weights).forEach(([sym, weight]) => {
+          if (directScores[sym] !== undefined) {
+            directScores[sym] += weight;
+            if (weight >= 5) primaryHits[sym] += 1;
+          }
+        });
+
+        if (chosenOption.dims) {
+          Object.entries(chosenOption.dims).forEach(([dimKey, val]) => {
+            dimSums[dimKey] += val;
+            dimCounts[dimKey] += 1;
+          });
+        }
+
+        chosenRecords.push({
+          dimGroup: qObj.dimGroup,
+          traitTag: chosenOption.traitTag,
+          weights: chosenOption.weights
+        });
+      });
+
+      const userProfile = {};
+      Object.keys(dimSums).forEach(k => {
+        userProfile[k] = dimCounts[k] > 0 ? Math.round(dimSums[k] / dimCounts[k]) : 80;
+      });
+
+      const finalRanking = Object.keys(ELEMENTS_DATA).map(sym => {
+        const elProfile = ELEMENTS_DATA[sym].profile;
+        const sqDist =
+          Math.pow(userProfile.personality - elProfile.personality, 2) +
+          Math.pow(userProfile.thinking - elProfile.thinking, 2) +
+          Math.pow(userProfile.teamwork - elProfile.teamwork, 2) +
+          Math.pow(userProfile.pressure - elProfile.pressure, 2) +
+          Math.pow(userProfile.creativity - elProfile.creativity, 2);
+
+        const euclideanDist = Math.sqrt(sqDist);
+        const tieBreaker = Math.max(0, (100 - euclideanDist) / 200);
+        const totalCompositeScore = directScores[sym] + (primaryHits[sym] * 0.6) + tieBreaker;
+
+        return {
+          symbol: sym,
+          directScore: directScores[sym],
+          compositeScore: totalCompositeScore
+        };
+      });
+
+      finalRanking.sort((a, b) => b.compositeScore - a.compositeScore);
+
+      const winnerSymbol = finalRanking[0].symbol;
+      const runnerUpSymbol = finalRanking[1].symbol;
+      const winnerData = ELEMENTS_DATA[winnerSymbol];
+
+      function getBestMatchingTrait(groupKey, fallbackText) {
+        const groupItems = chosenRecords.filter(r => r.dimGroup === groupKey);
+        if (groupItems.length === 0) return fallbackText;
+        groupItems.sort((a, b) => {
+          const scoreA = (a.weights[winnerSymbol] || 0) * 10 + (a.weights[runnerUpSymbol] || 0);
+          const scoreB = (b.weights[winnerSymbol] || 0) * 10 + (b.weights[runnerUpSymbol] || 0);
+          return scoreB - scoreA;
+        });
+        return groupItems[0].traitTag;
+      }
+
+      const tPers = getBestMatchingTrait("personality", "giàu bản sắc cá nhân");
+      const tThink = getBestMatchingTrait("thinking", "có góc nhìn sâu sắc");
+      const tTeam = getBestMatchingTrait("teamwork", "biết cách phối hợp nhịp nhàng");
+      const tPress = getBestMatchingTrait("pressure", "vững vàng trước biến động");
+      const tCreate = getBestMatchingTrait("creativity", "mang dấu ấn sáng tạo riêng");
+
+      const personalDecode =
+        `Qua 15 câu trả lời thực tế, phổ phản xạ của bạn hội tụ rõ nét nhất ở nguyên tố ${winnerData.name} (${winnerData.symbol}): ` +
+        `bạn là người ${tPers}; trong tư duy luôn ${tThink}. ` +
+        `Khi làm việc cùng tập thể, bạn ${tTeam}; đứng trước áp lực lại chọn cách ${tPress} và ${tCreate}.`;
+
+      displayElementResult(winnerSymbol, userProfile, personalDecode, true);
+    }
+
+    function displayElementResult(symbol, userProfile, personalDecode, isDramatic = false) {
+      currentWinnerSymbol = symbol;
+      const el = ELEMENTS_DATA[symbol];
+      const finalDims = userProfile || el.profile;
+      currentUserProfile = finalDims;
+
+      const p1 = ELEMENTS_DATA[el.partners[0]];
+      const p2 = ELEMENTS_DATA[el.partners[1]];
+      const p3 = ELEMENTS_DATA[el.partners[2]];
+
+      currentTop3List = [
+        { symbol: p1.symbol, pct: 96 },
+        { symbol: p2.symbol, pct: 92 },
+        { symbol: p3.symbol, pct: 88 }
+      ];
+
+      const p1Role = p1.title.split("—")[1].trim();
+      const p2Role = p2.title.split("—")[1].trim();
+      const p3Role = p3.title.split("—")[1].trim();
+
+      currentBestMatchText =
+        `Đồng điệu nhất với ${p1.symbol} (${p1Role} — ${cleanShortDesc(p1.shortDesc)}), ` +
+        `${p2.symbol} (${p2Role} — ${cleanShortDesc(p2.shortDesc)}) ` +
+        `và ${p3.symbol} (${p3Role} — ${cleanShortDesc(p3.shortDesc)}).`;
+
+      currentPersonalDecodeText = personalDecode ||
+        `Phổ tính cách của nguyên tố ${el.name} (${el.symbol}) đặc trưng bởi phẩm chất "${cleanShortDesc(el.shortDesc)}" thuộc ${el.groupName}, tạo nên sự phối hợp ăn ý nhất khi đồng hành cùng ${p1.title}, ${p2.title} và ${p3.title} trong đội hình BWAN Gen 6.`;
+
+      const userName = document.getElementById("userNameInput").value.trim();
+
+      document.getElementById("resultUserHeader").textContent = userName
+        ? `✨ HỒ SƠ CỦA: ${userName.toUpperCase()}`
+        : `✨ HỒ SƠ NGUYÊN TỐ CỦA BẠN`;
+
+      const cardBox = document.getElementById("resultCardBox");
+      cardBox.style.background = el.cardBg;
+      cardBox.style.borderColor = el.accentHex;
+
+      const tileBox = document.getElementById("resTile");
+      tileBox.style.borderColor = el.accentHex;
+      tileBox.style.boxShadow = `0 0 32px ${el.accentHex}66, inset 0 0 18px ${el.accentHex}33`;
+
+      document.getElementById("resAtomicNum").textContent = el.number;
+      document.getElementById("resAtomicNum").style.color = el.accentHex;
+      document.getElementById("resGroupCode").textContent = `#${el.number}`;
+      document.getElementById("resGroupCode").style.color = el.accentHex;
+      document.getElementById("resSymbol").textContent = el.symbol;
+      document.getElementById("resElementName").textContent = el.name;
+
+      document.getElementById("resArchetypeGroup").textContent = el.groupName.toUpperCase();
+      document.getElementById("resArchetypeGroup").style.color = el.accentHex;
+      document.getElementById("resFullTitle").textContent = el.title;
+      document.getElementById("resCoreKeywords").textContent = `✦ ${el.shortDesc}`;
+      document.getElementById("resCoreKeywords").style.borderLeftColor = el.accentHex;
+
+      document.getElementById("personalDecodeTitle").style.color = el.accentHex;
+      document.getElementById("boxTitle1").style.color = el.accentHex;
+      document.getElementById("boxTitle2").style.color = el.accentHex;
+      document.getElementById("boxTitle3").style.color = el.accentHex;
+
+      document.getElementById("resDeepDesc").textContent = el.deepDesc;
+      document.getElementById("resPersonalDecode").textContent = currentPersonalDecodeText;
+      document.getElementById("resStrengths").textContent = el.strengths;
+      document.getElementById("resTeamRole").textContent = el.teamRole;
+      document.getElementById("resBestMatch").textContent = currentBestMatchText;
+      document.getElementById("resFooterElementCode").textContent = `ELEMENT #${el.number} • ${el.symbol.toUpperCase()} (${el.name.toUpperCase()})`;
+      document.getElementById("resFooterElementCode").style.color = el.accentHex;
+
+      const dimLabels = [
+        { key: "personality", label: "Tính cách & Biểu đạt" },
+        { key: "thinking", label: "Tư duy & Hệ thống" },
+        { key: "teamwork", label: "Làm việc nhóm & Kết nối" },
+        { key: "pressure", label: "Xử lý áp lực & Bền bỉ" },
+        { key: "creativity", label: "Phong cách sáng tạo" }
+      ];
+
+      document.getElementById("dimensionBars").innerHTML = dimLabels.map(d => {
+        const val = Math.min(99, Math.max(58, Math.round((finalDims[d.key] * 0.75) + (el.profile[d.key] * 0.25))));
+        return `
+          <div class="bar-item">
+            <div class="bar-label">
+              <span>${d.label}</span>
+              <span>${val}%</span>
+            </div>
+            <div class="bar-bg">
+              <div class="bar-fill" style="width: ${val}%; background: linear-gradient(90deg, #6c63ff, ${el.accentHex});"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("topMatchesList").innerHTML = currentTop3List.map(item => {
+        const info = ELEMENTS_DATA[item.symbol];
+        return `
+          <div class="sec-el-row" onclick="previewSingleElement('${item.symbol}')" style="cursor:pointer" title="Bấm để xem nguyên tố này">
+            <div class="sec-el-left">
+              <div class="sec-el-badge" style="border-color:${info.accentHex}">${info.symbol}</div>
+              <div>
+                <div style="font-size:0.9rem;font-weight:700;color:#fff;">${info.title}</div>
+                <div style="font-size:0.78rem;color:var(--text-muted);">${info.shortDesc}</div>
+              </div>
+            </div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:${info.accentHex};">
+              ${item.pct}%
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      initChemistryMatcher(symbol, p1.symbol);
+      showScreen("resultScreen", isDramatic);
+    }
+
+    /*************************************************************************
+     * 6. KIỂM TRA ĐỘ ĂN Ý GIỮA CÁC NHÓM NGƯỜI
+     *************************************************************************/
+    function initChemistryMatcher(mySym, defaultPartnerSym) {
+      const myEl = ELEMENTS_DATA[mySym];
+      document.getElementById("matcherMyElementLabel").textContent = `Bạn: ${myEl.symbol} (${myEl.title})`;
+
+      const select = document.getElementById("friendElementSelect");
+      const otherKeys = Object.keys(ELEMENTS_DATA);
+      const defaultPartner = defaultPartnerSym || myEl.partners[0] || "C";
+
+      select.innerHTML = otherKeys.map(k => {
+        const item = ELEMENTS_DATA[k];
+        return `<option value="${k}" ${k === defaultPartner ? "selected" : ""}>Đồng đội: ${item.symbol} · ${item.number} (${item.title})</option>`;
+      }).join("");
+
+      updateChemistryReaction();
+    }
+
+    function updateChemistryReaction() {
+      const mySym = currentWinnerSymbol;
+      const friendSym = document.getElementById("friendElementSelect").value;
+      const myEl = ELEMENTS_DATA[mySym];
+      const friendEl = ELEMENTS_DATA[friendSym];
+      const outBox = document.getElementById("reactionOutputBox");
+
+      if (mySym === friendSym) {
+        outBox.innerHTML =
+          `⚡ <b>Sự Đồng Điệu Cùng Hình Tượng (${myEl.title} • Độ hợp cạ: 96%):</b> ` +
+          `Hai bạn có chung thế mạnh "${cleanShortDesc(myEl.shortDesc)}". Khi làm việc cùng nhau, hai bạn hiểu ý nhau cực nhanh mà không cần giải thích dài dòng, tạo nên sức mạnh nhân đôi ở đúng sở trường chung!`;
+        return;
+      }
+
+      const inTop3 = currentTop3List.some(item => item.symbol === friendSym);
+      const isTopPartner = inTop3 || myEl.partners.includes(friendSym) || friendEl.partners.includes(mySym);
+      const sameGroup = myEl.groupName === friendEl.groupName;
+      const compatibility = isTopPartner ? 96 : (sameGroup ? 92 : 88);
+
+      let badgeTitle = `🤝 Sự Bù Trừ Cân Bằng (${myEl.symbol} + ${friendEl.symbol} • Độ hợp cạ: ${compatibility}%)`;
+      if (isTopPartner) {
+        badgeTitle = `💞 Cặp Bài Trùng Lý Tưởng (${myEl.symbol} + ${friendEl.symbol} • Độ hợp cạ: ${compatibility}%)`;
+      } else if (sameGroup) {
+        badgeTitle = `✨ Cộng Hưởng Cùng Nhóm Tính Cách (${myEl.symbol} + ${friendEl.symbol} • Độ hợp cạ: ${compatibility}%)`;
+      }
+
+      outBox.innerHTML =
+        `<div style="margin-bottom:6px; color:${myEl.accentHex}; font-weight:700;">${badgeTitle}</div>` +
+        `<div>Một người là <b>${myEl.title}</b> (${cleanShortDesc(myEl.shortDesc)}) kết hợp cùng <b>${friendEl.title}</b> (${cleanShortDesc(friendEl.shortDesc)}) sẽ giúp bổ khuyết hoàn hảo cho nhau: vừa giữ được bản sắc riêng vừa nâng đỡ nhau hoàn thành xuất sắc mục tiêu chung tại BWAN Gen 6.</div>`;
+    }
+
+    function restartQuiz() {
+      showScreen("introScreen");
+    }
+
+    /*************************************************************************
+     * 7. SAO CHÉP KẾT QUẢ CHỐNG LỖI 100%
+     *************************************************************************/
+    async function copyShareResult() {
+      const userName = document.getElementById("userNameInput").value.trim();
+      const title = document.getElementById("resFullTitle").textContent;
+      const keywords = document.getElementById("resCoreKeywords").textContent;
+      const bestMatch = document.getElementById("resBestMatch").textContent;
+
+      const shareText =
+        `🧪 [Which Element Are You? — BWAN Gen 6]\n` +
+        `${userName ? `👤 Thành viên: ${userName}\n` : ""}` +
+        `⚛️ Nguyên tố đại diện: ${title}\n` +
+        `✨ Đặc trưng: ${keywords}\n` +
+        `💞 Nhóm người phù hợp: ${bestMatch}\n` +
+        `👉 Khám phá ngay nguyên tố của bạn cùng BWAN Gen 6!`;
+
+      let copiedSuccess = false;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          copiedSuccess = true;
+        } catch (err) {
+          copiedSuccess = false;
+        }
+      }
+
+      if (!copiedSuccess) {
+        try {
+          const tempTextArea = document.createElement("textarea");
+          tempTextArea.value = shareText;
+          tempTextArea.setAttribute("readonly", "");
+          tempTextArea.style.position = "fixed";
+          tempTextArea.style.top = "0";
+          tempTextArea.style.left = "-9999px";
+          document.body.appendChild(tempTextArea);
+          tempTextArea.focus();
+          tempTextArea.select();
+          tempTextArea.setSelectionRange(0, 99999);
+          copiedSuccess = document.execCommand("copy");
+          document.body.removeChild(tempTextArea);
+        } catch (err) {
+          copiedSuccess = false;
+        }
+      }
+
+      if (copiedSuccess) {
+        showToast("✅ Đã sao chép kết quả! Bạn có thể dán (Ctrl+V) để chia sẻ ngay.");
+      } else {
+        const modal = document.getElementById("copyFallbackModal");
+        const box = document.getElementById("fallbackCopyTextarea");
+        box.value = shareText;
+        modal.classList.add("open");
+        setTimeout(() => {
+          box.focus();
+          box.select();
+        }, 100);
+      }
+    }
+
+    function closeCopyModal() {
+      document.getElementById("copyFallbackModal").classList.remove("open");
+    }
+
+    /*************************************************************************
+     * 8. BỘ KẾT XUẤT ẢNH THẺ KẾT QUẢ TƯƠNG THÍCH 100% ĐIỆN THOẠI & MÁY TÍNH
+     *    - Không dùng ctx.roundRect (tránh lỗi trên iOS/Android cũ)
+     *    - Dùng Blob URL + Mở Modal xem ảnh trực tiếp (Nhấn giữ Lưu ảnh hoặc Share)
+     *************************************************************************/
+    function getCanvasWrappedLines(ctx, text, maxWidth) {
+      const words = text.trim().split(/\s+/);
+      const lines = [];
+      let currentLine = "";
+      for (let i = 0; i < words.length; i++) {
+        const testLine = currentLine ? (currentLine + " " + words[i]) : words[i];
+        if (ctx.measureText(testLine).width > maxWidth && currentLine) {
+          lines.push(currentLine);
+          currentLine = words[i];
+        } else {
+          currentLine = testLine;
+        }
+      }
+      if (currentLine) lines.push(currentLine);
+      return lines;
+    }
+
+    function renderResultCardToCanvas() {
+      const el = ELEMENTS_DATA[currentWinnerSymbol];
+      const finalDims = currentUserProfile || el.profile;
+      const userName = document.getElementById("userNameInput").value.trim();
+
+      const S = 2;
+      const W = 880;
+      const padX = 36;
+      const innerW = W - padX * 2;
+
+      const measureCanvas = document.createElement("canvas");
+      const mCtx = measureCanvas.getContext("2d");
+
+      mCtx.font = "400 16px 'Be Vietnam Pro', sans-serif";
+      const deepLines = getCanvasWrappedLines(mCtx, el.deepDesc, innerW);
+      const deepLineH = 27;
+      const deepBlockH = deepLines.length * deepLineH;
+
+      mCtx.font = "400 15px 'Be Vietnam Pro', sans-serif";
+      const decodeLines = getCanvasWrappedLines(mCtx, currentPersonalDecodeText, innerW - 44);
+      const decodeLineH = 25;
+      const decodeBoxH = 54 + decodeLines.length * decodeLineH + 18;
+
+      const colGap = 16;
+      const colW = (innerW - colGap * 2) / 3;
+      mCtx.font = "400 14.5px 'Be Vietnam Pro', sans-serif";
+      const col1Lines = getCanvasWrappedLines(mCtx, el.strengths, colW - 36);
+      const col2Lines = getCanvasWrappedLines(mCtx, el.teamRole, colW - 36);
+      const col3Lines = getCanvasWrappedLines(mCtx, currentBestMatchText, colW - 36);
+      const maxColLines = Math.max(col1Lines.length, col2Lines.length, col3Lines.length);
+      const colLineH = 23.5;
+      const threeColBoxH = 52 + maxColLines * colLineH + 18;
+
+      const statsBoxH = 286;
+      const H = 92 + 142 + 22 + deepBlockH + 20 + decodeBoxH + 18 + threeColBoxH + 22 + statsBoxH + 64;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = W * S;
+      canvas.height = Math.ceil(H * S);
+      const ctx = canvas.getContext("2d");
+      ctx.scale(S, S);
+
+      // Nền thẻ
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, el.bgStart);
+      bgGrad.addColorStop(1, el.bgEnd);
+      ctx.fillStyle = bgGrad;
+      drawRoundRectPath(ctx, 0, 0, W, H, 24);
+      ctx.fill();
+
+      const glow = ctx.createRadialGradient(W - 140, 110, 10, W - 140, 110, 320);
+      glow.addColorStop(0, el.accentHex + "30");
+      glow.addColorStop(1, "transparent");
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.strokeStyle = el.accentHex;
+      ctx.lineWidth = 3;
+      drawRoundRectPath(ctx, 1.5, 1.5, W - 3, H - 3, 23);
+      ctx.stroke();
+
+      // 1. TOP BAR
+      const topY = 34;
+      const leftHeaderStr = userName
+        ? `✨ HỒ SƠ CỦA: ${userName.toUpperCase()}`
+        : `✨ HỒ SƠ NGUYÊN TỐ CỦA BẠN`;
+      ctx.font = "700 13.5px 'Be Vietnam Pro', sans-serif";
+      const lhWidth = ctx.measureText(leftHeaderStr).width + 32;
+
+      ctx.fillStyle = "rgba(0, 0, 0, 0.48)";
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+      ctx.lineWidth = 1;
+      drawRoundRectPath(ctx, padX, topY, lhWidth, 36, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#e6e3ff";
+      ctx.fillText(leftHeaderStr, padX + 16, topY + 23);
+
+      const rightBrandStr = "WHICH ELEMENT ARE YOU? • BWAN GEN 6";
+      ctx.font = "700 13px 'Space Grotesk', sans-serif";
+      const rbTextW = ctx.measureText(rightBrandStr).width;
+      const rbPillW = rbTextW + 58;
+      const rbPillX = W - padX - rbPillW;
+
+      ctx.fillStyle = "rgba(108, 99, 255, 0.22)";
+      ctx.strokeStyle = "rgba(108, 99, 255, 0.55)";
+      drawRoundRectPath(ctx, rbPillX, topY, rbPillW, 36, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      if (BWAN_LOGO_IMAGE_OBJ && BWAN_LOGO_IMAGE_OBJ.complete) {
+        ctx.drawImage(BWAN_LOGO_IMAGE_OBJ, rbPillX + 12, topY + 6, 24, 24);
+      }
+      ctx.fillStyle = "#e2dfff";
+      ctx.fillText(rightBrandStr, rbPillX + 43, topY + 23);
+
+      // 2. Ô NGUYÊN TỐ
+      const heroY = 92;
+      ctx.fillStyle = "rgba(8, 8, 16, 0.88)";
+      ctx.strokeStyle = el.accentHex;
+      ctx.lineWidth = 3;
+      drawRoundRectPath(ctx, padX, heroY, 138, 138, 22);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = el.accentHex;
+      ctx.font = "700 15px 'Space Grotesk', sans-serif";
+      ctx.fillText(String(el.number), padX + 16, heroY + 28);
+      ctx.textAlign = "right";
+      ctx.fillText(`#${el.number}`, padX + 122, heroY + 28);
+      ctx.textAlign = "left";
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 54px 'Space Grotesk', sans-serif";
+      ctx.fillText(el.symbol, padX + 16, heroY + 86);
+
+      ctx.fillStyle = "#e0e0f5";
+      ctx.font = "600 14.5px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText(el.name, padX + 16, heroY + 116);
+
+      const infoX = padX + 164;
+      ctx.fillStyle = el.accentHex;
+      ctx.font = "700 14px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText(el.groupName.toUpperCase(), infoX, heroY + 28);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 36px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText(el.title, infoX, heroY + 72);
+
+      const kwText = `✦ ${el.shortDesc}`;
+      ctx.font = "600 17px 'Be Vietnam Pro', sans-serif";
+      const kwBoxW = ctx.measureText(kwText).width + 34;
+
+      ctx.fillStyle = "rgba(108, 99, 255, 0.28)";
+      drawRoundRectPath(ctx, infoX, heroY + 90, kwBoxW, 40, 10);
+      ctx.fill();
+
+      ctx.fillStyle = el.accentHex;
+      ctx.fillRect(infoX, heroY + 90, 4, 40);
+
+      ctx.fillStyle = "#f4f2ff";
+      ctx.fillText(kwText, infoX + 16, heroY + 116);
+
+      // 3. DEEP DESC
+      let curY = heroY + 138 + 26;
+      ctx.fillStyle = "#f0f0fa";
+      ctx.font = "400 16px 'Be Vietnam Pro', sans-serif";
+      deepLines.forEach(line => {
+        ctx.fillText(line, padX, curY);
+        curY += deepLineH;
+      });
+
+      // 4. HỘP GIẢI MÃ THỰC TẾ
+      curY += 12;
+      ctx.fillStyle = "rgba(8, 8, 18, 0.78)";
+      ctx.strokeStyle = "rgba(108, 99, 255, 0.5)";
+      ctx.lineWidth = 1.5;
+      drawRoundRectPath(ctx, padX, curY, innerW, decodeBoxH, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = el.accentHex;
+      ctx.font = "700 15.5px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText("🔬 Giải mã thực tế từ chuỗi 15 phản xạ của bạn:", padX + 22, curY + 30);
+
+      ctx.fillStyle = "#ededfa";
+      ctx.font = "400 15px 'Be Vietnam Pro', sans-serif";
+      let dLineY = curY + 58;
+      decodeLines.forEach(line => {
+        ctx.fillText(line, padX + 22, dLineY);
+        dLineY += decodeLineH;
+      });
+
+      // 5. BA HỘP PHÂN TÍCH ĐỒNG BỘ
+      curY += decodeBoxH + 18;
+      const threeColsData = [
+        { title: "⚡ Chất riêng nổi bật", lines: col1Lines },
+        { title: "🤝 Vai trò trong tập thể", lines: col2Lines },
+        { title: "💞 Nhóm người phù hợp nhất", lines: col3Lines }
+      ];
+
+      threeColsData.forEach((col, idx) => {
+        const cx = padX + idx * (colW + colGap);
+        ctx.fillStyle = "rgba(8, 8, 16, 0.76)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+        ctx.lineWidth = 1;
+        drawRoundRectPath(ctx, cx, curY, colW, threeColBoxH, 15);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = el.accentHex;
+        ctx.font = "700 15px 'Be Vietnam Pro', sans-serif";
+        ctx.fillText(col.title, cx + 18, curY + 30);
+
+        ctx.fillStyle = "#ebebf7";
+        ctx.font = "400 14.5px 'Be Vietnam Pro', sans-serif";
+        let cY = curY + 56;
+        col.lines.forEach(line => {
+          ctx.fillText(line, cx + 18, cY);
+          cY += colLineH;
+        });
+      });
+
+      // 6. HAI HỘP THỐNG KÊ ĐÁY
+      curY += threeColBoxH + 20;
+      const halfGap = 20;
+      const halfW = (innerW - halfGap) / 2;
+
+      ctx.fillStyle = "rgba(10, 10, 20, 0.82)";
+      ctx.strokeStyle = "rgba(108, 99, 255, 0.34)";
+      ctx.lineWidth = 1;
+      drawRoundRectPath(ctx, padX, curY, halfW, statsBoxH, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "700 16px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText("📊 Bản đồ 5 chiều năng lượng của bạn", padX + 20, curY + 34);
+
+      const dimLabels = [
+        { key: "personality", label: "Tính cách & Biểu đạt" },
+        { key: "thinking", label: "Tư duy & Hệ thống" },
+        { key: "teamwork", label: "Làm việc nhóm & Kết nối" },
+        { key: "pressure", label: "Xử lý áp lực & Bền bỉ" },
+        { key: "creativity", label: "Phong cách sáng tạo" }
+      ];
+
+      let barY = curY + 64;
+      const barTrackW = halfW - 40;
+      dimLabels.forEach(d => {
+        const val = Math.min(99, Math.max(58, Math.round((finalDims[d.key] * 0.75) + (el.profile[d.key] * 0.25))));
+        ctx.fillStyle = "#d4d5ea";
+        ctx.font = "600 13.5px 'Be Vietnam Pro', sans-serif";
+        ctx.fillText(d.label, padX + 20, barY);
+
+        ctx.textAlign = "right";
+        ctx.fillText(`${val}%`, padX + 20 + barTrackW, barY);
+        ctx.textAlign = "left";
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.09)";
+        drawRoundRectPath(ctx, padX + 20, barY + 7, barTrackW, 8, 4);
+        ctx.fill();
+
+        const fillGrad = ctx.createLinearGradient(padX + 20, 0, padX + 20 + barTrackW, 0);
+        fillGrad.addColorStop(0, "#6c63ff");
+        fillGrad.addColorStop(1, el.accentHex);
+        ctx.fillStyle = fillGrad;
+        drawRoundRectPath(ctx, padX + 20, barY + 7, (barTrackW * val) / 100, 8, 4);
+        ctx.fill();
+
+        barY += 44;
+      });
+
+      const rightCardX = padX + halfW + halfGap;
+      ctx.fillStyle = "rgba(10, 10, 20, 0.82)";
+      ctx.strokeStyle = "rgba(108, 99, 255, 0.34)";
+      drawRoundRectPath(ctx, rightCardX, curY, halfW, statsBoxH, 16);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "700 16px 'Be Vietnam Pro', sans-serif";
+      ctx.fillText("🧬 Top 3 Nguyên tố đồng điệu nhất", rightCardX + 20, curY + 34);
+
+      let rowY = curY + 52;
+      currentTop3List.slice(0, 3).forEach(item => {
+        const info = ELEMENTS_DATA[item.symbol];
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+        drawRoundRectPath(ctx, rightCardX + 20, rowY, halfW - 40, 66, 12);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(108, 99, 255, 0.24)";
+        ctx.strokeStyle = info.accentHex;
+        ctx.lineWidth = 1.5;
+        drawRoundRectPath(ctx, rightCardX + 32, rowY + 15, 36, 36, 9);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 15px 'Space Grotesk', sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(info.symbol, rightCardX + 50, rowY + 38);
+        ctx.textAlign = "left";
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 14.5px 'Be Vietnam Pro', sans-serif";
+        ctx.fillText(info.title, rightCardX + 80, rowY + 29);
+
+        ctx.fillStyle = "#a5a8c4";
+        ctx.font = "400 12.5px 'Be Vietnam Pro', sans-serif";
+        const shortLines = getCanvasWrappedLines(ctx, info.shortDesc, halfW - 185);
+        ctx.fillText(shortLines[0] || "", rightCardX + 80, rowY + 48);
+
+        ctx.fillStyle = info.accentHex;
+        ctx.font = "700 15.5px 'Space Grotesk', sans-serif";
+        ctx.textAlign = "right";
+        ctx.fillText(`${item.pct}%`, rightCardX + halfW - 34, rowY + 39);
+        ctx.textAlign = "left";
+
+        rowY += 74;
+      });
+
+      // 7. FOOTER BẢN QUYỀN
+      const footerLineY = curY + statsBoxH + 22;
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padX, footerLineY);
+      ctx.lineTo(W - padX, footerLineY);
+      ctx.stroke();
+
+      if (BWAN_LOGO_IMAGE_OBJ && BWAN_LOGO_IMAGE_OBJ.complete) {
+        ctx.drawImage(BWAN_LOGO_IMAGE_OBJ, padX, footerLineY + 14, 22, 22);
+      }
+
+      ctx.fillStyle = "#b4aeff";
+      ctx.font = "700 12.5px 'Space Grotesk', sans-serif";
+      ctx.fillText("BWAN GEN 6 CHEMISTRY LAB • PERSONALITY ELEMENT CARD", padX + 30, footerLineY + 30);
+
+      ctx.fillStyle = el.accentHex;
+      ctx.textAlign = "right";
+      ctx.fillText(`ELEMENT #${el.number} • ${el.symbol.toUpperCase()} (${el.name.toUpperCase()})`, W - padX, footerLineY + 30);
+      ctx.textAlign = "left";
+
+      return canvas;
+    }
+
+    function downloadResultCardPNG() {
+      const el = ELEMENTS_DATA[currentWinnerSymbol];
+      const btn = document.getElementById("downloadBtn");
+      const originalBtnText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = "⏳ Đang kết xuất ảnh PNG sắc nét...";
+
+      try {
+        const canvas = renderResultCardToCanvas();
+        const fileName = `BWAN-Gen6-${el.symbol}-${el.name}.png`;
+        LAST_GENERATED_FILENAME = fileName;
+
+        const dataUrl = canvas.toDataURL("image/png");
+        const previewImg = document.getElementById("generatedCardPreviewImg");
+        previewImg.src = dataUrl;
+
+        // Chuyển sang Blob URL để trình duyệt Điện thoại không chặn vì chuỗi Base64 quá dài
+        canvas.toBlob(function(blob) {
+          if (!blob) return;
+          LAST_GENERATED_BLOB = blob;
+          const blobUrl = URL.createObjectURL(blob);
+
+          const directLink = document.getElementById("directBlobDownloadLink");
+          directLink.href = blobUrl;
+          directLink.download = fileName;
+
+          // Tự động kích hoạt tải file cho PC & Chrome Android
+          const tempLink = document.createElement("a");
+          tempLink.href = blobUrl;
+          tempLink.download = fileName;
+          document.body.appendChild(tempLink);
+          tempLink.click();
+          document.body.removeChild(tempLink);
+
+          // Mở đồng thời hộp Xem & Lưu Ảnh để trên iOS / Messenger / Zalo luôn lưu được 100%
+          document.getElementById("imageSaveModal").classList.add("open");
+          showToast("📸 Ảnh đã sẵn sàng! Bạn có thể lưu về máy hoặc nhấn giữ vào ảnh.");
+        }, "image/png");
+      } catch (err) {
+        showToast("⚠️ Lỗi kết xuất ảnh: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalBtnText;
+      }
+    }
+
+    // Hàm gọi bảng Chia sẻ / Lưu vào Ảnh gốc trên iPhone (iOS) và Android
+    async function shareOrSaveImageMobile() {
+      if (!LAST_GENERATED_BLOB) return;
+      try {
+        const file = new File([LAST_GENERATED_BLOB], LAST_GENERATED_FILENAME, { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Thẻ Nguyên Tố Nhân Cách — BWAN Gen 6",
+            text: "Khám phá nguyên tố đại diện cho tính cách của mình tại BWAN Gen 6!"
+          });
+          showToast("✅ Đã mở menu Lưu / Chia sẻ ảnh trên điện thoại!");
+          return;
+        }
+      } catch (e) {
+        // Nếu người dùng đóng bảng share hoặc trình duyệt không hỗ trợ file share
+      }
+      // Fallback bấm nút tải Blob trực tiếp
+      document.getElementById("directBlobDownloadLink").click();
+      showToast("💡 Bạn cũng có thể nhấn giữ ngón tay (2 giây) vào ảnh bên dưới để Lưu vào Ảnh!");
+    }
+
+    function closeImageSaveModal() {
+      document.getElementById("imageSaveModal").classList.remove("open");
+    }
+
+    /*************************************************************************
+     * 9. BẢNG 18 NGUYÊN TỐ
+     *************************************************************************/
+    function renderElementsModalGrid() {
+      const grid = document.getElementById("modalElementsGrid");
+      grid.innerHTML = Object.values(ELEMENTS_DATA).map(el => `
+        <div class="el-card-preview" style="background: ${el.cardBg}; border-color: ${el.accentHex}55;" onclick="previewSingleElement('${el.symbol}')">
+          <div class="sym-num" style="color: ${el.accentHex}">${el.symbol} · ${el.number}</div>
+          <div class="archetype-name">${el.title}</div>
+          <div class="short-traits">${el.shortDesc}</div>
+        </div>
+      `).join("");
+    }
+
+    function openElementsModal() {
+      document.getElementById("elementsModal").classList.add("open");
+    }
+
+    function closeElementsModal() {
+      document.getElementById("elementsModal").classList.remove("open");
+    }
+
+    function previewSingleElement(sym) {
+      closeElementsModal();
+      displayElementResult(sym, ELEMENTS_DATA[sym].profile, null, true);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      buildExactBwanLogoDataURL();
+      initFloatingLab();
+      renderElementsModalGrid();
+    });
+
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        initFloatingLab();
+      }, 200);
+    });
+  </script>
+</body>
+</html>

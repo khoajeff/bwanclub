@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   ChemDonationModuleConfig,
   DonationSubmissionPayload,
@@ -14,6 +14,11 @@ import {
   buildAppsScriptLeaderboardUrl,
   parseAppsScriptLeaderboardResponse,
   formatDonationTimestamp,
+  loadLocalDonationIntents,
+  saveLocalDonationIntent,
+  enrichAndMergeDonors,
+  donorNamesMatch,
+  DonationIntentItem,
 } from './donationLogic';
 import { QuickDonatePanel } from './components/QuickDonatePanel';
 import { TopDonorsSection } from './components/TopDonorsSection';
@@ -31,6 +36,7 @@ import { motion } from 'motion/react';
 
 export interface ChemClubDonationModuleProps {
   config?: ChemDonationModuleConfig;
+  lang?: 'vi' | 'en';
   onDonationCreated?: (
     record: DonorRecord,
     updatedConfig: ChemDonationModuleConfig
@@ -44,6 +50,7 @@ export interface ChemClubDonationModuleProps {
 
 export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
   config = DEFAULT_CHEM_DONATION_CONFIG,
+  lang = 'vi',
   onDonationCreated,
   resolveCustomQrUrl,
   embeddedMode = false,
@@ -51,11 +58,19 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
   onNavigateToLeaderboard,
   onNavigateToDonate,
 }) => {
+  const isEn = lang === 'en';
   const [raisedVnd, setRaisedVnd] = useState<number>(config.initialRaisedVnd);
   const [supportersCount, setSupportersCount] = useState<number>(
     config.initialSupportersCount
   );
   const [donors, setDonors] = useState<DonorRecord[]>(config.initialDonors);
+  const donorsRef = useRef<DonorRecord[]>(config.initialDonors);
+  donorsRef.current = donors;
+
+  const [wishIntents, setWishIntents] = useState<DonationIntentItem[]>(() =>
+    loadLocalDonationIntents()
+  );
+
   const [latestDonorName, setLatestDonorName] = useState<string | null>(null);
   const [isLoadingLeaderboard, setIsLoadingLeaderboard] =
     useState<boolean>(true);
@@ -64,44 +79,65 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
     try {
       setIsLoadingLeaderboard(true);
       const leaderboardUrl = buildAppsScriptLeaderboardUrl();
-      const response = await fetch(leaderboardUrl, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-        },
-      });
 
-      if (!response.ok) return;
-
-      const json = await response.json();
-      const remoteRecords = parseAppsScriptLeaderboardResponse(json);
+      const [remoteSettled, localSettled] = await Promise.allSettled([
+        fetch(leaderboardUrl, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+          },
+        }),
+        fetch('/api/donations'),
+      ]);
 
       let localVerified: DonorRecord[] = [];
-      try {
-        const localRes = await fetch('/api/donations');
-        if (localRes.ok) {
-          const localData = (await localRes.json()) as {
+      let serverIntents: DonationIntentItem[] = [];
+      if (localSettled.status === 'fulfilled' && localSettled.value.ok) {
+        try {
+          const localData = (await localSettled.value.json()) as {
             donations?: DonorRecord[];
+            intents?: DonationIntentItem[];
           };
           if (Array.isArray(localData.donations)) {
             localVerified = localData.donations;
           }
+          if (Array.isArray(localData.intents)) {
+            serverIntents = localData.intents;
+          }
+        } catch {
+          // Ignore malformed JSON
         }
-      } catch {
-        // Ignore if running in static environment
       }
 
-      const merged = [...remoteRecords];
-      for (const localItem of localVerified) {
-        const alreadyInRemote = remoteRecords.some(
-          (r) =>
-            r.amountVnd === localItem.amountVnd &&
-            r.name.toLowerCase().includes(localItem.name.toLowerCase())
-        );
-        if (!alreadyInRemote) {
-          merged.unshift(localItem);
+      const localIntents = loadLocalDonationIntents();
+      const combinedIntentsMap = new Map<string, DonationIntentItem>();
+      for (const item of [...localIntents, ...serverIntents]) {
+        if (item && item.name) {
+          const key = `${item.name.trim().toLowerCase()}|${(item.message || '').trim()}`;
+          if (!combinedIntentsMap.has(key)) {
+            combinedIntentsMap.set(key, item);
+          }
         }
       }
+      setWishIntents(Array.from(combinedIntentsMap.values()));
+
+      let remoteRecords = donorsRef.current;
+      if (remoteSettled.status === 'fulfilled' && remoteSettled.value.ok) {
+        try {
+          const json = await remoteSettled.value.json();
+          remoteRecords = parseAppsScriptLeaderboardResponse(json);
+        } catch {
+          // Keep current records if remote JSON fails
+        }
+      }
+
+      const merged = enrichAndMergeDonors(
+        remoteRecords,
+        localVerified,
+        serverIntents,
+        localIntents,
+        donorsRef.current
+      );
 
       setDonors(merged);
       const total = merged.reduce(
@@ -132,6 +168,75 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
   const rankedDonors = rankDonors(donors);
   const currentTop1 = rankedDonors[0] || null;
 
+  const handleIntentSaved = useCallback((intent: DonationIntentItem) => {
+    setWishIntents((prev) => [
+      intent,
+      ...prev.filter((item) => item.id !== intent.id),
+    ]);
+    // Nếu trên bảng xếp hạng đã có giao dịch khớp tên + số tiền thì gắn lời chúc ngay
+    setDonors((prev) =>
+      enrichAndMergeDonors(prev, [], [intent], [intent], prev)
+    );
+  }, []);
+
+  const handleAttachWishToDonor = useCallback(
+    async (
+      donorName: string,
+      message: string,
+      affiliation?: string
+    ): Promise<{ ok: boolean; matchedName?: string }> => {
+      const targetDonor = donorsRef.current.find((d) =>
+        donorNamesMatch(d.name, donorName)
+      );
+
+      const displayName = targetDonor ? targetDonor.name : donorName.trim();
+      const intent: DonationIntentItem = {
+        id: `wish_${Date.now()}`,
+        name: displayName,
+        affiliation:
+          affiliation && affiliation.trim().length > 0
+            ? affiliation.trim()
+            : targetDonor?.affiliation || 'Nhà hảo tâm BWAN CLUB',
+        amountVnd: targetDonor ? targetDonor.amountVnd : 0,
+        message: message.trim(),
+        receiptCode: targetDonor?.verifiedReceiptCode || 'BWAN-WISH',
+        timestampIso: new Date().toISOString(),
+      };
+
+      saveLocalDonationIntent(intent);
+      setWishIntents((prev) => [intent, ...prev]);
+      try {
+        await fetch('/api/donation-intents', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(intent),
+        });
+      } catch {
+        // Ignore network error, saved in localStorage
+      }
+
+      if (targetDonor) {
+        setDonors((prev) => {
+          let attached = false;
+          return prev.map((d) => {
+            if (!attached && donorNamesMatch(d.name, targetDonor.name)) {
+              attached = true;
+              return {
+                ...d,
+                message: intent.message,
+                affiliation: intent.affiliation,
+              };
+            }
+            return d;
+          });
+        });
+      }
+
+      return { ok: true, matchedName: displayName };
+    },
+    []
+  );
+
   const handleDonationVerified = (
     payload: DonationSubmissionPayload,
     orderMeta?: { paymentLinkId?: string; orderCode?: string | number }
@@ -148,6 +253,18 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
     if (orderMeta?.orderCode) {
       result.createdRecord.verifiedReceiptCode = `ORD-${orderMeta.orderCode}`;
     }
+
+    saveLocalDonationIntent({
+      id: result.createdRecord.id,
+      paymentLinkId: orderMeta?.paymentLinkId,
+      orderCode: orderMeta?.orderCode,
+      name: result.createdRecord.name,
+      affiliation: result.createdRecord.affiliation,
+      amountVnd: result.createdRecord.amountVnd,
+      message: result.createdRecord.message,
+      receiptCode: result.createdRecord.verifiedReceiptCode,
+      timestampIso: result.createdRecord.timestampIso,
+    });
 
     setRaisedVnd(result.updatedRaisedVnd);
     setSupportersCount(result.updatedSupportersCount);
@@ -188,7 +305,11 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
   return (
     <section
       id="quyen-gop-section"
-      aria-label="Quỹ Học Thuật & Bảng Xếp Hạng Top Donate BWAN CLUB"
+      aria-label={
+        isEn
+          ? 'Academic Fund & Top Donate Leaderboard BWAN CLUB'
+          : 'Quỹ Học Thuật & Bảng Xếp Hạng Top Donate BWAN CLUB'
+      }
       className={`google-one-chem-section-wash ${
         embeddedMode ? 'pt-6 pb-16 sm:pt-8 sm:pb-20' : 'py-16 sm:py-20'
       } px-4 sm:px-6 lg:px-8 transition-colors duration-300`}
@@ -206,18 +327,24 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
               >
                 <div className="inline-flex items-center gap-2 text-xs font-bold text-[#6C63FF] dark:text-[#A39DFF] uppercase tracking-wider">
                   <HeartHandshake className="h-4 w-4" />
-                  <span>QUỸ HỌC THUẬT & BẢO TRỢ THỰC NGHIỆM BWAN CLUB</span>
+                  <span>
+                    {isEn
+                      ? 'BWAN CLUB ACADEMIC & EXPERIMENTAL SPONSORSHIP FUND'
+                      : 'QUỸ HỌC THUẬT & BẢO TRỢ THỰC NGHIỆM BWAN CLUB'}
+                  </span>
                 </div>
                 <h2 className="mt-2 font-display text-3xl sm:text-4xl font-extrabold text-[#1F1F2E] dark:text-white tracking-tight text-balance">
-                  Đồng Hành Cùng{' '}
+                  {isEn ? 'Fuel the ' : 'Đồng Hành Cùng '}
                   <span className="google-one-chem-gradient-text">
-                    Phản Ứng Sáng Tạo BWAN CLUB
+                    {isEn
+                      ? 'BWAN CLUB Creative Reaction'
+                      : 'Phản Ứng Sáng Tạo BWAN CLUB'}
                   </span>
                 </h2>
                 <p className="mt-3 text-sm sm:text-base text-[#4A4A68] dark:text-[#CBD5E1] leading-relaxed">
-                  Mọi khoản đóng góp đều được xác thực tự động 100% qua cổng QR
-                  PayOS và vinh danh trực tiếp theo thời gian thực lên Bảng Xếp
-                  Hạng Top Donate của BWAN CLUB.
+                  {isEn
+                    ? 'Every contribution is 100% automatically verified via the PayOS QR gateway and honored in real time on the BWAN CLUB Top Donate Leaderboard.'
+                    : 'Mọi khoản đóng góp đều được xác thực tự động 100% qua cổng QR PayOS và vinh danh trực tiếp theo thời gian thực lên Bảng Xếp Hạng Top Donate của BWAN CLUB.'}
                 </p>
               </motion.div>
             )}
@@ -236,7 +363,10 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                   campaignTitle={config.campaignTitle}
                   presetAmounts={config.presetAmountsVnd}
                   bankConfig={config.bankConfig}
+                  donors={donors}
+                  lang={lang}
                   onDonationVerified={handleDonationVerified}
+                  onIntentSaved={handleIntentSaved}
                   resolveCustomQrUrl={resolveCustomQrUrl}
                 />
               </motion.div>
@@ -257,10 +387,16 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                   <div className="flex items-center justify-between text-xs font-semibold text-[#5D50FE] dark:text-[#A39DFF]">
                     <span className="inline-flex items-center gap-1.5">
                       <TrendingUp className="h-4 w-4" />
-                      <span>Tiến Độ Quỹ Thực Tế Thời Gian Thực</span>
+                      <span>
+                        {isEn
+                          ? 'Real-Time Live Fund Progress'
+                          : 'Tiến Độ Quỹ Thực Tế Thời Gian Thực'}
+                      </span>
                     </span>
                     <span className="font-mono-tabular font-bold text-[#181826] dark:text-white">
-                      Đạt {overallProgress.exactPercent}%
+                      {isEn
+                        ? `${overallProgress.exactPercent}% Reached`
+                        : `Đạt ${overallProgress.exactPercent}%`}
                     </span>
                   </div>
 
@@ -273,7 +409,9 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                         {formatVnd(raisedVnd)}
                       </span>
                       <span className="mt-0.5 block text-xs text-[#525866] dark:text-[#94A3B8]">
-                        Mục tiêu chiến dịch: {formatVnd(config.totalTargetVnd)}
+                        {isEn
+                          ? `Campaign Goal: ${formatVnd(config.totalTargetVnd)}`
+                          : `Mục tiêu chiến dịch: ${formatVnd(config.totalTargetVnd)}`}
                       </span>
                     </div>
 
@@ -286,7 +424,7 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                         <span>{supportersCount}</span>
                       </span>
                       <span className="block text-[11px] text-[#525866] dark:text-[#94A3B8]">
-                        lượt đã thanh toán
+                        {isEn ? 'verified donations' : 'lượt đã thanh toán'}
                       </span>
                     </div>
                   </div>
@@ -298,7 +436,11 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                     aria-valuenow={overallProgress.exactPercent}
                     aria-valuemin={0}
                     aria-valuemax={100}
-                    aria-label="Tiến độ quỹ học thuật BWAN CLUB"
+                    aria-label={
+                      isEn
+                        ? 'BWAN CLUB academic fund progress'
+                        : 'Tiến độ quỹ học thuật BWAN CLUB'
+                    }
                   >
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-[#5D50FE] to-[#0EA5E9] transition-all duration-300"
@@ -314,11 +456,15 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                       </span>
                       <div>
                         <span className="block text-[11px] font-bold text-amber-800 dark:text-amber-300">
-                          Vị trí Top 1 Bảng xếp hạng
+                          {isEn
+                            ? 'Top 1 Leaderboard Position'
+                            : 'Vị trí Top 1 Bảng xếp hạng'}
                         </span>
                         <span className="text-xs font-extrabold text-[#181826] dark:text-white">
                           {currentTop1
                             ? currentTop1.donorName
+                            : isEn
+                            ? 'Awaiting first supporter'
                             : 'Đang chờ người ủng hộ đầu tiên'}
                         </span>
                       </div>
@@ -355,7 +501,11 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                       className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#F1F0FF] dark:bg-[#6C63FF]/25 hover:bg-[#E5E3FF] dark:hover:bg-[#6C63FF]/35 px-4 py-3 text-xs font-bold text-[#5D50FE] dark:text-[#A39DFF] transition-colors cursor-pointer"
                     >
                       <Crown className="h-4 w-4 text-amber-500" />
-                      <span>Xem Bảng Xếp Hạng Top Donate BWAN CLUB</span>
+                      <span>
+                        {isEn
+                          ? 'View BWAN CLUB Top Donate Leaderboard'
+                          : 'Xem Bảng Xếp Hạng Top Donate BWAN CLUB'}
+                      </span>
                       <ArrowRight className="h-3.5 w-3.5" />
                     </motion.button>
                   </div>
@@ -367,14 +517,20 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-[#5D50FE] dark:text-[#A39DFF]" />
                       <h3 className="text-sm font-extrabold text-[#181826] dark:text-white">
-                        Lượt Ủng Hộ Mới Nhất Theo Thời Gian Thực
+                        {isEn
+                          ? 'Real-Time Latest Donations'
+                          : 'Lượt Ủng Hộ Mới Nhất Theo Thời Gian Thực'}
                       </h3>
                     </div>
                     <button
                       type="button"
                       onClick={fetchLeaderboardData}
                       disabled={isLoadingLeaderboard}
-                      aria-label="Làm mới lượt ủng hộ mới nhất"
+                      aria-label={
+                        isEn
+                          ? 'Refresh latest donations'
+                          : 'Làm mới lượt ủng hộ mới nhất'
+                      }
                       className="inline-flex items-center gap-1 rounded-full border border-slate-200 dark:border-[#6C63FF]/35 bg-[#F8F8FB] dark:bg-[#0D0C1D] px-2.5 py-1 text-[11px] font-semibold text-[#5D50FE] dark:text-[#A39DFF] transition-colors hover:border-[#5D50FE] disabled:opacity-50 cursor-pointer"
                     >
                       <RefreshCw
@@ -382,7 +538,7 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                           isLoadingLeaderboard ? 'animate-spin' : ''
                         }`}
                       />
-                      <span>Làm mới</span>
+                      <span>{isEn ? 'Refresh' : 'Làm mới'}</span>
                     </button>
                   </div>
 
@@ -391,13 +547,17 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                       <div className="rounded-2xl border border-dashed border-slate-200 dark:border-[#6C63FF]/30 bg-[#F8F8FB] dark:bg-[#0D0C1D] p-6 text-center">
                         <p className="text-xs font-bold text-[#181826] dark:text-white">
                           {isLoadingLeaderboard
-                            ? 'Đang tải dữ liệu lượt ủng hộ...'
+                            ? isEn
+                              ? 'Loading donation data...'
+                              : 'Đang tải dữ liệu lượt ủng hộ...'
+                            : isEn
+                            ? 'No verified transactions yet'
                             : 'Chưa có giao dịch thanh toán nào'}
                         </p>
                         <p className="mt-1 text-[11px] leading-relaxed text-[#525866] dark:text-[#94A3B8]">
-                          Khi người dùng quét mã QR và hoàn tất chuyển khoản,
-                          khoản ủng hộ sẽ tự động cập nhật tại đây và cộng dồn
-                          lên Bảng xếp hạng.
+                          {isEn
+                            ? 'Once a supporter scans the QR code and completes the transfer, their donation automatically updates here and on the Leaderboard.'
+                            : 'Khi người dùng quét mã QR và hoàn tất chuyển khoản, khoản ủng hộ sẽ tự động cập nhật tại đây và cộng dồn lên Bảng xếp hạng.'}
                         </p>
                       </div>
                     ) : (
@@ -424,13 +584,21 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                                   {isNewest && (
                                     <span className="inline-flex items-center gap-0.5 text-[10px] font-extrabold text-[#5D50FE] dark:text-[#A39DFF]">
                                       <Sparkles className="h-2.5 w-2.5" />
-                                      <span>Mới nhất</span>
+                                      <span>{isEn ? 'Newest' : 'Mới nhất'}</span>
                                     </span>
                                   )}
                                 </div>
                                 <p className="truncate font-mono-tabular text-[11px] text-[#525866] dark:text-[#94A3B8]">
-                                  {formatDonationTimestamp(item.timestampIso)}
+                                  {formatDonationTimestamp(
+                                    item.timestampIso,
+                                    lang
+                                  )}
                                 </p>
+                                {item.message && (
+                                  <p className="mt-0.5 truncate text-[11px] italic text-[#5D50FE] dark:text-[#A39DFF]">
+                                    “{item.message}”
+                                  </p>
+                                )}
                               </div>
 
                               <span className="font-mono-tabular text-xs font-extrabold text-[#5D50FE] dark:text-[#A39DFF] whitespace-nowrap">
@@ -459,7 +627,7 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
             <div className="flex flex-wrap items-center gap-6">
               <div>
                 <span className="block text-xs font-semibold text-[#525866] dark:text-[#94A3B8]">
-                  Tổng quỹ đã huy động
+                  {isEn ? 'Total Fund Raised' : 'Tổng quỹ đã huy động'}
                 </span>
                 <span
                   data-testid="live-total-raised"
@@ -471,13 +639,13 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
               <div className="h-8 w-[1px] bg-slate-200 dark:bg-[#6C63FF]/25 hidden sm:block" />
               <div>
                 <span className="block text-xs font-semibold text-[#525866] dark:text-[#94A3B8]">
-                  Số lượt ủng hộ xác thực
+                  {isEn ? 'Verified Donations' : 'Số lượt ủng hộ xác thực'}
                 </span>
                 <span
                   data-testid="live-supporters-count"
                   className="font-mono-tabular text-xl font-extrabold text-[#1F1F2E] dark:text-white"
                 >
-                  {supportersCount} lượt
+                  {isEn ? `${supportersCount} donations` : `${supportersCount} lượt`}
                 </span>
               </div>
             </div>
@@ -491,7 +659,9 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
                 className="inline-flex items-center gap-2 rounded-full google-one-chem-btn px-6 py-3 text-xs sm:text-sm font-bold text-white cursor-pointer whitespace-nowrap"
               >
                 <HeartHandshake className="h-4 w-4" />
-                <span>Ủng hộ Quỹ BWAN CLUB ngay</span>
+                <span>
+                  {isEn ? 'Support BWAN CLUB Fund Now' : 'Ủng hộ Quỹ BWAN CLUB ngay'}
+                </span>
                 <ArrowRight className="h-4 w-4" />
               </motion.button>
             )}
@@ -502,10 +672,13 @@ export const ChemClubDonationModule: React.FC<ChemClubDonationModuleProps> = ({
         {showLeaderboard && (
           <TopDonorsSection
             donors={donors}
+            wishIntents={wishIntents}
             latestDonorName={latestDonorName}
             isLoadingLeaderboard={isLoadingLeaderboard}
+            lang={lang}
             onRefreshLeaderboard={fetchLeaderboardData}
             onScrollToDonate={scrollToQuickDonate}
+            onAttachWishToDonor={handleAttachWishToDonor}
           />
         )}
       </div>
